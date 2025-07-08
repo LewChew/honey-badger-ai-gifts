@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Honey Badger - AI Gift Delivery</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon" id="headerLogo">🍯</div>
+                    HONEY BADGER
+                </div>
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" onclick="showModal('loginModal')">Login</button>
+                    <button class="btn" onclick="showModal('signupModal')">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <section class="hero">
+                <h1>Hire a Honey Badger</h1>
+                <p>Send AI-powered gift experiences that motivate, engage, and delight your loved ones</p>
+                <div class="hero-buttons">
+                    <button class="btn-primary" onclick="showModal('sendModal')">Send Honey Badger</button>
+                </div>
+            </section>
+
+            <section class="features" id="features">
+                <h2>How It Works</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🎁</div>
+                        <h3>Choose Your Gift</h3>
+                        <p>Select from gift cards, cash, photos, or custom messages. Set the perfect reward for your recipient.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎯</div>
+                        <h3>Set the Challenge</h3>
+                        <p>Define how they unlock it: a simple photo, workout routine, daily tasks, or creative challenges.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🤖</div>
+                        <h3>AI Honey Badger Delivers</h3>
+                        <p>Our persistent AI helper motivates and guides them through the challenge via text, email, and more.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="gift-cards">
+                <h3>Supported Gift Cards</h3>
+                <div class="gift-cards-grid">
+                    <div class="gift-card">Dick's Sporting Goods</div>
+                    <div class="gift-card">Fortnite</div>
+                    <div class="gift-card">Sephora</div>
+                    <div class="gift-card">Lululemon</div>
+                    <div class="gift-card">Starbucks</div>
+                    <div class="gift-card">Dunkin'</div>
+                </div>
+            </section>
+
+            <section class="examples">
+                <h3>Real Examples</h3>
+                
+                <div class="example-card">
+                    <h4>🎂 Birthday Surprise</h4>
+                    <p><strong>Gift:</strong> $100 Venmo Gift Card</p>
+                    <p><strong>Challenge:</strong> Return a video saying hi and tell me your favorite ice cream</p>
+                    <p><strong>Honey Badger:</strong> "Hey! Someone special sent you a birthday surprise. All you need to do is send me a quick video..."</p>
+                </div>
+
+                <div class="example-card">
+                    <h4>🏃‍♂️ Fitness Motivation</h4>
+                    <p><strong>Gift:</strong> 3D Printer</p>
+                    <p><strong>Challenge:</strong> Work out and make your bed for 60 days straight</p>
+                    <p><strong>Honey Badger:</strong> "Day 1 of your epic journey! Your parent believes in you and I'm here to help you earn that 3D printer..."</p>
+                </div>
+
+                <div class="example-card">
+                    <h4>💕 Relationship Fun</h4>
+                    <p><strong>Gift:</strong> Special Photo</p>
+                    <p><strong>Challenge:</strong> Do a load of laundry</p>
+                    <p><strong>Honey Badger:</strong> "Your wife has something special waiting for you! Time to tackle that laundry pile..."</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Modals -->
+    <div id="sendModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('sendModal')">&times;</span>
+            <h2>Send a Honey Badger</h2>
+            <form id="sendForm">
+                <div class="form-group">
+                    <label for="recipientName">Recipient Name:</label>
+                    <input type="text" id="recipientName" name="recipientName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="recipientContact">Recipient Email/Phone:</label>
+                    <input type="text" id="recipientContact" name="recipientContact" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="giftType">Gift Type:</label>
+                    <select id="giftType" name="giftType" required onchange="updateGiftOptions()">
+                        <option value="">Select gift type</option>
+                        <option value="giftcard">Gift Card</option>
+                        <option value="cash">Cash (Venmo/PayPal)</option>
+                        <option value="photo">Photo/Video</option>
+                        <option value="message">Custom Message</option>
+                        <option value="physical">Physical Item</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="giftCardOptions" style="display: none;">
+                    <label for="giftCard">Choose Gift Card:</label>
+                    <select id="giftCard" name="giftCard">
+                        <option value="">Select gift card</option>
+                        <option value="dicks">Dick's Sporting Goods</option>
+                        <option value="fortnite">Fortnite</option>
+                        <option value="sephora">Sephora</option>
+                        <option value="lululemon">Lululemon</option>
+                        <option value="starbucks">Starbucks</option>
+                        <option value="dunkin">Dunkin'</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="giftValue">Gift Value/Description:</label>
+                    <input type="text" id="giftValue" name="giftValue" placeholder="e.g., $100, Family Photo, etc." required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="challenge">Challenge/Task:</label>
+                    <textarea id="challenge" name="challenge" placeholder="What does the recipient need to do to unlock this gift?" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Personal Message:</label>
+                    <textarea id="message" name="message" placeholder="Add a personal note (optional)"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="duration">Challenge Duration:</label>
+                    <select id="duration" name="duration" required>
+                        <option value="immediate">Immediate (once completed)</option>
+                        <option value="daily">Daily for 7 days</option>
+                        <option value="weekly">Weekly for 4 weeks</option>
+                        <option value="monthly">Monthly for 3 months</option>
+                        <option value="custom">Custom duration</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn-primary" style="width: 100%; margin-top: 1rem;">Send Honey Badger 🚀</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2>Login to Honey Badger</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email:</label>
+                    <input type="email" id="loginEmail" name="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password:</label>
+                    <input type="password" id="loginPassword" name="loginPassword" required>
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('signupModal')">&times;</span>
+            <h2>Join Honey Badger</h2>
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="signupName">Full Name:</label>
+                    <input type="text" id="signupName" name="signupName" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email:</label>
+                    <input type="email" id="signupEmail" name="signupEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password:</label>
+                    <input type="password" id="signupPassword" name="signupPassword" required>
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">Sign Up</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
