@@ -52,11 +52,10 @@ header {
     height: 40px;
     margin-right: 12px;
     filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5));
-    transition: transform 0.3s ease;
-}
-
-.logo-icon:hover {
-    transform: scale(1.1) rotate(5deg);
+    /* Optimized for crisp rendering */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
 }
 
 .logo-text {
@@ -70,15 +69,13 @@ header {
 }
 
 .hero-logo-image {
-    width: 150px;
-    height: 150px;
+    width: 200px;
+    height: 200px;
     filter: drop-shadow(4px 4px 8px rgba(0,0,0,0.3));
-    animation: float 3s ease-in-out infinite;
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
+    /* High definition rendering */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
 }
 
 /* Modal Logo */
@@ -91,10 +88,14 @@ header {
 }
 
 .modal-logo {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
     margin-right: 15px;
     filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+    /* High definition rendering */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
 }
 
 .modal-header h2 {
@@ -179,14 +180,7 @@ main {
     text-align: center;
     box-shadow: 0 8px 25px rgba(0,0,0,0.1);
     border: 3px solid #ffeb3b;
-    transition: all 0.3s ease;
     backdrop-filter: blur(10px);
-}
-
-.feature-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 15px 35px rgba(255,235,59,0.4);
-    border-color: #ffc107;
 }
 
 .feature-icon {
@@ -237,13 +231,7 @@ main {
     font-weight: 700;
     color: #212121;
     box-shadow: 0 4px 15px rgba(255,193,7,0.3);
-    transition: all 0.3s ease;
     border: 2px solid #212121;
-}
-
-.gift-card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 20px rgba(255,193,7,0.5);
 }
 
 /* Examples */
@@ -268,12 +256,6 @@ main {
     border-left: 6px solid #ffeb3b;
     box-shadow: 0 6px 20px rgba(0,0,0,0.1);
     backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
-}
-
-.example-card:hover {
-    transform: translateX(10px);
-    box-shadow: 0 8px 25px rgba(255,235,59,0.3);
 }
 
 .example-card h4 {
@@ -303,7 +285,6 @@ main {
     text-transform: uppercase;
     letter-spacing: 1px;
     cursor: pointer;
-    transition: all 0.3s ease;
     text-decoration: none;
     display: inline-block;
     font-size: 0.9rem;
@@ -319,34 +300,16 @@ main {
     border: 2px solid #212121;
 }
 
-.btn-primary:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(255,193,7,0.6);
-    background: linear-gradient(135deg, #ffc107, #ff9800);
-}
-
 .btn {
     background: #ffeb3b;
     color: #212121;
     border: 2px solid #212121;
 }
 
-.btn:hover {
-    background: #ffc107;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(255,193,7,0.4);
-}
-
 .btn-secondary {
     background: transparent;
     color: #ffeb3b;
     border: 2px solid #ffeb3b;
-}
-
-.btn-secondary:hover {
-    background: #ffeb3b;
-    color: #212121;
-    transform: translateY(-2px);
 }
 
 /* Modal Styles */
@@ -382,12 +345,6 @@ main {
     font-size: 2rem;
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.close:hover {
-    color: #ffc107;
-    transform: scale(1.2);
 }
 
 .modal h2 {
@@ -422,7 +379,6 @@ main {
     background: rgba(255,255,255,0.1);
     color: #fff;
     font-size: 1rem;
-    transition: all 0.3s ease;
     backdrop-filter: blur(10px);
 }
 
@@ -445,6 +401,17 @@ main {
     resize: vertical;
 }
 
+/* High Definition SVG Optimization */
+.logo-icon svg,
+.hero-logo-image svg,
+.modal-logo svg {
+    width: 100%;
+    height: 100%;
+    /* Ensures crisp SVG rendering */
+    shape-rendering: crispEdges;
+    text-rendering: optimizeLegibility;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .hero h1 {
@@ -458,8 +425,8 @@ main {
     }
     
     .hero-logo-image {
-        width: 100px;
-        height: 100px;
+        width: 150px;
+        height: 150px;
     }
     
     .logo {
@@ -489,8 +456,8 @@ main {
     }
     
     .modal-logo {
-        width: 40px;
-        height: 40px;
+        width: 50px;
+        height: 50px;
         margin-right: 10px;
     }
     
@@ -521,8 +488,8 @@ main {
     }
     
     .hero-logo-image {
-        width: 80px;
-        height: 80px;
+        width: 120px;
+        height: 120px;
     }
     
     .modal-content {
@@ -541,27 +508,4 @@ main {
     .example-card {
         padding: 1.5rem;
     }
-}
-
-/* Additional logo animations and effects */
-.logo-icon {
-    background: transparent;
-}
-
-/* Ensure SVG styling */
-.logo-icon svg,
-.hero-logo-image svg,
-.modal-logo svg {
-    width: 100%;
-    height: 100%;
-}
-
-/* Loading animation for logo */
-@keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
-}
-
-.hero-logo-image {
-    animation: float 3s ease-in-out infinite, pulse 2s ease-in-out infinite;
 }
