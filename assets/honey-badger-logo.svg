@@ -1,0 +1,39 @@
+<!-- This is a placeholder for the actual Honey Badger logo image -->
+<!-- The actual logo should be uploaded as honey-badger-logo.png -->
+<!-- SVG version for better scalability -->
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="200" height="200" fill="#000000"/>
+  
+  <!-- Hexagon clusters representing honey badger logo structure -->
+  <!-- Main hexagon cluster -->
+  <g transform="translate(50, 40)">
+    <!-- Large hexagon 1 -->
+    <polygon points="50,15 65,25 65,45 50,55 35,45 35,25" fill="#FFFF00"/>
+    <!-- Large hexagon 2 -->
+    <polygon points="80,40 95,50 95,70 80,80 65,70 65,50" fill="#FFFF00"/>
+    <!-- Connection piece -->
+    <polygon points="65,45 80,40 80,50 65,55" fill="#FFFF00"/>
+  </g>
+  
+  <!-- Small hexagons -->
+  <g transform="translate(140, 30)">
+    <polygon points="10,5 15,8 15,14 10,17 5,14 5,8" fill="#FFFF00"/>
+  </g>
+  
+  <g transform="translate(30, 110)">
+    <polygon points="10,5 15,8 15,14 10,17 5,14 5,8" fill="#FFFF00"/>
+  </g>
+  
+  <g transform="translate(160, 110)">
+    <polygon points="10,5 15,8 15,14 10,17 5,14 5,8" fill="#FFFF00"/>
+  </g>
+  
+  <!-- Bottom center hexagon -->
+  <g transform="translate(85, 120)">
+    <polygon points="15,10 25,15 25,25 15,30 5,25 5,15" fill="#FFFF00"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="100" y="170" text-anchor="middle" fill="#FFFF00" font-family="Arial, sans-serif" font-size="16" font-weight="bold">HONEY BADGER</text>
+</svg>
