@@ -51,11 +51,9 @@ header {
     width: 40px;
     height: 40px;
     margin-right: 12px;
-    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.5));
-    /* Optimized for crisp rendering */
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
-    image-rendering: pixelated;
+    /* No filters or effects - render exactly as designed */
+    object-fit: contain;
+    object-position: center;
 }
 
 .logo-text {
@@ -71,11 +69,9 @@ header {
 .hero-logo-image {
     width: 200px;
     height: 200px;
-    filter: drop-shadow(4px 4px 8px rgba(0,0,0,0.3));
-    /* High definition rendering */
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
-    image-rendering: pixelated;
+    /* No filters or effects - render exactly as designed */
+    object-fit: contain;
+    object-position: center;
 }
 
 /* Modal Logo */
@@ -91,11 +87,9 @@ header {
     width: 60px;
     height: 60px;
     margin-right: 15px;
-    filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
-    /* High definition rendering */
-    image-rendering: -webkit-optimize-contrast;
-    image-rendering: crisp-edges;
-    image-rendering: pixelated;
+    /* No filters or effects - render exactly as designed */
+    object-fit: contain;
+    object-position: center;
 }
 
 .modal-header h2 {
@@ -401,15 +395,32 @@ main {
     resize: vertical;
 }
 
-/* High Definition SVG Optimization */
+/* Logo SVG Preservation - Render exactly as GitHub shows */
+.logo-icon,
+.hero-logo-image,
+.modal-logo {
+    /* Remove all filters, effects, and transformations */
+    filter: none;
+    transform: none;
+    /* Preserve aspect ratio */
+    aspect-ratio: 1 / 1;
+    /* Ensure clean scaling */
+    image-rendering: auto;
+    /* Prevent any distortion */
+    flex-shrink: 0;
+}
+
+/* SVG specific styling to match GitHub rendering */
 .logo-icon svg,
 .hero-logo-image svg,
 .modal-logo svg {
     width: 100%;
     height: 100%;
-    /* Ensures crisp SVG rendering */
-    shape-rendering: crispEdges;
-    text-rendering: optimizeLegibility;
+    /* Preserve original SVG rendering */
+    shape-rendering: auto;
+    text-rendering: auto;
+    /* No additional effects */
+    filter: none;
 }
 
 /* Responsive Design */
