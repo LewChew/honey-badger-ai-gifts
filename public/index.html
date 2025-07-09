@@ -12,8 +12,8 @@
         <div class="container">
             <div class="header-content">
                 <div class="logo">
-                    <div class="logo-icon" id="headerLogo">🍯</div>
-                    HONEY BADGER
+                    <img src="/assets/honey-badger-logo.svg" alt="Honey Badger Logo" class="logo-icon" id="headerLogo">
+                    <span class="logo-text">HONEY BADGER</span>
                 </div>
                 <div class="nav-buttons">
                     <button class="btn btn-secondary" onclick="showModal('loginModal')">Login</button>
@@ -26,6 +26,9 @@
     <main>
         <div class="container">
             <section class="hero">
+                <div class="hero-logo">
+                    <img src="/assets/honey-badger-logo.svg" alt="Honey Badger" class="hero-logo-image">
+                </div>
                 <h1>Hire a Honey Badger</h1>
                 <p>Send AI-powered gift experiences that motivate, engage, and delight your loved ones</p>
                 <div class="hero-buttons">
@@ -97,7 +100,10 @@
     <div id="sendModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('sendModal')">&times;</span>
-            <h2>Send a Honey Badger</h2>
+            <div class="modal-header">
+                <img src="/assets/honey-badger-logo.svg" alt="Honey Badger" class="modal-logo">
+                <h2>Send a Honey Badger</h2>
+            </div>
             <form id="sendForm">
                 <div class="form-group">
                     <label for="recipientName">Recipient Name:</label>
