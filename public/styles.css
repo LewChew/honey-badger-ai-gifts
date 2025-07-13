@@ -9,12 +9,34 @@ body {
     background: linear-gradient(135deg, #ffeb3b 0%, #ffc107 50%, #212121 100%);
     min-height: 100vh;
     color: #333;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Background Honey Badger Logo */
+body::before {
+    content: '';
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80vw;
+    height: 80vh;
+    background-image: url('/assets/HB-logo.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.05;
+    z-index: 0;
+    pointer-events: none;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
+    position: relative;
+    z-index: 1;
 }
 
 /* Header */
@@ -51,7 +73,6 @@ header {
     width: 40px;
     height: 40px;
     margin-right: 12px;
-    /* No filters or effects - render exactly as designed */
     object-fit: contain;
     object-position: center;
 }
@@ -60,54 +81,7 @@ header {
     margin-left: 8px;
 }
 
-/* Hero Section Logo */
-.hero-logo {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.hero-logo-image {
-    width: 200px;
-    height: 200px;
-    /* No filters or effects - render exactly as designed */
-    object-fit: contain;
-    object-position: center;
-}
-
-/* Modal Logo */
-.modal-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 2px solid #ffeb3b;
-}
-
-.modal-logo {
-    width: 60px;
-    height: 60px;
-    margin-right: 15px;
-    /* No filters or effects - render exactly as designed */
-    object-fit: contain;
-    object-position: center;
-}
-
-.modal-header h2 {
-    margin: 0;
-    color: #ffeb3b;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-}
-
-.nav-buttons {
-    display: flex;
-    gap: 10px;
-}
-
-/* Main Styles */
-main {
-    padding: 3rem 0;
-}
-
+/* Hero Section */
 .hero {
     text-align: center;
     margin-bottom: 5rem;
@@ -117,17 +91,71 @@ main {
     backdrop-filter: blur(10px);
     border: 2px solid rgba(255,235,59,0.3);
     box-shadow: 0 8px 32px rgba(255,235,59,0.2);
+    position: relative;
 }
 
+/* Cartoon "For Hire" Sign Style */
 .hero h1 {
-    font-size: 3.5rem;
+    font-size: 4rem;
     font-weight: 900;
-    color: #212121;
+    color: #ff0000;
     margin-bottom: 1rem;
-    text-shadow: 2px 2px 0px #ffeb3b, 4px 4px 0px rgba(0,0,0,0.3);
+    text-shadow: 
+        3px 3px 0px #ffeb3b,
+        6px 6px 0px #212121,
+        9px 9px 15px rgba(0,0,0,0.5);
     font-family: 'Arial Black', sans-serif;
     text-transform: uppercase;
-    letter-spacing: 3px;
+    letter-spacing: 4px;
+    transform: rotate(-2deg);
+    display: inline-block;
+    position: relative;
+    animation: swingSign 3s ease-in-out infinite;
+}
+
+/* Wooden sign effect */
+.hero h1::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    left: -40px;
+    right: -40px;
+    bottom: -20px;
+    background: linear-gradient(135deg, #8B4513 0%, #D2691E 50%, #8B4513 100%);
+    border-radius: 15px;
+    z-index: -1;
+    box-shadow: 
+        inset -3px -3px 10px rgba(0,0,0,0.5),
+        inset 3px 3px 10px rgba(255,255,255,0.2),
+        0 10px 20px rgba(0,0,0,0.3);
+    border: 4px solid #654321;
+}
+
+/* Nail/tack effect */
+.hero h1::after {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, #C0C0C0 0%, #808080 50%, #606060 100%);
+    border-radius: 50%;
+    box-shadow: 
+        inset -2px -2px 4px rgba(0,0,0,0.5),
+        inset 2px 2px 4px rgba(255,255,255,0.5),
+        0 2px 4px rgba(0,0,0,0.3);
+    z-index: 1;
+}
+
+@keyframes swingSign {
+    0%, 100% {
+        transform: rotate(-2deg);
+    }
+    50% {
+        transform: rotate(2deg);
+    }
 }
 
 .hero p {
@@ -139,15 +167,21 @@ main {
     margin-right: auto;
     font-weight: 500;
     text-shadow: 1px 1px 2px rgba(255,255,255,0.8);
+    position: relative;
+    z-index: 1;
 }
 
 .hero-buttons {
     margin-top: 2rem;
+    position: relative;
+    z-index: 1;
 }
 
 /* Features */
 .features {
     margin-bottom: 4rem;
+    position: relative;
+    z-index: 1;
 }
 
 .features h2 {
@@ -175,6 +209,11 @@ main {
     box-shadow: 0 8px 25px rgba(0,0,0,0.1);
     border: 3px solid #ffeb3b;
     backdrop-filter: blur(10px);
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
 }
 
 .feature-icon {
@@ -195,7 +234,6 @@ main {
 .feature-logo {
     width: 60px;
     height: 60px;
-    /* No filters or effects - render exactly as designed */
     object-fit: contain;
     object-position: center;
 }
@@ -217,6 +255,8 @@ main {
 .gift-cards {
     margin-bottom: 4rem;
     text-align: center;
+    position: relative;
+    z-index: 1;
 }
 
 .gift-cards h3 {
@@ -243,11 +283,18 @@ main {
     color: #212121;
     box-shadow: 0 4px 15px rgba(255,193,7,0.3);
     border: 2px solid #212121;
+    transition: transform 0.2s ease;
+}
+
+.gift-card:hover {
+    transform: scale(1.05);
 }
 
 /* Examples */
 .examples {
     margin-bottom: 4rem;
+    position: relative;
+    z-index: 1;
 }
 
 .examples h3 {
@@ -300,6 +347,7 @@ main {
     display: inline-block;
     font-size: 0.9rem;
     border: 2px solid transparent;
+    transition: all 0.3s ease;
 }
 
 .btn-primary {
@@ -311,16 +359,36 @@ main {
     border: 2px solid #212121;
 }
 
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255,193,7,0.6);
+}
+
 .btn {
     background: #ffeb3b;
     color: #212121;
     border: 2px solid #212121;
 }
 
+.btn:hover {
+    background: #ffc107;
+}
+
 .btn-secondary {
     background: transparent;
     color: #ffeb3b;
     border: 2px solid #ffeb3b;
+}
+
+.btn-secondary:hover {
+    background: #ffeb3b;
+    color: #212121;
+}
+
+/* Nav Buttons */
+.nav-buttons {
+    display: flex;
+    gap: 10px;
 }
 
 /* Modal Styles */
@@ -356,6 +424,34 @@ main {
     font-size: 2rem;
     font-weight: bold;
     cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.close:hover {
+    color: #ffc107;
+}
+
+/* Modal Header */
+.modal-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #ffeb3b;
+}
+
+.modal-logo {
+    width: 60px;
+    height: 60px;
+    margin-right: 15px;
+    object-fit: contain;
+    object-position: center;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: #ffeb3b;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 }
 
 .modal h2 {
@@ -391,6 +487,7 @@ main {
     color: #fff;
     font-size: 1rem;
     backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
 }
 
 .form-group input:focus,
@@ -412,51 +509,34 @@ main {
     resize: vertical;
 }
 
-/* Logo SVG Preservation - Render exactly as GitHub shows */
-.logo-icon,
-.hero-logo-image,
-.modal-logo,
-.feature-logo {
-    /* Remove all filters, effects, and transformations */
-    filter: none;
-    transform: none;
-    /* Preserve aspect ratio */
-    aspect-ratio: 1 / 1;
-    /* Ensure clean scaling */
-    image-rendering: auto;
-    /* Prevent any distortion */
-    flex-shrink: 0;
-}
-
-/* SVG specific styling to match GitHub rendering */
-.logo-icon svg,
-.hero-logo-image svg,
-.modal-logo svg,
-.feature-logo svg {
-    width: 100%;
-    height: 100%;
-    /* Preserve original SVG rendering */
-    shape-rendering: auto;
-    text-rendering: auto;
-    /* No additional effects */
-    filter: none;
+/* Hero Logo - Remove since we're using background */
+.hero-logo {
+    display: none;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    body::before {
+        width: 100vw;
+        height: 100vh;
+        opacity: 0.03;
+    }
+
     .hero h1 {
         font-size: 2.5rem;
-        letter-spacing: 1px;
+        letter-spacing: 2px;
+    }
+    
+    .hero h1::before {
+        left: -20px;
+        right: -20px;
+        top: -15px;
+        bottom: -15px;
     }
     
     .hero p {
         font-size: 1.1rem;
         padding: 0 1rem;
-    }
-    
-    .hero-logo-image {
-        width: 150px;
-        height: 150px;
     }
     
     .logo {
@@ -520,15 +600,18 @@ main {
 @media (max-width: 480px) {
     .hero h1 {
         font-size: 2rem;
+        letter-spacing: 1px;
+    }
+    
+    .hero h1::before {
+        left: -15px;
+        right: -15px;
+        top: -10px;
+        bottom: -10px;
     }
     
     .hero {
         padding: 2rem 1rem;
-    }
-    
-    .hero-logo-image {
-        width: 120px;
-        height: 120px;
     }
     
     .feature-logo {
