@@ -107,6 +107,12 @@ header {
     position: relative;
 }
 
+/* Spacer between sign and tagline */
+.tagline-spacer {
+    height: 3rem;
+    width: 100%;
+}
+
 /* Cartoon "For Hire" Sign Style - Enhanced */
 .hero h1 {
     font-size: 4.5rem;
@@ -243,15 +249,28 @@ header {
     justify-content: center;
     align-items: center;
     margin-bottom: 1rem;
-    height: 90px;
+    height: 120px;
 }
 
 .feature-logo {
-    width: 70px;
-    height: 70px;
+    width: 100px;
+    height: 100px;
     object-fit: contain;
     object-position: center;
     filter: brightness(1.3) contrast(1.2) drop-shadow(2px 2px 4px rgba(0,0,0,0.8));
+    transition: all 0.3s ease;
+}
+
+/* Enhanced Avatar */
+.enhanced-avatar {
+    width: 120px !important;
+    height: 120px !important;
+    filter: brightness(1.4) contrast(1.3) drop-shadow(3px 3px 6px rgba(0,0,0,0.9));
+}
+
+.enhanced-avatar:hover {
+    transform: scale(1.1);
+    filter: brightness(1.5) contrast(1.4) drop-shadow(4px 4px 8px rgba(0,0,0,1));
 }
 
 .feature-card h3 {
@@ -379,6 +398,24 @@ header {
     text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
 }
 
+/* Enhanced Button - Bigger and Bolder */
+.enhanced-button {
+    font-size: 1.6rem !important;
+    padding: 24px 48px !important;
+    font-weight: 900 !important;
+    letter-spacing: 2px !important;
+    border: 4px solid #000 !important;
+    box-shadow: 0 8px 25px rgba(255,193,7,0.6) !important;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5) !important;
+    transform: scale(1.1);
+}
+
+.enhanced-button:hover {
+    transform: scale(1.2) translateY(-4px) !important;
+    box-shadow: 0 12px 35px rgba(255,193,7,0.8) !important;
+    background: linear-gradient(135deg, #ffc107, #ffeb3b) !important;
+}
+
 .btn-primary:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 25px rgba(255,193,7,0.7);
@@ -468,6 +505,13 @@ header {
     object-fit: contain;
     object-position: center;
     filter: brightness(1.3) contrast(1.2) drop-shadow(2px 2px 4px rgba(0,0,0,0.8));
+}
+
+/* Enhanced Modal Avatar */
+.enhanced-modal-avatar {
+    width: 90px !important;
+    height: 90px !important;
+    filter: brightness(1.4) contrast(1.3) drop-shadow(3px 3px 6px rgba(0,0,0,0.9)) !important;
 }
 
 .modal-header h2 {
@@ -561,6 +605,10 @@ header {
         padding: 0 1rem;
     }
     
+    .tagline-spacer {
+        height: 2rem;
+    }
+    
     .logo {
         font-size: 1.6rem;
         letter-spacing: 2px;
@@ -573,12 +621,27 @@ header {
     }
     
     .feature-logo {
-        width: 60px;
-        height: 60px;
+        width: 80px;
+        height: 80px;
+    }
+    
+    .enhanced-avatar {
+        width: 100px !important;
+        height: 100px !important;
     }
     
     .feature-icon-logo {
-        height: 80px;
+        height: 100px;
+    }
+    
+    .enhanced-button {
+        font-size: 1.4rem !important;
+        padding: 20px 40px !important;
+        transform: scale(1.05);
+    }
+    
+    .enhanced-button:hover {
+        transform: scale(1.15) translateY(-3px) !important;
     }
     
     .features-grid {
@@ -596,10 +659,9 @@ header {
         width: 95%;
     }
     
-    .modal-logo {
-        width: 60px;
-        height: 60px;
-        margin-right: 15px;
+    .enhanced-modal-avatar {
+        width: 80px !important;
+        height: 80px !important;
     }
     
     .nav-buttons {
@@ -636,18 +698,37 @@ header {
         padding: 2rem 1rem;
     }
     
+    .tagline-spacer {
+        height: 1.5rem;
+    }
+    
     .feature-logo {
-        width: 50px;
-        height: 50px;
+        width: 70px;
+        height: 70px;
+    }
+    
+    .enhanced-avatar {
+        width: 90px !important;
+        height: 90px !important;
     }
     
     .feature-icon-logo {
-        height: 70px;
+        height: 90px;
+    }
+    
+    .enhanced-button {
+        font-size: 1.2rem !important;
+        padding: 18px 32px !important;
     }
     
     .modal-content {
         margin: 5% auto;
         padding: 1rem;
+    }
+    
+    .enhanced-modal-avatar {
+        width: 70px !important;
+        height: 70px !important;
     }
     
     .features h2 {
