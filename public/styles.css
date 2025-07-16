@@ -113,94 +113,103 @@ header {
     width: 100%;
 }
 
-/* Cartoon "For Hire" Sign Style - Narrow and Tall Old Wood */
+/* Enhanced Wooden Sign Style - Fixed Implementation */
 .hero h1 {
     font-size: 3.2rem;
     font-weight: 900;
-    color: #8B0000;
+    color: #FFEF94;
     margin-bottom: 1rem;
     text-shadow: 
-        3px 3px 0px #ffeb3b,
-        6px 6px 0px #000,
-        10px 10px 20px rgba(0,0,0,0.7);
-    font-family: 'Arial Black', sans-serif;
+        2px 2px 0 #654321,
+        4px 4px 8px rgba(0,0,0,0.8),
+        6px 6px 12px rgba(0,0,0,0.6);
+    font-family: 'Georgia', serif;
     text-transform: uppercase;
     letter-spacing: 3px;
     transform: rotate(-1.5deg);
     display: inline-block;
     position: relative;
-    animation: swingSign 4s ease-in-out infinite;
-    line-height: 1.1;
-    padding: 0 20px;
+    animation: swingSign 6s ease-in-out infinite;
+    line-height: 1.2;
+    padding: 25px 40px;
+    z-index: 10;
 }
 
-/* Old weathered wooden sign effect - Narrow and Tall */
+/* Wooden Sign Background - Fixed Colors and Positioning */
 .hero h1::before {
     content: '';
     position: absolute;
-    top: -40px;
-    left: -25px;
-    right: -25px;
-    bottom: -40px;
-    background: 
-        linear-gradient(135deg, #4A3728 0%, #6B4E3D 15%, #8B6F47 25%, #A0825A 40%, #8B6F47 55%, #6B4E3D 75%, #5D4037 90%, #3E2723 100%);
-    border-radius: 12px;
-    z-index: -1;
+    top: -30px;
+    left: -40px;
+    right: -40px;
+    bottom: -30px;
+    background: linear-gradient(135deg, 
+        #8B4513 0%, 
+        #A0522D 15%, 
+        #CD853F 25%, 
+        #D2B48C 40%, 
+        #CD853F 55%, 
+        #A0522D 75%, 
+        #8B4513 90%, 
+        #654321 100%);
+    border-radius: 15px;
+    z-index: -2;
     box-shadow: 
-        inset -6px -6px 20px rgba(0,0,0,0.7),
-        inset 6px 6px 20px rgba(139,111,71,0.4),
-        inset -3px 3px 10px rgba(160,130,90,0.3),
-        0 20px 40px rgba(0,0,0,0.6);
-    border: 6px solid #2E1A0F;
-    position: relative;
+        0 15px 35px rgba(0,0,0,0.6),
+        inset 0 2px 0 rgba(255,255,255,0.1),
+        inset 0 -2px 0 rgba(0,0,0,0.3),
+        inset -8px -8px 20px rgba(0,0,0,0.4),
+        inset 8px 8px 20px rgba(205,133,63,0.3);
+    border: 8px solid #654321;
 }
 
-/* Wood grain texture effect */
+/* Wood Grain Texture - Fixed Overlay */
 .hero h1::after {
     content: '';
     position: absolute;
-    top: -35px;
-    left: -20px;
-    right: -20px;
-    bottom: -35px;
+    top: -22px;
+    left: -32px;
+    right: -32px;
+    bottom: -22px;
     background: 
         repeating-linear-gradient(
             90deg,
             transparent,
-            transparent 2px,
-            rgba(0,0,0,0.1) 2px,
-            rgba(0,0,0,0.1) 3px
+            transparent 1px,
+            rgba(139, 69, 19, 0.15) 1px,
+            rgba(139, 69, 19, 0.15) 2px
         ),
         repeating-linear-gradient(
             0deg,
             transparent,
-            transparent 8px,
-            rgba(101,67,33,0.2) 8px,
-            rgba(101,67,33,0.2) 12px
+            transparent 6px,
+            rgba(101, 67, 33, 0.2) 6px,
+            rgba(101, 67, 33, 0.2) 10px
+        ),
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 15px,
+            rgba(139, 69, 19, 0.1) 15px,
+            rgba(139, 69, 19, 0.1) 20px
         );
     border-radius: 8px;
     z-index: -1;
-    opacity: 0.8;
-}
-
-/* Rusty nail effect - repositioned for narrow sign */
-.hero h1:before {
-    content: '🔨';
-    position: absolute;
-    top: -35px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 20px;
-    z-index: 2;
-    filter: sepia(1) hue-rotate(15deg) saturate(2);
+    pointer-events: none;
 }
 
 @keyframes swingSign {
     0%, 100% {
         transform: rotate(-1.5deg);
     }
+    25% {
+        transform: rotate(-0.5deg);
+    }
     50% {
         transform: rotate(1.5deg);
+    }
+    75% {
+        transform: rotate(0.5deg);
     }
 }
 
@@ -621,10 +630,10 @@ header {
     }
     
     .hero h1::before {
-        left: -20px;
-        right: -20px;
-        top: -30px;
-        bottom: -30px;
+        left: -30px;
+        right: -30px;
+        top: -25px;
+        bottom: -25px;
     }
     
     .hero p {
@@ -715,10 +724,10 @@ header {
     }
     
     .hero h1::before {
-        left: -15px;
-        right: -15px;
-        top: -25px;
-        bottom: -25px;
+        left: -25px;
+        right: -25px;
+        top: -20px;
+        bottom: -20px;
     }
     
     .hero {
