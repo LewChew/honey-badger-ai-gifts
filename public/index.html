@@ -16,8 +16,60 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
+        }
+
+        /* Header styles */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            width: 100%;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-logo .logo-icon {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
+            border-radius: 50%;
+            background: rgba(243, 156, 18, 0.1);
+            padding: 5px;
+        }
+
+        .header-logo .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #f39c12, #e67e22);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
             align-items: center;
             justify-content: center;
+            padding: 20px;
         }
 
         .container {
@@ -42,24 +94,47 @@
             text-align: center;
         }
 
-        .left-panel h1 {
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+        .left-panel .sign {
+            margin-bottom: 25px;
         }
 
-        .left-panel .tagline {
-            font-size: 1.2rem;
-            margin-bottom: 30px;
-            opacity: 0.9;
+        .left-panel .sign h1 {
+            font-size: 1.6rem; /* Smaller than before (was 2.5rem) */
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.75); /* Lighter color */
+            font-weight: 400; /* Lighter weight */
+            /* Removed any animation/transform properties */
+        }
+
+        .left-panel .sign .tagline {
+            font-size: 0.9rem; /* Smaller than before (was 1.2rem) */
+            opacity: 0.65; /* Lighter than before (was 0.9) */
+            font-weight: 300; /* Lighter weight */
+            /* Removed any animation properties */
+        }
+
+        .avatar {
+            font-size: 5rem; /* Much larger than before */
+            margin: 30px 0;
+            display: block;
+            filter: drop-shadow(3px 3px 6px rgba(0,0,0,0.2));
+        }
+
+        .avatar-image {
+            width: 150px; /* Large avatar */
+            height: 150px;
+            object-fit: contain;
+            filter: drop-shadow(3px 3px 6px rgba(0,0,0,0.2));
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            margin: 0 auto;
         }
 
         .features {
             list-style: none;
             text-align: left;
+            margin-top: 20px;
         }
 
         .features li {
@@ -214,100 +289,159 @@
             .container {
                 flex-direction: column;
                 width: 95%;
-                margin: 10px;
+                margin: 10px 0;
             }
 
             .left-panel {
                 padding: 30px 20px;
             }
 
-            .left-panel h1 {
-                font-size: 2rem;
+            .left-panel .sign h1 {
+                font-size: 1.4rem;
+            }
+
+            .avatar-image {
+                width: 120px;
+                height: 120px;
             }
 
             .right-panel {
                 padding: 30px 20px;
             }
+
+            .header-logo .logo-text {
+                font-size: 1.2rem;
+            }
+
+            .header-logo .logo-icon {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-content {
+                padding: 0 15px;
+            }
+
+            .header-logo .logo-text {
+                font-size: 1rem;
+            }
+
+            .header-logo .logo-icon {
+                width: 35px;
+                height: 35px;
+            }
+
+            .left-panel .sign h1 {
+                font-size: 1.2rem;
+            }
+
+            .avatar-image {
+                width: 100px;
+                height: 100px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Left Panel -->
-        <div class="left-panel">
-            <h1>🍯 Honey Badger AI</h1>
-            <p class="tagline">AI-Powered Motivational Gift Delivery</p>
-            <ul class="features">
-                <li>Send gifts with motivational challenges</li>
-                <li>AI-powered persistent engagement</li>
-                <li>Track recipient progress</li>
-                <li>Customizable motivation levels</li>
-                <li>SMS and email notifications</li>
-            </ul>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="header-logo">
+                <img src="/assets/Honey_badger_avatar.png" alt="Honey Badger Logo" class="logo-icon">
+                <span class="logo-text">Honey Badger AI</span>
+            </div>
         </div>
+    </div>
 
-        <!-- Right Panel -->
-        <div class="right-panel">
-            <!-- Authentication Forms -->
-            <div id="authContainer" class="auth-container">
-                <!-- Tab Navigation -->
-                <div class="auth-tabs">
-                    <button class="auth-tab active" data-tab="login">Login</button>
-                    <button class="auth-tab" data-tab="signup">Sign Up</button>
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="container">
+            <!-- Left Panel -->
+            <div class="left-panel">
+                <!-- Sign (smaller, lighter, no animation) -->
+                <div class="sign">
+                    <h1>Honey Badger AI</h1>
+                    <p class="tagline">AI-Powered Motivational Gift Delivery</p>
                 </div>
-
-                <!-- Alert Messages -->
-                <div id="alertContainer"></div>
-
-                <!-- Login Form -->
-                <form id="loginForm" class="auth-form active">
-                    <div class="form-group">
-                        <label for="loginEmail">Email Address</label>
-                        <input type="email" id="loginEmail" name="loginEmail" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="loginPassword">Password</label>
-                        <input type="password" id="loginPassword" name="loginPassword" required>
-                    </div>
-                    <button type="submit" class="btn">Login</button>
-                </form>
-
-                <!-- Signup Form -->
-                <form id="signupForm" class="auth-form">
-                    <div class="form-group">
-                        <label for="signupName">Full Name</label>
-                        <input type="text" id="signupName" name="signupName" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="signupEmail">Email Address</label>
-                        <input type="email" id="signupEmail" name="signupEmail" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="signupPhone">Phone Number (Optional)</label>
-                        <input type="tel" id="signupPhone" name="signupPhone" placeholder="+1234567890">
-                    </div>
-                    <div class="form-group">
-                        <label for="signupPassword">Password</label>
-                        <input type="password" id="signupPassword" name="signupPassword" required>
-                        <small style="color: #666; font-size: 0.9rem;">Must be at least 6 characters with uppercase, lowercase, and number</small>
-                    </div>
-                    <div class="form-group">
-                        <label for="confirmPassword">Confirm Password</label>
-                        <input type="password" id="confirmPassword" name="confirmPassword" required>
-                    </div>
-                    <button type="submit" class="btn">Create Account</button>
-                </form>
+                
+                <!-- Avatar (larger, positioned below sign) -->
+                <img src="/assets/Honey_badger_avatar.png" alt="Honey Badger Avatar" class="avatar-image">
+                
+                <!-- Features -->
+                <ul class="features">
+                    <li>Send gifts with motivational challenges</li>
+                    <li>AI-powered persistent engagement</li>
+                    <li>Track recipient progress</li>
+                    <li>Customizable motivation levels</li>
+                    <li>SMS and email notifications</li>
+                </ul>
             </div>
 
-            <!-- Dashboard (Hidden by default) -->
-            <div id="dashboard" class="dashboard hidden">
-                <h2>Welcome to Honey Badger AI! 🍯</h2>
-                <div id="userInfo" class="user-info">
-                    <!-- User info will be populated here -->
+            <!-- Right Panel -->
+            <div class="right-panel">
+                <!-- Authentication Forms -->
+                <div id="authContainer" class="auth-container">
+                    <!-- Tab Navigation -->
+                    <div class="auth-tabs">
+                        <button class="auth-tab active" data-tab="login">Login</button>
+                        <button class="auth-tab" data-tab="signup">Sign Up</button>
+                    </div>
+
+                    <!-- Alert Messages -->
+                    <div id="alertContainer"></div>
+
+                    <!-- Login Form -->
+                    <form id="loginForm" class="auth-form active">
+                        <div class="form-group">
+                            <label for="loginEmail">Email Address</label>
+                            <input type="email" id="loginEmail" name="loginEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="loginPassword">Password</label>
+                            <input type="password" id="loginPassword" name="loginPassword" required>
+                        </div>
+                        <button type="submit" class="btn">Login</button>
+                    </form>
+
+                    <!-- Signup Form -->
+                    <form id="signupForm" class="auth-form">
+                        <div class="form-group">
+                            <label for="signupName">Full Name</label>
+                            <input type="text" id="signupName" name="signupName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signupEmail">Email Address</label>
+                            <input type="email" id="signupEmail" name="signupEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="signupPhone">Phone Number (Optional)</label>
+                            <input type="tel" id="signupPhone" name="signupPhone" placeholder="+1234567890">
+                        </div>
+                        <div class="form-group">
+                            <label for="signupPassword">Password</label>
+                            <input type="password" id="signupPassword" name="signupPassword" required>
+                            <small style="color: #666; font-size: 0.9rem;">Must be at least 6 characters with uppercase, lowercase, and number</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword">Confirm Password</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" required>
+                        </div>
+                        <button type="submit" class="btn">Create Account</button>
+                    </form>
                 </div>
-                <p>You're now ready to send motivational AI-powered gifts!</p>
-                <button id="giftBtn" class="btn" style="margin-bottom: 10px;">Send Honey Badger Gift</button>
-                <button id="logoutBtn" class="btn logout-btn">Logout</button>
+
+                <!-- Dashboard (Hidden by default) -->
+                <div id="dashboard" class="dashboard hidden">
+                    <h2>Welcome to Honey Badger AI! 🍯</h2>
+                    <div id="userInfo" class="user-info">
+                        <!-- User info will be populated here -->
+                    </div>
+                    <p>You're now ready to send motivational AI-powered gifts!</p>
+                    <button id="giftBtn" class="btn" style="margin-bottom: 10px;">Send Honey Badger Gift</button>
+                    <button id="logoutBtn" class="btn logout-btn">Logout</button>
+                </div>
             </div>
         </div>
     </div>
@@ -410,7 +544,7 @@
             try {
                 showLoading(loginForm.querySelector('.btn'));
                 
-                const response = await fetch('/api/auth/login', {
+                const response = await fetch('/api/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -423,7 +557,9 @@
                 if (data.success) {
                     authToken = data.token;
                     currentUser = data.user;
-                    localStorage.setItem('authToken', authToken);
+                    if (authToken) {
+                        localStorage.setItem('authToken', authToken);
+                    }
                     showAlert('Login successful! Welcome back.', 'success');
                     setTimeout(() => showDashboard(), 1000);
                 } else {
@@ -453,7 +589,7 @@
             try {
                 showLoading(signupForm.querySelector('.btn'));
                 
-                const response = await fetch('/api/auth/signup', {
+                const response = await fetch('/api/signup', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -466,7 +602,9 @@
                 if (data.success) {
                     authToken = data.token;
                     currentUser = data.user;
-                    localStorage.setItem('authToken', authToken);
+                    if (authToken) {
+                        localStorage.setItem('authToken', authToken);
+                    }
                     showAlert('Account created successfully! Welcome to Honey Badger AI.', 'success');
                     setTimeout(() => showDashboard(), 1000);
                 } else {
@@ -488,12 +626,14 @@
         // Handle logout
         async function handleLogout() {
             try {
-                await fetch('/api/auth/logout', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${authToken}`
-                    }
-                });
+                if (authToken) {
+                    await fetch('/api/auth/logout', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${authToken}`
+                        }
+                    });
+                }
             } catch (error) {
                 console.error('Logout error:', error);
             }
@@ -523,13 +663,15 @@
             dashboard.classList.remove('hidden');
             
             // Populate user info
-            userInfo.innerHTML = `
-                <h3>Account Information</h3>
-                <p><strong>Name:</strong> ${currentUser.name}</p>
-                <p><strong>Email:</strong> ${currentUser.email}</p>
-                ${currentUser.phone ? `<p><strong>Phone:</strong> ${currentUser.phone}</p>` : ''}
-                <p><strong>Member since:</strong> ${new Date(currentUser.createdAt).toLocaleDateString()}</p>
-            `;
+            if (currentUser) {
+                userInfo.innerHTML = `
+                    <h3>Account Information</h3>
+                    <p><strong>Name:</strong> ${currentUser.name || 'N/A'}</p>
+                    <p><strong>Email:</strong> ${currentUser.email || 'N/A'}</p>
+                    ${currentUser.phone ? `<p><strong>Phone:</strong> ${currentUser.phone}</p>` : ''}
+                    <p><strong>Member since:</strong> ${currentUser.createdAt ? new Date(currentUser.createdAt).toLocaleDateString() : 'Today'}</p>
+                `;
+            }
         }
 
         // Utility functions
