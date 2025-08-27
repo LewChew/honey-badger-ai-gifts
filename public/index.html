@@ -3,713 +3,219 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Honey Badger AI Gifts - Motivational Gift Delivery</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Header styles */
-        .header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            width: 100%;
-            padding: 15px 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-        }
-
-        .header-logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .header-logo .logo-icon {
-            width: 50px;
-            height: 50px;
-            object-fit: contain;
-            filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.1));
-        }
-
-        .header-logo .logo-text {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: linear-gradient(45deg, #f39c12, #e67e22);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .main-content {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .container {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-            width: 90%;
-            max-width: 1000px;
-            min-height: 600px;
-            display: flex;
-        }
-
-        .left-panel {
-            background: linear-gradient(45deg, #f39c12, #e67e22);
-            color: white;
-            padding: 40px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            text-align: center;
-        }
-
-        .left-panel .sign {
-            margin-bottom: 25px;
-        }
-
-        .left-panel .sign h1 {
-            font-size: 1.6rem; /* Smaller than before (was 2.5rem) */
-            margin-bottom: 8px;
-            color: rgba(255, 255, 255, 0.75); /* Lighter color */
-            font-weight: 400; /* Lighter weight */
-            /* Removed any animation/transform properties */
-        }
-
-        .left-panel .sign .tagline {
-            font-size: 0.9rem; /* Smaller than before (was 1.2rem) */
-            opacity: 0.65; /* Lighter than before (was 0.9) */
-            font-weight: 300; /* Lighter weight */
-            /* Removed any animation properties */
-        }
-
-        .avatar {
-            font-size: 5rem; /* Much larger than before */
-            margin: 30px 0;
-            display: block;
-            filter: drop-shadow(3px 3px 6px rgba(0,0,0,0.2));
-        }
-
-        .avatar-image {
-            width: 150px; /* Large avatar */
-            height: 150px;
-            object-fit: contain;
-            filter: drop-shadow(3px 3px 6px rgba(0,0,0,0.2));
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 10px;
-            margin: 0 auto;
-        }
-
-        .features {
-            list-style: none;
-            text-align: left;
-            margin-top: 20px;
-        }
-
-        .features li {
-            margin: 15px 0;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .features li::before {
-            content: "🍯";
-            font-size: 1.2rem;
-        }
-
-        .right-panel {
-            flex: 1;
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .auth-container {
-            width: 100%;
-        }
-
-        .auth-tabs {
-            display: flex;
-            margin-bottom: 30px;
-            border-bottom: 1px solid #eee;
-        }
-
-        .auth-tab {
-            flex: 1;
-            padding: 15px;
-            text-align: center;
-            cursor: pointer;
-            border: none;
-            background: none;
-            font-size: 1.1rem;
-            color: #666;
-            transition: all 0.3s ease;
-        }
-
-        .auth-tab.active {
-            color: #f39c12;
-            border-bottom: 2px solid #f39c12;
-        }
-
-        .auth-form {
-            display: none;
-        }
-
-        .auth-form.active {
-            display: block;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 500;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e1e1e1;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: #f39c12;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(45deg, #f39c12, #e67e22);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .alert {
-            padding: 12px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-weight: 500;
-        }
-
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .alert-error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        .dashboard {
-            padding: 20px;
-            text-align: center;
-        }
-
-        .dashboard h2 {
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        .user-info {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .logout-btn {
-            background: #dc3545;
-            margin-top: 10px;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-                width: 95%;
-                margin: 10px 0;
-            }
-
-            .left-panel {
-                padding: 30px 20px;
-            }
-
-            .left-panel .sign h1 {
-                font-size: 1.4rem;
-            }
-
-            .avatar-image {
-                width: 120px;
-                height: 120px;
-            }
-
-            .right-panel {
-                padding: 30px 20px;
-            }
-
-            .header-logo .logo-text {
-                font-size: 1.2rem;
-            }
-
-            .header-logo .logo-icon {
-                width: 40px;
-                height: 40px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .header-content {
-                padding: 0 15px;
-            }
-
-            .header-logo .logo-text {
-                font-size: 1rem;
-            }
-
-            .header-logo .logo-icon {
-                width: 35px;
-                height: 35px;
-            }
-
-            .left-panel .sign h1 {
-                font-size: 1.2rem;
-            }
-
-            .avatar-image {
-                width: 100px;
-                height: 100px;
-            }
-        }
-    </style>
+    <title>Honey Badger - AI Gift Delivery</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+    <link rel="alternate icon" href="/assets/favicon.ico" type="image/x-icon">
 </head>
 <body>
-    <!-- Header -->
-    <div class="header">
-        <div class="header-content">
-            <div class="header-logo">
-                <img src="/assets/hb-logo" alt="Honey Badger Logo" class="logo-icon">
-                <span class="logo-text">Honey Badger AI</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Content -->
-    <div class="main-content">
+    <header>
         <div class="container">
-            <!-- Left Panel -->
-            <div class="left-panel">
-                <!-- Sign (smaller, lighter, no animation) -->
-                <div class="sign">
-                    <h1>Honey Badger AI</h1>
-                    <p class="tagline">AI-Powered Motivational Gift Delivery</p>
+            <div class="header-content">
+                <div class="logo">
+                    <img src="/assets/HB-logo.svg" alt="Honey Badger Logo" class="logo-icon" id="headerLogo">
+                    <span class="logo-text">HONEY BADGER</span>
                 </div>
-                
-                <!-- Avatar (larger, positioned below sign) -->
-                <img src="/assets/Honey_badger_avatar.png" alt="Honey Badger Avatar" class="avatar-image">
-                
-                <!-- Features -->
-                <ul class="features">
-                    <li>Send gifts with motivational challenges</li>
-                    <li>AI-powered persistent engagement</li>
-                    <li>Track recipient progress</li>
-                    <li>Customizable motivation levels</li>
-                    <li>SMS and email notifications</li>
-                </ul>
-            </div>
-
-            <!-- Right Panel -->
-            <div class="right-panel">
-                <!-- Authentication Forms -->
-                <div id="authContainer" class="auth-container">
-                    <!-- Tab Navigation -->
-                    <div class="auth-tabs">
-                        <button class="auth-tab active" data-tab="login">Login</button>
-                        <button class="auth-tab" data-tab="signup">Sign Up</button>
-                    </div>
-
-                    <!-- Alert Messages -->
-                    <div id="alertContainer"></div>
-
-                    <!-- Login Form -->
-                    <form id="loginForm" class="auth-form active">
-                        <div class="form-group">
-                            <label for="loginEmail">Email Address</label>
-                            <input type="email" id="loginEmail" name="loginEmail" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="loginPassword">Password</label>
-                            <input type="password" id="loginPassword" name="loginPassword" required>
-                        </div>
-                        <button type="submit" class="btn">Login</button>
-                    </form>
-
-                    <!-- Signup Form -->
-                    <form id="signupForm" class="auth-form">
-                        <div class="form-group">
-                            <label for="signupName">Full Name</label>
-                            <input type="text" id="signupName" name="signupName" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="signupEmail">Email Address</label>
-                            <input type="email" id="signupEmail" name="signupEmail" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="signupPhone">Phone Number (Optional)</label>
-                            <input type="tel" id="signupPhone" name="signupPhone" placeholder="+1234567890">
-                        </div>
-                        <div class="form-group">
-                            <label for="signupPassword">Password</label>
-                            <input type="password" id="signupPassword" name="signupPassword" required>
-                            <small style="color: #666; font-size: 0.9rem;">Must be at least 6 characters with uppercase, lowercase, and number</small>
-                        </div>
-                        <div class="form-group">
-                            <label for="confirmPassword">Confirm Password</label>
-                            <input type="password" id="confirmPassword" name="confirmPassword" required>
-                        </div>
-                        <button type="submit" class="btn">Create Account</button>
-                    </form>
-                </div>
-
-                <!-- Dashboard (Hidden by default) -->
-                <div id="dashboard" class="dashboard hidden">
-                    <h2>Welcome to Honey Badger AI! 🍯</h2>
-                    <div id="userInfo" class="user-info">
-                        <!-- User info will be populated here -->
-                    </div>
-                    <p>You're now ready to send motivational AI-powered gifts!</p>
-                    <button id="giftBtn" class="btn" style="margin-bottom: 10px;">Send Honey Badger Gift</button>
-                    <button id="logoutBtn" class="btn logout-btn">Logout</button>
+                <div class="nav-buttons">
+                    <button class="btn btn-secondary" onclick="showModal('loginModal')">Login</button>
+                    <button class="btn" onclick="showModal('signupModal')">Sign Up</button>
                 </div>
             </div>
         </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <section class="hero">
+                <div class="hero-logo">
+                    <img src="/assets/HB-logo.svg" alt="Honey Badger" class="hero-logo-image">
+                </div>
+                <h1>Hire a Honey Badger</h1>
+                <p>Send AI-powered gift experiences that motivate, engage, and delight your loved ones</p>
+                <div class="hero-buttons">
+                    <button class="btn-primary" onclick="showModal('sendModal')">Send Honey Badger</button>
+                </div>
+            </section>
+
+            <section class="features" id="features">
+                <h2>How It Works</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🎁</div>
+                        <h3>Choose Your Gift</h3>
+                        <p>Select from gift cards, cash, photos, or custom messages. Set the perfect reward for your recipient.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎯</div>
+                        <h3>Set the Challenge</h3>
+                        <p>Define how they unlock it: a simple photo, workout routine, daily tasks, or creative challenges.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon-logo">
+                            <img src="/assets/HB-avatar.svg" alt="Honey Badger AI" class="feature-logo">
+                        </div>
+                        <h3>AI Honey Badger Delivers</h3>
+                        <p>Our persistent AI helper motivates and guides them through the challenge via text, email, and more.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="gift-cards">
+                <h3>Supported Gift Cards</h3>
+                <div class="gift-cards-grid">
+                    <div class="gift-card">Dick's Sporting Goods</div>
+                    <div class="gift-card">Fortnite</div>
+                    <div class="gift-card">Sephora</div>
+                    <div class="gift-card">Lululemon</div>
+                    <div class="gift-card">Starbucks</div>
+                    <div class="gift-card">Dunkin'</div>
+                </div>
+            </section>
+
+            <section class="examples">
+                <h3>Real Examples</h3>
+                
+                <div class="example-card">
+                    <h4>🎂 Birthday Surprise</h4>
+                    <p><strong>Gift:</strong> $100 Venmo Gift Card</p>
+                    <p><strong>Challenge:</strong> Return a video saying hi and tell me your favorite ice cream</p>
+                    <p><strong>Honey Badger:</strong> "Hey! Someone special sent you a birthday surprise. All you need to do is send me a quick video..."</p>
+                </div>
+
+                <div class="example-card">
+                    <h4>🏃‍♂️ Fitness Motivation</h4>
+                    <p><strong>Gift:</strong> 3D Printer</p>
+                    <p><strong>Challenge:</strong> Work out and make your bed for 60 days straight</p>
+                    <p><strong>Honey Badger:</strong> "Day 1 of your epic journey! Your parent believes in you and I'm here to help you earn that 3D printer..."</p>
+                </div>
+
+                <div class="example-card">
+                    <h4>💕 Relationship Fun</h4>
+                    <p><strong>Gift:</strong> Special Photo</p>
+                    <p><strong>Challenge:</strong> Do a load of laundry</p>
+                    <p><strong>Honey Badger:</strong> "Your wife has something special waiting for you! Time to tackle that laundry pile..."</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Modals -->
+    <div id="sendModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('sendModal')">&times;</span>
+            <div class="modal-header">
+                <img src="/assets/HB-avatar.svg" alt="Honey Badger" class="modal-logo">
+                <h2>Send a Honey Badger</h2>
+            </div>
+            <form id="sendForm">
+                <div class="form-group">
+                    <label for="recipientName">Recipient Name:</label>
+                    <input type="text" id="recipientName" name="recipientName" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="recipientContact">Recipient Email/Phone:</label>
+                    <input type="text" id="recipientContact" name="recipientContact" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="giftType">Gift Type:</label>
+                    <select id="giftType" name="giftType" required onchange="updateGiftOptions()">
+                        <option value="">Select gift type</option>
+                        <option value="giftcard">Gift Card</option>
+                        <option value="cash">Cash (Venmo/PayPal)</option>
+                        <option value="photo">Photo/Video</option>
+                        <option value="message">Custom Message</option>
+                        <option value="physical">Physical Item</option>
+                    </select>
+                </div>
+                
+                <div class="form-group" id="giftCardOptions" style="display: none;">
+                    <label for="giftCard">Choose Gift Card:</label>
+                    <select id="giftCard" name="giftCard">
+                        <option value="">Select gift card</option>
+                        <option value="dicks">Dick's Sporting Goods</option>
+                        <option value="fortnite">Fortnite</option>
+                        <option value="sephora">Sephora</option>
+                        <option value="lululemon">Lululemon</option>
+                        <option value="starbucks">Starbucks</option>
+                        <option value="dunkin">Dunkin'</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="giftValue">Gift Value/Description:</label>
+                    <input type="text" id="giftValue" name="giftValue" placeholder="e.g., $100, Family Photo, etc." required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="challenge">Challenge/Task:</label>
+                    <textarea id="challenge" name="challenge" placeholder="What does the recipient need to do to unlock this gift?" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Personal Message:</label>
+                    <textarea id="message" name="message" placeholder="Add a personal note (optional)"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="duration">Challenge Duration:</label>
+                    <select id="duration" name="duration" required>
+                        <option value="immediate">Immediate (once completed)</option>
+                        <option value="daily">Daily for 7 days</option>
+                        <option value="weekly">Weekly for 4 weeks</option>
+                        <option value="monthly">Monthly for 3 months</option>
+                        <option value="custom">Custom duration</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn-primary" style="width: 100%; margin-top: 1rem;">Send Honey Badger 🚀</button>
+            </form>
+        </div>
     </div>
 
-    <script>
-        // Global state
-        let currentUser = null;
-        let authToken = null;
-
-        // DOM elements
-        const authContainer = document.getElementById('authContainer');
-        const dashboard = document.getElementById('dashboard');
-        const alertContainer = document.getElementById('alertContainer');
-        const authTabs = document.querySelectorAll('.auth-tab');
-        const authForms = document.querySelectorAll('.auth-form');
-        const loginForm = document.getElementById('loginForm');
-        const signupForm = document.getElementById('signupForm');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const giftBtn = document.getElementById('giftBtn');
-        const userInfo = document.getElementById('userInfo');
-
-        // Initialize app
-        document.addEventListener('DOMContentLoaded', function() {
-            checkAuthStatus();
-            setupEventListeners();
-        });
-
-        // Check if user is already authenticated
-        function checkAuthStatus() {
-            const token = localStorage.getItem('authToken');
-            if (token) {
-                validateToken(token);
-            }
-        }
-
-        // Validate token with server
-        async function validateToken(token) {
-            try {
-                const response = await fetch('/api/auth/me', {
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    currentUser = data.user;
-                    authToken = token;
-                    showDashboard();
-                } else {
-                    localStorage.removeItem('authToken');
-                    showAuth();
-                }
-            } catch (error) {
-                console.error('Token validation error:', error);
-                localStorage.removeItem('authToken');
-                showAuth();
-            }
-        }
-
-        // Setup event listeners
-        function setupEventListeners() {
-            // Tab switching
-            authTabs.forEach(tab => {
-                tab.addEventListener('click', function() {
-                    switchTab(this.dataset.tab);
-                });
-            });
-
-            // Form submissions
-            loginForm.addEventListener('submit', handleLogin);
-            signupForm.addEventListener('submit', handleSignup);
-            logoutBtn.addEventListener('click', handleLogout);
-            giftBtn.addEventListener('click', sendGift);
-
-            // Password confirmation validation
-            document.getElementById('confirmPassword').addEventListener('input', validatePasswordMatch);
-        }
-
-        // Switch between login and signup tabs
-        function switchTab(tabName) {
-            authTabs.forEach(tab => {
-                tab.classList.toggle('active', tab.dataset.tab === tabName);
-            });
-
-            authForms.forEach(form => {
-                form.classList.toggle('active', form.id === `${tabName}Form`);
-            });
-
-            clearAlerts();
-        }
-
-        // Handle login form submission
-        async function handleLogin(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(loginForm);
-            const loginData = Object.fromEntries(formData);
-
-            try {
-                showLoading(loginForm.querySelector('.btn'));
-                
-                const response = await fetch('/api/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(loginData)
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    authToken = data.token;
-                    currentUser = data.user;
-                    if (authToken) {
-                        localStorage.setItem('authToken', authToken);
-                    }
-                    showAlert('Login successful! Welcome back.', 'success');
-                    setTimeout(() => showDashboard(), 1000);
-                } else {
-                    showAlert(data.message || 'Login failed. Please try again.', 'error');
-                }
-            } catch (error) {
-                console.error('Login error:', error);
-                showAlert('Network error. Please try again.', 'error');
-            } finally {
-                hideLoading(loginForm.querySelector('.btn'), 'Login');
-            }
-        }
-
-        // Handle signup form submission
-        async function handleSignup(e) {
-            e.preventDefault();
-
-            const formData = new FormData(signupForm);
-            const signupData = Object.fromEntries(formData);
-
-            // Validate password confirmation
-            if (signupData.signupPassword !== signupData.confirmPassword) {
-                showAlert('Passwords do not match.', 'error');
-                return;
-            }
-
-            try {
-                showLoading(signupForm.querySelector('.btn'));
-                
-                const response = await fetch('/api/signup', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(signupData)
-                });
-
-                const data = await response.json();
-
-                if (data.success) {
-                    authToken = data.token;
-                    currentUser = data.user;
-                    if (authToken) {
-                        localStorage.setItem('authToken', authToken);
-                    }
-                    showAlert('Account created successfully! Welcome to Honey Badger AI.', 'success');
-                    setTimeout(() => showDashboard(), 1000);
-                } else {
-                    if (data.errors && data.errors.length > 0) {
-                        const errorMessages = data.errors.map(err => err.msg).join('<br>');
-                        showAlert(errorMessages, 'error');
-                    } else {
-                        showAlert(data.message || 'Signup failed. Please try again.', 'error');
-                    }
-                }
-            } catch (error) {
-                console.error('Signup error:', error);
-                showAlert('Network error. Please try again.', 'error');
-            } finally {
-                hideLoading(signupForm.querySelector('.btn'), 'Create Account');
-            }
-        }
-
-        // Handle logout
-        async function handleLogout() {
-            try {
-                if (authToken) {
-                    await fetch('/api/auth/logout', {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${authToken}`
-                        }
-                    });
-                }
-            } catch (error) {
-                console.error('Logout error:', error);
-            }
-
-            // Clear local state regardless of server response
-            currentUser = null;
-            authToken = null;
-            localStorage.removeItem('authToken');
-            showAuth();
-            showAlert('Logged out successfully.', 'success');
-        }
-
-        // Send gift (placeholder for now)
-        function sendGift() {
-            alert('Gift sending feature coming soon! This will open a form to send Honey Badger gifts with motivational challenges.');
-        }
-
-        // Show authentication forms
-        function showAuth() {
-            authContainer.classList.remove('hidden');
-            dashboard.classList.add('hidden');
-        }
-
-        // Show dashboard
-        function showDashboard() {
-            authContainer.classList.add('hidden');
-            dashboard.classList.remove('hidden');
-            
-            // Populate user info
-            if (currentUser) {
-                userInfo.innerHTML = `
-                    <h3>Account Information</h3>
-                    <p><strong>Name:</strong> ${currentUser.name || 'N/A'}</p>
-                    <p><strong>Email:</strong> ${currentUser.email || 'N/A'}</p>
-                    ${currentUser.phone ? `<p><strong>Phone:</strong> ${currentUser.phone}</p>` : ''}
-                    <p><strong>Member since:</strong> ${currentUser.createdAt ? new Date(currentUser.createdAt).toLocaleDateString() : 'Today'}</p>
-                `;
-            }
-        }
-
-        // Utility functions
-        function showAlert(message, type) {
-            alertContainer.innerHTML = `
-                <div class="alert alert-${type}">
-                    ${message}
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2>Login to Honey Badger</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email:</label>
+                    <input type="email" id="loginEmail" name="loginEmail" required>
                 </div>
-            `;
-            
-            // Auto-hide success messages
-            if (type === 'success') {
-                setTimeout(clearAlerts, 5000);
-            }
-        }
+                <div class="form-group">
+                    <label for="loginPassword">Password:</label>
+                    <input type="password" id="loginPassword" name="loginPassword" required>
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">Login</button>
+            </form>
+        </div>
+    </div>
 
-        function clearAlerts() {
-            alertContainer.innerHTML = '';
-        }
+    <!-- Signup Modal -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('signupModal')">&times;</span>
+            <h2>Join Honey Badger</h2>
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="signupName">Full Name:</label>
+                    <input type="text" id="signupName" name="signupName" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">Email:</label>
+                    <input type="email" id="signupEmail" name="signupEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">Password:</label>
+                    <input type="password" id="signupPassword" name="signupPassword" required>
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">Sign Up</button>
+            </form>
+        </div>
+    </div>
 
-        function showLoading(button) {
-            button.disabled = true;
-            button.textContent = 'Loading...';
-        }
-
-        function hideLoading(button, originalText) {
-            button.disabled = false;
-            button.textContent = originalText;
-        }
-
-        function validatePasswordMatch() {
-            const password = document.getElementById('signupPassword').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            const confirmField = document.getElementById('confirmPassword');
-
-            if (confirmPassword && password !== confirmPassword) {
-                confirmField.style.borderColor = '#dc3545';
-            } else {
-                confirmField.style.borderColor = '#e1e1e1';
-            }
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
