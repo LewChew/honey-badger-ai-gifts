@@ -178,18 +178,25 @@
     <div id="loginModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('loginModal')">&times;</span>
-            <h2>Login to Honey Badger</h2>
+            <div class="modal-header">
+                <img src="/assets/HB-avatar.svg" alt="Honey Badger" class="modal-logo">
+                <h2>Login to Honey Badger</h2>
+            </div>
             <form id="loginForm">
                 <div class="form-group">
                     <label for="loginEmail">Email:</label>
-                    <input type="email" id="loginEmail" name="loginEmail" required>
+                    <input type="email" id="loginEmail" name="loginEmail" required placeholder="Enter your email">
                 </div>
                 <div class="form-group">
                     <label for="loginPassword">Password:</label>
-                    <input type="password" id="loginPassword" name="loginPassword" required>
+                    <input type="password" id="loginPassword" name="loginPassword" required placeholder="Enter your password">
                 </div>
                 <button type="submit" class="btn" style="width: 100%;">Login</button>
             </form>
+            <p style="text-align: center; margin-top: 15px; color: #ccc;">
+                Don't have an account? 
+                <a href="#" onclick="closeModal('loginModal'); showModal('signupModal');" style="color: #ffeb3b; text-decoration: none;">Sign up here</a>
+            </p>
         </div>
     </div>
 
@@ -197,22 +204,38 @@
     <div id="signupModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('signupModal')">&times;</span>
-            <h2>Join Honey Badger</h2>
+            <div class="modal-header">
+                <img src="/assets/HB-avatar.svg" alt="Honey Badger" class="modal-logo">
+                <h2>Join Honey Badger</h2>
+            </div>
             <form id="signupForm">
                 <div class="form-group">
                     <label for="signupName">Full Name:</label>
-                    <input type="text" id="signupName" name="signupName" required>
+                    <input type="text" id="signupName" name="signupName" required placeholder="Enter your full name">
                 </div>
                 <div class="form-group">
                     <label for="signupEmail">Email:</label>
-                    <input type="email" id="signupEmail" name="signupEmail" required>
+                    <input type="email" id="signupEmail" name="signupEmail" required placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label for="signupPhone">Phone (Optional):</label>
+                    <input type="tel" id="signupPhone" name="signupPhone" placeholder="+1234567890">
                 </div>
                 <div class="form-group">
                     <label for="signupPassword">Password:</label>
-                    <input type="password" id="signupPassword" name="signupPassword" required>
+                    <input type="password" id="signupPassword" name="signupPassword" required placeholder="Create a secure password">
+                    <small style="color: #aaa; font-size: 0.85rem;">Must be 6+ characters with uppercase, lowercase, and numbers</small>
                 </div>
-                <button type="submit" class="btn" style="width: 100%;">Sign Up</button>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password:</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Confirm your password">
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">Create Account</button>
             </form>
+            <p style="text-align: center; margin-top: 15px; color: #ccc;">
+                Already have an account? 
+                <a href="#" onclick="closeModal('signupModal'); showModal('loginModal');" style="color: #ffeb3b; text-decoration: none;">Login here</a>
+            </p>
         </div>
     </div>
 
