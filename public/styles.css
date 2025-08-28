@@ -13,7 +13,7 @@ body {
     overflow-x: hidden;
 }
 
-/* Background Honey Badger Logo - Updated to use PNG avatar */
+/* Background Honey Badger Logo - Updated to use avatar */
 body::before {
     content: '';
     position: fixed;
@@ -22,7 +22,7 @@ body::before {
     transform: translate(-50%, -50%);
     width: 90vw;
     height: 90vh;
-    background-image: url('/assets/Honey_badger_avatar.png');
+    background-image: url('/assets/HB-avatar.svg');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -111,7 +111,7 @@ header {
     position: relative;
 }
 
-/* Hero Logo - Show the avatar above the wooden sign */
+/* Hero Logo - Show the avatar above the title */
 .hero-logo {
     display: flex;
     justify-content: center;
@@ -141,110 +141,19 @@ header {
     }
 }
 
-/* Spacer between sign and tagline */
-.tagline-spacer {
-    height: 3rem;
-    width: 100%;
-}
-
-/* Enhanced Wooden Sign Style - Fixed Implementation */
+/* Clean Hero Title - No wooden sign */
 .hero h1 {
     font-size: 3.2rem;
     font-weight: 900;
-    color: #FFEF94;
+    color: #ffeb3b;
     margin-bottom: 1rem;
-    text-shadow: 
-        2px 2px 0 #654321,
-        4px 4px 8px rgba(0,0,0,0.8),
-        6px 6px 12px rgba(0,0,0,0.6);
-    font-family: 'Georgia', serif;
+    text-shadow: 3px 3px 0px #000, 6px 6px 12px rgba(0,0,0,0.8);
+    font-family: 'Arial Black', sans-serif;
     text-transform: uppercase;
     letter-spacing: 3px;
-    transform: rotate(-1.5deg);
-    display: inline-block;
-    position: relative;
-    animation: swingSign 6s ease-in-out infinite;
     line-height: 1.2;
-    padding: 25px 40px;
+    position: relative;
     z-index: 10;
-}
-
-/* Wooden Sign Background - Fixed Colors and Positioning */
-.hero h1::before {
-    content: '';
-    position: absolute;
-    top: -30px;
-    left: -40px;
-    right: -40px;
-    bottom: -30px;
-    background: linear-gradient(135deg, 
-        #8B4513 0%, 
-        #A0522D 15%, 
-        #CD853F 25%, 
-        #D2B48C 40%, 
-        #CD853F 55%, 
-        #A0522D 75%, 
-        #8B4513 90%, 
-        #654321 100%);
-    border-radius: 15px;
-    z-index: -2;
-    box-shadow: 
-        0 15px 35px rgba(0,0,0,0.6),
-        inset 0 2px 0 rgba(255,255,255,0.1),
-        inset 0 -2px 0 rgba(0,0,0,0.3),
-        inset -8px -8px 20px rgba(0,0,0,0.4),
-        inset 8px 8px 20px rgba(205,133,63,0.3);
-    border: 8px solid #654321;
-}
-
-/* Wood Grain Texture - Fixed Overlay */
-.hero h1::after {
-    content: '';
-    position: absolute;
-    top: -22px;
-    left: -32px;
-    right: -32px;
-    bottom: -22px;
-    background: 
-        repeating-linear-gradient(
-            90deg,
-            transparent,
-            transparent 1px,
-            rgba(139, 69, 19, 0.15) 1px,
-            rgba(139, 69, 19, 0.15) 2px
-        ),
-        repeating-linear-gradient(
-            0deg,
-            transparent,
-            transparent 6px,
-            rgba(101, 67, 33, 0.2) 6px,
-            rgba(101, 67, 33, 0.2) 10px
-        ),
-        repeating-linear-gradient(
-            45deg,
-            transparent,
-            transparent 15px,
-            rgba(139, 69, 19, 0.1) 15px,
-            rgba(139, 69, 19, 0.1) 20px
-        );
-    border-radius: 8px;
-    z-index: -1;
-    pointer-events: none;
-}
-
-@keyframes swingSign {
-    0%, 100% {
-        transform: rotate(-1.5deg);
-    }
-    25% {
-        transform: rotate(-0.5deg);
-    }
-    50% {
-        transform: rotate(1.5deg);
-    }
-    75% {
-        transform: rotate(0.5deg);
-    }
 }
 
 .hero p {
@@ -332,20 +241,6 @@ header {
     border-radius: 50%;
     background: rgba(255, 235, 59, 0.1);
     padding: 8px;
-}
-
-/* Enhanced Avatar */
-.enhanced-avatar {
-    width: 120px !important;
-    height: 120px !important;
-    filter: brightness(1.4) contrast(1.3) drop-shadow(3px 3px 6px rgba(0,0,0,0.9));
-    background: rgba(255, 235, 59, 0.15) !important;
-}
-
-.enhanced-avatar:hover {
-    transform: scale(1.1);
-    filter: brightness(1.5) contrast(1.4) drop-shadow(4px 4px 8px rgba(0,0,0,1));
-    background: rgba(255, 235, 59, 0.25) !important;
 }
 
 .feature-card h3 {
@@ -473,24 +368,6 @@ header {
     text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
 }
 
-/* Enhanced Button - Bigger and Bolder */
-.enhanced-button {
-    font-size: 1.6rem !important;
-    padding: 24px 48px !important;
-    font-weight: 900 !important;
-    letter-spacing: 2px !important;
-    border: 4px solid #000 !important;
-    box-shadow: 0 8px 25px rgba(255,193,7,0.6) !important;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.5) !important;
-    transform: scale(1.1);
-}
-
-.enhanced-button:hover {
-    transform: scale(1.2) translateY(-4px) !important;
-    box-shadow: 0 12px 35px rgba(255,193,7,0.8) !important;
-    background: linear-gradient(135deg, #ffc107, #ffeb3b) !important;
-}
-
 .btn-primary:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 25px rgba(255,193,7,0.7);
@@ -585,14 +462,6 @@ header {
     padding: 5px;
 }
 
-/* Enhanced Modal Avatar */
-.enhanced-modal-avatar {
-    width: 90px !important;
-    height: 90px !important;
-    filter: brightness(1.4) contrast(1.3) drop-shadow(3px 3px 6px rgba(0,0,0,0.9)) !important;
-    background: rgba(255, 235, 59, 0.15) !important;
-}
-
 .modal-header h2 {
     margin: 0;
     color: #ffeb3b;
@@ -667,13 +536,6 @@ header {
         letter-spacing: 2px;
     }
     
-    .hero h1::before {
-        left: -30px;
-        right: -30px;
-        top: -25px;
-        bottom: -25px;
-    }
-    
     .hero-logo-image {
         width: 120px;
         height: 120px;
@@ -682,10 +544,6 @@ header {
     .hero p {
         font-size: 1.2rem;
         padding: 0 1rem;
-    }
-    
-    .tagline-spacer {
-        height: 2rem;
     }
     
     .logo {
@@ -704,23 +562,8 @@ header {
         height: 80px;
     }
     
-    .enhanced-avatar {
-        width: 100px !important;
-        height: 100px !important;
-    }
-    
     .feature-icon-logo {
         height: 100px;
-    }
-    
-    .enhanced-button {
-        font-size: 1.4rem !important;
-        padding: 20px 40px !important;
-        transform: scale(1.05);
-    }
-    
-    .enhanced-button:hover {
-        transform: scale(1.15) translateY(-3px) !important;
     }
     
     .features-grid {
@@ -736,11 +579,6 @@ header {
         margin: 10% auto;
         padding: 1.5rem;
         width: 95%;
-    }
-    
-    .enhanced-modal-avatar {
-        width: 80px !important;
-        height: 80px !important;
     }
     
     .nav-buttons {
@@ -766,13 +604,6 @@ header {
         letter-spacing: 1px;
     }
     
-    .hero h1::before {
-        left: -25px;
-        right: -25px;
-        top: -20px;
-        bottom: -20px;
-    }
-    
     .hero-logo-image {
         width: 100px;
         height: 100px;
@@ -782,37 +613,18 @@ header {
         padding: 2rem 1rem;
     }
     
-    .tagline-spacer {
-        height: 1.5rem;
-    }
-    
     .feature-logo {
         width: 70px;
         height: 70px;
-    }
-    
-    .enhanced-avatar {
-        width: 90px !important;
-        height: 90px !important;
     }
     
     .feature-icon-logo {
         height: 90px;
     }
     
-    .enhanced-button {
-        font-size: 1.2rem !important;
-        padding: 18px 32px !important;
-    }
-    
     .modal-content {
         margin: 5% auto;
         padding: 1rem;
-    }
-    
-    .enhanced-modal-avatar {
-        width: 70px !important;
-        height: 70px !important;
     }
     
     .features h2 {
