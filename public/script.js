@@ -1,5 +1,15 @@
+// Authentication state
+let currentUser = null;
+let authToken = localStorage.getItem('authToken');
+
 // Modal functionality
 function showModal(modalId) {
+    // Check if user is logged in and trying to send honey badger
+    if (modalId === 'sendModal' && !currentUser) {
+        alert('Please login first to send a Honey Badger! 🍯');
+        showModal('loginModal');
+        return;
+    }
     document.getElementById(modalId).style.display = 'block';
 }
 
@@ -29,21 +39,34 @@ window.onclick = function(event) {
     }
 }
 
-// API helper function
-async function makeAPIRequest(endpoint, data) {
+// API helper function with authentication
+async function makeAPIRequest(endpoint, data, requiresAuth = false) {
     try {
+        const headers = {
+            'Content-Type': 'application/json',
+        };
+
+        // Add authorization header if token exists
+        if (requiresAuth && authToken) {
+            headers['Authorization'] = `Bearer ${authToken}`;
+        }
+
         const response = await fetch(endpoint, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            headers: headers,
             body: JSON.stringify(data)
         });
         
         const result = await response.json();
         
+        // Handle token expiration
+        if (response.status === 401 || response.status === 403) {
+            handleTokenExpiration();
+            throw new Error(result.message || 'Authentication failed');
+        }
+        
         if (!response.ok) {
-            throw new Error(result.error || 'Request failed');
+            throw new Error(result.message || 'Request failed');
         }
         
         return result;
@@ -53,22 +76,110 @@ async function makeAPIRequest(endpoint, data) {
     }
 }
 
+// Check authentication status on page load
+async function checkAuthStatus() {
+    if (!authToken) return;
+
+    try {
+        const response = await fetch('/api/auth/me', {
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            }
+        });
+
+        if (response.ok) {
+            const result = await response.json();
+            currentUser = result.user;
+            updateUIForLoggedInUser(currentUser);
+        } else {
+            handleTokenExpiration();
+        }
+    } catch (error) {
+        console.error('Auth check failed:', error);
+        handleTokenExpiration();
+    }
+}
+
+// Handle token expiration
+function handleTokenExpiration() {
+    authToken = null;
+    currentUser = null;
+    localStorage.removeItem('authToken');
+    updateUIForLoggedOutUser();
+}
+
+// Show loading state
+function showLoading(button, text = 'Loading...') {
+    button.disabled = true;
+    button.dataset.originalText = button.textContent;
+    button.textContent = text;
+}
+
+// Hide loading state
+function hideLoading(button) {
+    button.disabled = false;
+    button.textContent = button.dataset.originalText || button.textContent;
+}
+
+// Show error message in form
+function showFormError(formId, message) {
+    let errorDiv = document.querySelector(`#${formId} .error-message`);
+    if (!errorDiv) {
+        errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message';
+        errorDiv.style.cssText = 'color: #ff4444; margin-bottom: 15px; padding: 10px; background: rgba(255,68,68,0.1); border-radius: 5px; border: 1px solid #ff4444;';
+        document.getElementById(formId).insertBefore(errorDiv, document.querySelector(`#${formId} button`));
+    }
+    errorDiv.textContent = message;
+    setTimeout(() => errorDiv.remove(), 5000);
+}
+
+// Show success message in form
+function showFormSuccess(formId, message) {
+    let successDiv = document.querySelector(`#${formId} .success-message`);
+    if (!successDiv) {
+        successDiv = document.createElement('div');
+        successDiv.className = 'success-message';
+        successDiv.style.cssText = 'color: #44ff44; margin-bottom: 15px; padding: 10px; background: rgba(68,255,68,0.1); border-radius: 5px; border: 1px solid #44ff44;';
+        document.getElementById(formId).insertBefore(successDiv, document.querySelector(`#${formId} button`));
+    }
+    successDiv.textContent = message;
+    setTimeout(() => successDiv.remove(), 3000);
+}
+
 // Form submission handlers
 document.addEventListener('DOMContentLoaded', function() {
+    // Check auth status on load
+    checkAuthStatus();
+
     // Send Honey Badger form
     document.getElementById('sendForm').addEventListener('submit', async function(e) {
         e.preventDefault();
+        
+        if (!currentUser) {
+            alert('Please login first to send a Honey Badger! 🍯');
+            closeModal('sendModal');
+            showModal('loginModal');
+            return;
+        }
+
+        const submitButton = this.querySelector('button[type="submit"]');
+        showLoading(submitButton, 'Sending Honey Badger...');
         
         const formData = new FormData(this);
         const data = Object.fromEntries(formData.entries());
         
         try {
-            const result = await makeAPIRequest('/api/send-honey-badger', data);
-            alert(`🍯 ${result.message}\nTracking ID: ${result.trackingId}`);
-            closeModal('sendModal');
-            this.reset();
+            const result = await makeAPIRequest('/api/send-honey-badger', data, true);
+            showFormSuccess('sendForm', `🍯 ${result.message}`);
+            setTimeout(() => {
+                closeModal('sendModal');
+                this.reset();
+            }, 2000);
         } catch (error) {
-            alert('❌ Failed to send Honey Badger. Please try again.');
+            showFormError('sendForm', error.message || 'Failed to send Honey Badger. Please try again.');
+        } finally {
+            hideLoading(submitButton);
         }
     });
 
@@ -76,19 +187,32 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('loginForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         
+        const submitButton = this.querySelector('button[type="submit"]');
+        showLoading(submitButton, 'Logging in...');
+        
         const formData = new FormData(this);
         const data = Object.fromEntries(formData.entries());
         
         try {
             const result = await makeAPIRequest('/api/login', data);
-            alert(`Welcome back to Honey Badger! 🍯`);
-            closeModal('loginModal');
-            this.reset();
             
-            // Update UI to show logged in state
-            updateUIForLoggedInUser(result.user);
+            // Store authentication data
+            authToken = result.token;
+            currentUser = result.user;
+            localStorage.setItem('authToken', authToken);
+            
+            showFormSuccess('loginForm', `Welcome back, ${result.user.name}! 🍯`);
+            
+            setTimeout(() => {
+                closeModal('loginModal');
+                this.reset();
+                updateUIForLoggedInUser(result.user);
+            }, 1500);
+            
         } catch (error) {
-            alert('❌ Login failed. Please check your credentials.');
+            showFormError('loginForm', error.message || 'Login failed. Please check your credentials.');
+        } finally {
+            hideLoading(submitButton);
         }
     });
 
@@ -96,19 +220,45 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('signupForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         
+        const submitButton = this.querySelector('button[type="submit"]');
+        showLoading(submitButton, 'Creating account...');
+        
         const formData = new FormData(this);
         const data = Object.fromEntries(formData.entries());
         
+        // Simple password confirmation check
+        const password = data.signupPassword;
+        const confirmPassword = document.getElementById('confirmPassword')?.value;
+        if (confirmPassword && password !== confirmPassword) {
+            showFormError('signupForm', 'Passwords do not match!');
+            hideLoading(submitButton);
+            return;
+        }
+        
         try {
             const result = await makeAPIRequest('/api/signup', data);
-            alert(`Welcome to Honey Badger! Your account has been created. 🍯`);
-            closeModal('signupModal');
-            this.reset();
             
-            // Update UI to show logged in state
-            updateUIForLoggedInUser(result.user);
+            // Store authentication data
+            authToken = result.token;
+            currentUser = result.user;
+            localStorage.setItem('authToken', authToken);
+            
+            showFormSuccess('signupForm', `Welcome to Honey Badger, ${result.user.name}! 🍯`);
+            
+            setTimeout(() => {
+                closeModal('signupModal');
+                this.reset();
+                updateUIForLoggedInUser(result.user);
+            }, 1500);
+            
         } catch (error) {
-            alert('❌ Signup failed. Please try again.');
+            if (error.message.includes('Validation failed')) {
+                showFormError('signupForm', 'Please check your input: Password must contain uppercase, lowercase, and numbers.');
+            } else {
+                showFormError('signupForm', error.message || 'Signup failed. Please try again.');
+            }
+        } finally {
+            hideLoading(submitButton);
         }
     });
 
@@ -120,19 +270,42 @@ document.addEventListener('DOMContentLoaded', function() {
 function updateUIForLoggedInUser(user) {
     const navButtons = document.querySelector('.nav-buttons');
     navButtons.innerHTML = `
-        <span style="color: #ffeb3b; font-weight: bold;">Welcome, ${user.name || user.email}!</span>
+        <span style="color: #ffeb3b; font-weight: bold; margin-right: 15px;">👋 ${user.name || user.email}</span>
         <button class="btn btn-secondary" onclick="logout()">Logout</button>
     `;
 }
 
-// Logout function
-function logout() {
+// Update UI for logged out user
+function updateUIForLoggedOutUser() {
     const navButtons = document.querySelector('.nav-buttons');
     navButtons.innerHTML = `
         <button class="btn btn-secondary" onclick="showModal('loginModal')">Login</button>
         <button class="btn" onclick="showModal('signupModal')">Sign Up</button>
     `;
-    alert('Logged out successfully! 🍯');
+}
+
+// Logout function
+async function logout() {
+    try {
+        if (authToken) {
+            await fetch('/api/auth/logout', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                }
+            });
+        }
+    } catch (error) {
+        console.error('Logout error:', error);
+    }
+    
+    // Clear local state
+    authToken = null;
+    currentUser = null;
+    localStorage.removeItem('authToken');
+    updateUIForLoggedOutUser();
+    
+    alert('Logged out successfully! Come back soon! 🍯');
 }
 
 // Animation initialization
@@ -196,6 +369,17 @@ function createParticleEffect() {
         @keyframes float {
             0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.6; }
             50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     `;
     document.head.appendChild(style);
