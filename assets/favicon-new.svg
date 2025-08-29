@@ -1,0 +1,29 @@
+<svg width="64" height="64" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="favYellow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FFFF00;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FFC107;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Black background -->
+  <rect width="64" height="64" fill="#000000"/>
+  
+  <!-- Simplified version of HB-avatar for favicon -->
+  <g transform="translate(8, 8) scale(0.75)">
+    <!-- Honey Badger silhouette simplified -->
+    <path fill="url(#favYellow)" stroke="#000" stroke-width="1" 
+          d="M32 8C46 8 58 18 58 32C58 46 46 56 32 56C18 56 6 46 6 32C6 18 18 8 32 8Z"/>
+    
+    <!-- Eyes -->
+    <circle cx="24" cy="26" r="2" fill="#000"/>
+    <circle cx="40" cy="26" r="2" fill="#000"/>
+    
+    <!-- Nose -->
+    <ellipse cx="32" cy="34" rx="3" ry="2" fill="#000"/>
+    
+    <!-- Ears -->
+    <ellipse cx="22" cy="16" rx="4" ry="6" fill="url(#favYellow)" stroke="#000" stroke-width="1"/>
+    <ellipse cx="42" cy="16" rx="4" ry="6" fill="url(#favYellow)" stroke="#000" stroke-width="1"/>
+  </g>
+</svg>
