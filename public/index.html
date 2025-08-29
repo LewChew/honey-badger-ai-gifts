@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Honey Badger - AI Gift Delivery</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-    <link rel="alternate icon" href="/assets/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/assets/favicon-new.svg" type="image/svg+xml">
+    <link rel="alternate icon" href="/assets/favicon-new.svg" type="image/x-icon">
 </head>
 <body>
     <header>
@@ -35,13 +35,19 @@
                     <h1>Hire a Honey Badger</h1>
                     <p>Send AI-powered gift experiences that motivate, engage, and delight your loved ones</p>
                     <div class="hero-buttons">
-                        <button class="btn-primary" onclick="showCreateAccountFlow()">Get Started - Create Account</button>
+                        <button class="btn-primary" onclick="showCreateAccountFlow()">
+                            <img src="/assets/HB-avatar.svg" alt="" class="btn-icon">
+                            Get Started - Create Account
+                        </button>
                         <button class="btn btn-secondary" onclick="showModal('loginModal')" style="margin-left: 1rem;">Already have an account?</button>
                     </div>
                 </section>
 
                 <section class="features" id="features">
-                    <h2>How It Works</h2>
+                    <h2>
+                        <img src="/assets/HB-avatar.svg" alt="Honey Badger" class="section-icon">
+                        How It Works
+                    </h2>
                     <div class="features-grid">
                         <div class="feature-card">
                             <div class="feature-icon">🎁</div>
@@ -64,7 +70,10 @@
                 </section>
 
                 <section class="gift-cards">
-                    <h3>Supported Gift Cards</h3>
+                    <h3>
+                        <img src="/assets/HB-avatar.svg" alt="Honey Badger" class="section-icon-small">
+                        Supported Gift Cards
+                    </h3>
                     <div class="gift-cards-grid">
                         <div class="gift-card">Dick's Sporting Goods</div>
                         <div class="gift-card">Fortnite</div>
@@ -76,24 +85,36 @@
                 </section>
 
                 <section class="examples">
-                    <h3>Real Examples</h3>
+                    <h3>
+                        <img src="/assets/HB-avatar.svg" alt="Honey Badger" class="section-icon-small">
+                        Real Examples
+                    </h3>
                     
                     <div class="example-card">
-                        <h4>🎂 Birthday Surprise</h4>
+                        <div class="example-header">
+                            <h4>🎂 Birthday Surprise</h4>
+                            <img src="/assets/HB-avatar.svg" alt="HB" class="example-badge">
+                        </div>
                         <p><strong>Gift:</strong> $100 Venmo Gift Card</p>
                         <p><strong>Challenge:</strong> Return a video saying hi and tell me your favorite ice cream</p>
                         <p><strong>Honey Badger:</strong> "Hey! Someone special sent you a birthday surprise. All you need to do is send me a quick video..."</p>
                     </div>
 
                     <div class="example-card">
-                        <h4>🏃‍♂️ Fitness Motivation</h4>
+                        <div class="example-header">
+                            <h4>🏃‍♂️ Fitness Motivation</h4>
+                            <img src="/assets/HB-avatar.svg" alt="HB" class="example-badge">
+                        </div>
                         <p><strong>Gift:</strong> 3D Printer</p>
                         <p><strong>Challenge:</strong> Work out and make your bed for 60 days straight</p>
                         <p><strong>Honey Badger:</strong> "Day 1 of your epic journey! Your parent believes in you and I'm here to help you earn that 3D printer..."</p>
                     </div>
 
                     <div class="example-card">
-                        <h4>💕 Relationship Fun</h4>
+                        <div class="example-header">
+                            <h4>💕 Relationship Fun</h4>
+                            <img src="/assets/HB-avatar.svg" alt="HB" class="example-badge">
+                        </div>
                         <p><strong>Gift:</strong> Special Photo</p>
                         <p><strong>Challenge:</strong> Do a load of laundry</p>
                         <p><strong>Honey Badger:</strong> "Your wife has something special waiting for you! Time to tackle that laundry pile..."</p>
@@ -108,6 +129,7 @@
         <main>
             <div class="container">
                 <div class="dashboard-header">
+                    <img src="/assets/HB-avatar.svg" alt="Honey Badger" class="dashboard-icon">
                     <h1>🍯 Your Honey Badger Dashboard</h1>
                     <p>Welcome back! Here's what's happening with your honey badgers.</p>
                 </div>
@@ -116,14 +138,20 @@
                     <!-- Left Panel - Recent Activity -->
                     <div class="dashboard-left">
                         <div class="activity-section">
-                            <h2>📤 Recently Sent</h2>
+                            <h2>
+                                <img src="/assets/HB-avatar.svg" alt="HB" class="activity-icon">
+                                📤 Recently Sent
+                            </h2>
                             <div id="sentBadgersList" class="badgers-list">
                                 <!-- Sent badgers will be populated here -->
                             </div>
                         </div>
 
                         <div class="activity-section">
-                            <h2>📥 Recently Received</h2>
+                            <h2>
+                                <img src="/assets/HB-avatar.svg" alt="HB" class="activity-icon">
+                                📥 Recently Received
+                            </h2>
                             <div id="receivedBadgersList" class="badgers-list">
                                 <!-- Received badgers will be populated here -->
                             </div>
@@ -135,7 +163,10 @@
                         <div class="send-panel">
                             <div class="send-header">
                                 <img src="/assets/HB-avatar.svg" alt="Honey Badger" class="send-avatar">
-                                <h2>Send a Honey Badger</h2>
+                                <div class="send-title">
+                                    <h2>Send a Honey Badger</h2>
+                                    <p class="send-subtitle">Deploy your AI motivator</p>
+                                </div>
                             </div>
                             
                             <form id="dashboardSendForm" class="send-form">
@@ -200,6 +231,7 @@
                                 </div>
                                 
                                 <button type="submit" class="btn-primary send-btn">
+                                    <img src="/assets/HB-avatar.svg" alt="" class="btn-icon">
                                     🚀 Send Honey Badger
                                 </button>
                             </form>
@@ -216,7 +248,10 @@
             <span class="close" onclick="closeModal('loginModal')">&times;</span>
             <div class="modal-header">
                 <img src="/assets/HB-avatar.svg" alt="Honey Badger" class="modal-logo">
-                <h2>Welcome Back!</h2>
+                <div class="modal-title">
+                    <h2>Welcome Back!</h2>
+                    <p class="modal-subtitle">Your Honey Badger awaits</p>
+                </div>
             </div>
             <form id="loginForm">
                 <div class="form-group">
@@ -227,7 +262,10 @@
                     <label for="loginPassword">Password:</label>
                     <input type="password" id="loginPassword" name="loginPassword" required placeholder="Enter your password">
                 </div>
-                <button type="submit" class="btn" style="width: 100%;">Login</button>
+                <button type="submit" class="btn" style="width: 100%;">
+                    <img src="/assets/HB-avatar.svg" alt="" class="btn-icon-small">
+                    Login
+                </button>
             </form>
             <p style="text-align: center; margin-top: 15px; color: #ccc;">
                 New to Honey Badger? 
@@ -242,7 +280,10 @@
             <span class="close" onclick="closeModal('signupModal')">&times;</span>
             <div class="modal-header">
                 <img src="/assets/HB-avatar.svg" alt="Honey Badger" class="modal-logo">
-                <h2>Join the Pack!</h2>
+                <div class="modal-title">
+                    <h2>Join the Pack!</h2>
+                    <p class="modal-subtitle">Unleash your AI gift companion</p>
+                </div>
             </div>
             <form id="signupForm">
                 <div class="form-group">
@@ -266,7 +307,10 @@
                     <label for="confirmPassword">Confirm Password:</label>
                     <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Confirm your password">
                 </div>
-                <button type="submit" class="btn" style="width: 100%;">Create Account</button>
+                <button type="submit" class="btn" style="width: 100%;">
+                    <img src="/assets/HB-avatar.svg" alt="" class="btn-icon-small">
+                    Create Account
+                </button>
             </form>
             <p style="text-align: center; margin-top: 15px; color: #ccc;">
                 Already have an account? 
