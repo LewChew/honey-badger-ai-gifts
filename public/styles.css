@@ -13,7 +13,7 @@ body {
     overflow-x: hidden;
 }
 
-/* Background Honey Badger Logo - Updated to use avatar */
+/* Background Honey Badger Logo - Updated to use new honey_badger.svg */
 body::before {
     content: '';
     position: fixed;
@@ -22,7 +22,7 @@ body::before {
     transform: translate(-50%, -50%);
     width: 90vw;
     height: 90vh;
-    background-image: url('/assets/HB-avatar.svg');
+    background-image: url('/assets/honey_badger.svg');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
