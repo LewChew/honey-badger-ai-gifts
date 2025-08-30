@@ -13,7 +13,7 @@ body {
     overflow-x: hidden;
 }
 
-/* Background Honey Badger Logo - Larger and no white space */
+/* Background Honeycomb Badger Logo - Larger and no white space */
 body::before {
     content: '';
     position: fixed;
@@ -22,7 +22,7 @@ body::before {
     transform: translate(-50%, -50%);
     width: 100vw;
     height: 100vh;
-    background-image: url('/assets/honey_badger.svg');
+    background-image: url('/assets/honeycomb_badger.svg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
