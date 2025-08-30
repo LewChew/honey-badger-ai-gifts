@@ -13,23 +13,24 @@ body {
     overflow-x: hidden;
 }
 
-/* Background Honey Badger Logo - Updated to use new honey_badger.svg */
+/* Background Honey Badger Logo - Optimized sizing and no white space */
 body::before {
     content: '';
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 90vw;
-    height: 90vh;
+    width: 80vw;
+    height: 80vh;
     background-image: url('/assets/honey_badger.svg');
-    background-size: contain;
+    background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    opacity: 0.15;
+    opacity: 0.12;
     z-index: 0;
     pointer-events: none;
     filter: brightness(1.2) contrast(1.1);
+    border-radius: 50%;
 }
 
 .container {
@@ -80,18 +81,20 @@ header {
     width: 75px;
     height: 75px;
     margin-right: 20px;
-    object-fit: contain;
+    object-fit: cover;
     object-position: center;
     filter: brightness(1.3) contrast(1.2) drop-shadow(2px 2px 4px rgba(0,0,0,0.8));
     transition: all 0.3s ease;
     border-radius: 50%;
     background: rgba(255, 235, 59, 0.1);
-    padding: 5px;
+    padding: 2px;
+    clip-path: circle(50%);
 }
 
 .logo:hover .logo-icon {
     filter: brightness(1.5) contrast(1.3) drop-shadow(3px 3px 6px rgba(0,0,0,0.9));
     background: rgba(255, 235, 59, 0.2);
+    transform: scale(1.05);
 }
 
 .logo-text {
@@ -120,12 +123,15 @@ header {
 .hero-logo-image {
     width: 150px;
     height: 150px;
-    object-fit: contain;
+    object-fit: cover;
+    object-position: center;
     filter: brightness(1.4) contrast(1.3) drop-shadow(4px 4px 8px rgba(0,0,0,0.8));
     border-radius: 50%;
     background: rgba(255, 235, 59, 0.1);
-    padding: 10px;
+    padding: 5px;
     animation: bounce 3s ease-in-out infinite;
+    clip-path: circle(50%);
+    border: 3px solid rgba(255, 235, 59, 0.3);
 }
 
 @keyframes bounce {
@@ -764,9 +770,9 @@ header {
 
 @media (max-width: 768px) {
     body::before {
-        width: 100vw;
-        height: 100vh;
-        opacity: 0.12;
+        width: 70vw;
+        height: 70vh;
+        opacity: 0.10;
     }
 
     .hero h1 {
@@ -777,6 +783,7 @@ header {
     .hero-logo-image {
         width: 120px;
         height: 120px;
+        padding: 3px;
     }
     
     .hero p {
@@ -793,6 +800,7 @@ header {
         width: 60px;
         height: 60px;
         margin-right: 15px;
+        padding: 1px;
     }
     
     .feature-logo {
@@ -854,6 +862,12 @@ header {
 }
 
 @media (max-width: 480px) {
+    body::before {
+        width: 60vw;
+        height: 60vh;
+        opacity: 0.08;
+    }
+
     .hero h1 {
         font-size: 1.8rem;
         letter-spacing: 1px;
@@ -862,6 +876,7 @@ header {
     .hero-logo-image {
         width: 100px;
         height: 100px;
+        padding: 2px;
     }
     
     .hero {
@@ -903,6 +918,7 @@ header {
         width: 50px;
         height: 50px;
         margin-right: 12px;
+        padding: 1px;
     }
     
     .dashboard-header {
