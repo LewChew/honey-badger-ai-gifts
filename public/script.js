@@ -147,41 +147,70 @@ function showFormSuccess(formId, message) {
     setTimeout(() => successDiv.remove(), 3000);
 }
 
+// Initialize word carousel
+function initializeWordCarousel() {
+    const words = document.querySelectorAll('.carousel-word');
+    if (words.length === 0) return;
+    
+    let currentIndex = 0;
+    
+    // Set initial state
+    words.forEach((word, index) => {
+        word.classList.remove('active');
+        if (index === 0) {
+            word.classList.add('active');
+        }
+    });
+    
+    // Cycle through words
+    setInterval(() => {
+        words[currentIndex].classList.remove('active');
+        currentIndex = (currentIndex + 1) % words.length;
+        words[currentIndex].classList.add('active');
+    }, 2000); // Change word every 2 seconds
+}
+
 // Form submission handlers
 document.addEventListener('DOMContentLoaded', function() {
     // Check auth status on load
     checkAuthStatus();
+    
+    // Initialize word carousel
+    initializeWordCarousel();
 
-    // Send Honey Badger form
-    document.getElementById('sendForm').addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        if (!currentUser) {
-            alert('Please login first to send a Honey Badger! 🍯');
-            closeModal('sendModal');
-            showModal('loginModal');
-            return;
-        }
+    // Send Honey Badger form (Dashboard)
+    const dashboardSendForm = document.getElementById('dashboardSendForm');
+    if (dashboardSendForm) {
+        dashboardSendForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (!currentUser) {
+                alert('Please login first to send a Honey Badger! 🍯');
+                showModal('loginModal');
+                return;
+            }
 
-        const submitButton = this.querySelector('button[type="submit"]');
-        showLoading(submitButton, 'Sending Honey Badger...');
-        
-        const formData = new FormData(this);
-        const data = Object.fromEntries(formData.entries());
-        
-        try {
-            const result = await makeAPIRequest('/api/send-honey-badger', data, true);
-            showFormSuccess('sendForm', `🍯 ${result.message}`);
-            setTimeout(() => {
-                closeModal('sendModal');
-                this.reset();
-            }, 2000);
-        } catch (error) {
-            showFormError('sendForm', error.message || 'Failed to send Honey Badger. Please try again.');
-        } finally {
-            hideLoading(submitButton);
-        }
-    });
+            const submitButton = this.querySelector('button[type="submit"]');
+            showLoading(submitButton, 'Sending Honey Badger...');
+            
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+            
+            try {
+                const result = await makeAPIRequest('/api/send-honey-badger', data, true);
+                showFormSuccess('dashboardSendForm', `🍯 ${result.message}`);
+                setTimeout(() => {
+                    this.reset();
+                    // Optionally refresh the badgers list
+                    loadBadgersList();
+                }, 2000);
+            } catch (error) {
+                showFormError('dashboardSendForm', error.message || 'Failed to send Honey Badger. Please try again.');
+            } finally {
+                hideLoading(submitButton);
+            }
+        });
+    }
 
     // Login form
     document.getElementById('loginForm').addEventListener('submit', async function(e) {
@@ -207,6 +236,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 closeModal('loginModal');
                 this.reset();
                 updateUIForLoggedInUser(result.user);
+                // Show dashboard instead of landing page
+                showDashboard();
             }, 1500);
             
         } catch (error) {
@@ -249,6 +280,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 closeModal('signupModal');
                 this.reset();
                 updateUIForLoggedInUser(result.user);
+                // Show dashboard instead of landing page
+                showDashboard();
             }, 1500);
             
         } catch (error) {
@@ -266,22 +299,114 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeAnimations();
 });
 
+// Show dashboard
+function showDashboard() {
+    document.getElementById('landingPage').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    loadBadgersList();
+}
+
+// Show landing page
+function showLandingPage() {
+    document.getElementById('dashboard').style.display = 'none';
+    document.getElementById('landingPage').style.display = 'block';
+}
+
+// Load badgers list
+async function loadBadgersList() {
+    if (!authToken) return;
+    
+    try {
+        // Load sent badgers
+        const sentResponse = await fetch('/api/badgers/sent', {
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            }
+        });
+        
+        if (sentResponse.ok) {
+            const sentData = await sentResponse.json();
+            displayBadgers('sentBadgersList', sentData.badgers || []);
+        }
+        
+        // Load received badgers
+        const receivedResponse = await fetch('/api/badgers/received', {
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            }
+        });
+        
+        if (receivedResponse.ok) {
+            const receivedData = await receivedResponse.json();
+            displayBadgers('receivedBadgersList', receivedData.badgers || []);
+        }
+    } catch (error) {
+        console.error('Failed to load badgers:', error);
+    }
+}
+
+// Display badgers in list
+function displayBadgers(listId, badgers) {
+    const listElement = document.getElementById(listId);
+    
+    if (!badgers || badgers.length === 0) {
+        listElement.innerHTML = '<div class="empty-state">No honey badgers yet. Send one to get started!</div>';
+        return;
+    }
+    
+    listElement.innerHTML = badgers.map(badger => `
+        <div class="badger-item">
+            <div class="badger-header">
+                <span class="badger-title">${badger.recipientName || 'Unknown'}</span>
+                <span class="badger-status status-${badger.status || 'pending'}">${badger.status || 'Pending'}</span>
+            </div>
+            <div class="badger-info">
+                <strong>Gift:</strong> ${badger.giftType} - ${badger.giftValue}<br>
+                <strong>Challenge:</strong> ${badger.challenge}
+            </div>
+            <div class="badger-meta">
+                Sent ${new Date(badger.createdAt).toLocaleDateString()}
+            </div>
+        </div>
+    `).join('');
+}
+
 // Update UI for logged in user
 function updateUIForLoggedInUser(user) {
     const navButtons = document.querySelector('.nav-buttons');
     navButtons.innerHTML = `
-        <span style="color: #ffeb3b; font-weight: bold; margin-right: 15px;">👋 ${user.name || user.email}</span>
+        <span class="user-welcome">👋 ${user.name || user.email}</span>
         <button class="btn btn-secondary" onclick="logout()">Logout</button>
     `;
+    
+    // Show dashboard if on landing page
+    if (document.getElementById('landingPage').style.display !== 'none') {
+        showDashboard();
+    }
 }
 
 // Update UI for logged out user
 function updateUIForLoggedOutUser() {
     const navButtons = document.querySelector('.nav-buttons');
     navButtons.innerHTML = `
-        <button class="btn btn-secondary" onclick="showModal('loginModal')">Login</button>
-        <button class="btn" onclick="showModal('signupModal')">Sign Up</button>
+        <button class="btn-primary" onclick="showCreateAccountFlow()">
+            Send a Badger
+        </button>
     `;
+    
+    // Show landing page
+    showLandingPage();
+}
+
+// Show create account flow
+function showCreateAccountFlow() {
+    if (currentUser) {
+        // If logged in, go directly to dashboard
+        showDashboard();
+    } else {
+        // If not logged in, show signup modal
+        showModal('signupModal');
+    }
 }
 
 // Logout function
@@ -342,6 +467,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function createParticleEffect() {
     const hero = document.querySelector('.hero');
+    if (!hero) return;
     
     for (let i = 0; i < 20; i++) {
         const particle = document.createElement('div');
@@ -387,6 +513,8 @@ function createParticleEffect() {
 
 function addTypingEffect() {
     const subtitle = document.querySelector('.hero p');
+    if (!subtitle) return;
+    
     const originalText = subtitle.textContent;
     subtitle.textContent = '';
     
