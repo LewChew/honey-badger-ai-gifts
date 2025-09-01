@@ -3869,47 +3869,4 @@ M551.826538,661.912354
 	C551.667725,661.939941 551.364197,661.744202 550.954163,661.293457 
 	C551.125732,661.255249 551.403748,661.472107 551.826538,661.912354 
 z"/>
-</svg>  <!-- Nose -->
-  <ellipse cx="200" cy="165" rx="4" ry="3" fill="#1A1A1A"/>
-  
-  <!-- Legs -->
-  <ellipse cx="150" cy="280" rx="15" ry="25" fill="url(#badgerGradient)"/>
-  <ellipse cx="185" cy="285" rx="15" ry="25" fill="url(#badgerGradient)"/>
-  <ellipse cx="215" cy="285" rx="15" ry="25" fill="url(#badgerGradient)"/>
-  <ellipse cx="250" cy="280" rx="15" ry="25" fill="url(#badgerGradient)"/>
-  
-  <!-- Claws -->
-  <g fill="#E2FF00" stroke="#B8CC00" stroke-width="1">
-    <path d="M145,300 L142,310 M147,302 L144,312 M153,302 L156,312"/>
-    <path d="M180,305 L177,315 M182,307 L179,317 M190,307 L193,317"/>
-    <path d="M210,307 L207,317 M212,309 L209,319 M220,309 L223,319"/>
-    <path d="M245,300 L242,310 M247,302 L244,312 M253,302 L256,312"/>
-  </g>
-  
-  <!-- Tail -->
-  <ellipse cx="320" cy="230" rx="30" ry="15" fill="url(#badgerGradient)" transform="rotate(20 320 230)"/>
-  
-  <!-- Honey pot (gift element) -->
-  <g transform="translate(280, 120)">
-    <ellipse cx="0" cy="20" rx="25" ry="30" fill="#D4A574" stroke="#B8904F" stroke-width="2"/>
-    <ellipse cx="0" cy="5" rx="20" ry="8" fill="#E2FF00" opacity="0.8"/>
-    <rect x="-15" y="-8" width="30" height="8" fill="#8B4513" rx="4"/>
-    <text x="0" y="25" text-anchor="middle" fill="#8B4513" font-size="12" font-weight="bold">🍯</text>
-  </g>
-  
-  <!-- Sparkling effect -->
-  <g fill="#E2FF00" opacity="0.8">
-    <circle cx="120" cy="100" r="2">
-      <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/>
-    </circle>
-    <circle cx="300" cy="80" r="1.5">
-      <animate attributeName="opacity" values="0.5;1;0.5" dur="1.5s" repeatCount="indefinite"/>
-    </circle>
-    <circle cx="350" cy="180" r="2">
-      <animate attributeName="opacity" values="0.2;1;0.2" dur="2.5s" repeatCount="indefinite"/>
-    </circle>
-    <circle cx="80" cy="200" r="1">
-      <animate attributeName="opacity" values="0.4;1;0.4" dur="1.8s" repeatCount="indefinite"/>
-    </circle>
-  </g>
 </svg>
