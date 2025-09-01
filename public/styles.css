@@ -158,6 +158,30 @@ header {
     z-index: 10;
 }
 
+/* Word Carousel Styles */
+.word-carousel {
+    position: relative;
+    display: inline-block;
+    min-width: 250px; /* Adjust based on your longest word */
+    text-align: left;
+}
+
+.carousel-word {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease-in-out;
+    white-space: nowrap;
+}
+
+.carousel-word.active {
+    opacity: 1;
+    transform: translateY(0);
+    position: relative;
+}
+
 .hero p {
     font-size: 1.4rem;
     color: #f0f0f0;
@@ -781,6 +805,10 @@ header {
         letter-spacing: 2px;
     }
     
+    .word-carousel {
+        min-width: 200px;
+    }
+    
     .hero-logo-image {
         width: 160px;
         height: 160px;
@@ -872,6 +900,10 @@ header {
     .hero h1 {
         font-size: 1.8rem;
         letter-spacing: 1px;
+    }
+    
+    .word-carousel {
+        min-width: 160px;
     }
     
     .hero-logo-image {
