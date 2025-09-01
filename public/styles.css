@@ -22,7 +22,7 @@ body::before {
     transform: translate(-50%, -50%);
     width: 100vw;
     height: 100vh;
-    background-image: url('/assets/honeycomb_badger.svg');
+    background-image: url('/assets/honeycomb_badger2.svg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -48,8 +48,8 @@ header {
     position: sticky;
     top: 0;
     z-index: 100;
-    border-bottom: 5px solid #ffeb3b;
-    box-shadow: 0 4px 30px rgba(255,235,59,0.4);
+    border-bottom: 5px solid #E2FF00;
+    box-shadow: 0 4px 30px rgba(226,255,0,0.4);
 }
 
 .header-content {
@@ -63,7 +63,7 @@ header {
     align-items: center;
     font-size: 2.8rem;
     font-weight: 900;
-    color: #ffeb3b;
+    color: #E2FF00;
     text-shadow: 3px 3px 0px #000, 6px 6px 0px rgba(0,0,0,0.8);
     font-family: 'Arial Black', 'Arial', sans-serif;
     text-transform: uppercase;
@@ -101,14 +101,14 @@ header {
 
 /* Landing Page Styles */
 .hero {
-    text-align: center;
+    text-align: right;
     margin-bottom: 5rem;
     padding: 4rem 0;
     background: rgba(0,0,0,0.3);
     border-radius: 20px;
     backdrop-filter: blur(15px);
-    border: 3px solid rgba(255,235,59,0.5);
-    box-shadow: 0 10px 40px rgba(255,235,59,0.3);
+    border: 3px solid rgba(226,255,0,0.5);
+    box-shadow: 0 10px 40px rgba(226,255,0,0.3);
     position: relative;
 }
 
@@ -147,7 +147,7 @@ header {
 .hero h1 {
     font-size: 3.2rem;
     font-weight: 900;
-    color: #ffeb3b;
+    color: #E2FF00;
     margin-bottom: 1rem;
     text-shadow: 3px 3px 0px #000, 6px 6px 12px rgba(0,0,0,0.8);
     font-family: 'Arial Black', sans-serif;
@@ -163,12 +163,12 @@ header {
     position: relative;
     display: inline-block;
     min-width: 250px; /* Adjust based on your longest word */
-    text-align: left;
+    text-align: right;
 }
 
 .carousel-word {
     position: absolute;
-    left: 0;
+    right: 0;
     top: 0;
     opacity: 0;
     transform: translateY(20px);
@@ -188,17 +188,19 @@ header {
     margin-bottom: 2rem;
     max-width: 600px;
     margin-left: auto;
-    margin-right: auto;
+    margin-right: 0;
     font-weight: 500;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
     position: relative;
     z-index: 1;
+    text-align: right;
 }
 
 .hero-buttons {
     margin-top: 2rem;
     position: relative;
     z-index: 1;
+    text-align: right;
 }
 
 /* Dashboard Styles */
@@ -214,11 +216,11 @@ header {
     padding: 2rem;
     border-radius: 15px;
     backdrop-filter: blur(15px);
-    border: 2px solid rgba(255,235,59,0.3);
+    border: 2px solid rgba(226,255,0,0.3);
 }
 
 .dashboard-header h1 {
-    color: #ffeb3b;
+    color: #E2FF00;
     font-size: 2.5rem;
     margin-bottom: 0.5rem;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
@@ -247,12 +249,12 @@ header {
     background: rgba(0,0,0,0.4);
     border-radius: 15px;
     padding: 2rem;
-    border: 2px solid rgba(255,235,59,0.3);
+    border: 2px solid rgba(226,255,0,0.3);
     backdrop-filter: blur(15px);
 }
 
 .activity-section h2 {
-    color: #ffeb3b;
+    color: #E2FF00;
     margin-bottom: 1.5rem;
     font-size: 1.5rem;
     font-weight: 700;
@@ -266,16 +268,16 @@ header {
 }
 
 .badger-item {
-    background: rgba(255,235,59,0.1);
-    border: 1px solid rgba(255,235,59,0.3);
+    background: rgba(226,255,0,0.1);
+    border: 1px solid rgba(226,255,0,0.3);
     border-radius: 10px;
     padding: 1.5rem;
     transition: all 0.3s ease;
 }
 
 .badger-item:hover {
-    background: rgba(255,235,59,0.15);
-    border-color: rgba(255,235,59,0.5);
+    background: rgba(226,255,0,0.15);
+    border-color: rgba(226,255,0,0.5);
     transform: translateY(-2px);
 }
 
@@ -288,7 +290,7 @@ header {
 
 .badger-title {
     font-weight: 700;
-    color: #ffeb3b;
+    color: #E2FF00;
     font-size: 1.1rem;
 }
 
@@ -345,9 +347,9 @@ header {
     background: rgba(0,0,0,0.6);
     border-radius: 20px;
     padding: 2rem;
-    border: 3px solid #ffeb3b;
+    border: 3px solid #E2FF00;
     backdrop-filter: blur(15px);
-    box-shadow: 0 10px 30px rgba(255,235,59,0.3);
+    box-shadow: 0 10px 30px rgba(226,255,0,0.3);
 }
 
 .send-header {
@@ -355,7 +357,7 @@ header {
     align-items: center;
     margin-bottom: 2rem;
     padding-bottom: 1rem;
-    border-bottom: 2px solid rgba(255,235,59,0.3);
+    border-bottom: 2px solid rgba(226,255,0,0.3);
 }
 
 .send-avatar {
@@ -364,13 +366,13 @@ header {
     margin-right: 15px;
     /* Removed circular styling - preserve original image */
     border-radius: 0;
-    background: rgba(255, 235, 59, 0.1);
+    background: rgba(226, 255, 0, 0.1);
     padding: 5px;
     filter: brightness(1.3) contrast(1.2) drop-shadow(2px 2px 4px rgba(0,0,0,0.8));
 }
 
 .send-header h2 {
-    color: #ffeb3b;
+    color: #E2FF00;
     font-size: 1.5rem;
     margin: 0;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
@@ -383,7 +385,7 @@ header {
 .send-form label {
     display: block;
     margin-bottom: 0.5rem;
-    color: #ffeb3b;
+    color: #E2FF00;
     font-weight: 600;
     font-size: 0.9rem;
 }
@@ -393,7 +395,7 @@ header {
 .send-form textarea {
     width: 100%;
     padding: 10px 12px;
-    border: 2px solid rgba(255,235,59,0.5);
+    border: 2px solid rgba(226,255,0,0.5);
     border-radius: 8px;
     background: rgba(0,0,0,0.4);
     color: #fff;
@@ -406,9 +408,9 @@ header {
 .send-form select:focus,
 .send-form textarea:focus {
     outline: none;
-    border-color: #ffeb3b;
+    border-color: #E2FF00;
     background: rgba(0,0,0,0.6);
-    box-shadow: 0 0 15px rgba(255,235,59,0.3);
+    box-shadow: 0 0 15px rgba(226,255,0,0.3);
 }
 
 .send-form textarea {
@@ -434,7 +436,7 @@ header {
 .features h2 {
     text-align: center;
     font-size: 2.8rem;
-    color: #ffeb3b;
+    color: #E2FF00;
     margin-bottom: 3rem;
     text-shadow: 3px 3px 0px #000, 6px 6px 15px rgba(0,0,0,0.5);
     font-family: 'Arial Black', sans-serif;
@@ -454,7 +456,7 @@ header {
     border-radius: 15px;
     text-align: center;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    border: 3px solid #ffeb3b;
+    border: 3px solid #E2FF00;
     backdrop-filter: blur(15px);
     transition: transform 0.3s ease;
     color: #fff;
@@ -462,7 +464,7 @@ header {
 
 .feature-card:hover {
     transform: translateY(-8px);
-    box-shadow: 0 15px 40px rgba(255,235,59,0.3);
+    box-shadow: 0 15px 40px rgba(226,255,0,0.3);
 }
 
 .feature-icon {
@@ -488,13 +490,13 @@ header {
     transition: all 0.3s ease;
     /* Removed circular styling - preserve original image */
     border-radius: 0;
-    background: rgba(255, 235, 59, 0.1);
+    background: rgba(226, 255, 0, 0.1);
     padding: 8px;
 }
 
 .feature-card h3 {
     font-size: 1.5rem;
-    color: #ffeb3b;
+    color: #E2FF00;
     margin-bottom: 1rem;
     font-weight: 800;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
@@ -516,7 +518,7 @@ header {
 
 .gift-cards h3 {
     font-size: 2.2rem;
-    color: #ffeb3b;
+    color: #E2FF00;
     margin-bottom: 2rem;
     text-shadow: 2px 2px 0px #000;
     font-weight: 800;
@@ -531,12 +533,12 @@ header {
 }
 
 .gift-card {
-    background: linear-gradient(135deg, #ffeb3b, #ffc107);
+    background: linear-gradient(135deg, #E2FF00, #b8cc00);
     padding: 1rem;
     border-radius: 10px;
     font-weight: 700;
     color: #000;
-    box-shadow: 0 6px 20px rgba(255,193,7,0.4);
+    box-shadow: 0 6px 20px rgba(226,255,0,0.4);
     border: 2px solid #000;
     transition: transform 0.2s ease;
 }
@@ -555,7 +557,7 @@ header {
 .examples h3 {
     text-align: center;
     font-size: 2.2rem;
-    color: #ffeb3b;
+    color: #E2FF00;
     margin-bottom: 2rem;
     text-shadow: 2px 2px 0px #000;
     font-weight: 800;
@@ -566,14 +568,14 @@ header {
     padding: 2rem;
     border-radius: 15px;
     margin-bottom: 2rem;
-    border-left: 6px solid #ffeb3b;
+    border-left: 6px solid #E2FF00;
     box-shadow: 0 8px 25px rgba(0,0,0,0.5);
     backdrop-filter: blur(15px);
     color: #fff;
 }
 
 .example-card h4 {
-    color: #ffeb3b;
+    color: #E2FF00;
     margin-bottom: 1rem;
     font-size: 1.4rem;
     font-weight: 800;
@@ -587,7 +589,7 @@ header {
 }
 
 .example-card p strong {
-    color: #ffeb3b;
+    color: #E2FF00;
     font-weight: 700;
 }
 
@@ -608,39 +610,39 @@ header {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #ffeb3b, #ffc107);
+    background: linear-gradient(135deg, #E2FF00, #b8cc00);
     color: #000;
     font-size: 1.3rem;
     padding: 18px 36px;
-    box-shadow: 0 6px 20px rgba(255,193,7,0.5);
+    box-shadow: 0 6px 20px rgba(226,255,0,0.5);
     border: 3px solid #000;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
 }
 
 .btn-primary:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(255,193,7,0.7);
+    box-shadow: 0 8px 25px rgba(226,255,0,0.7);
 }
 
 .btn {
-    background: #ffeb3b;
+    background: #E2FF00;
     color: #000;
     border: 2px solid #000;
 }
 
 .btn:hover {
-    background: #ffc107;
+    background: #b8cc00;
     transform: translateY(-2px);
 }
 
 .btn-secondary {
     background: transparent;
-    color: #ffeb3b;
-    border: 2px solid #ffeb3b;
+    color: #E2FF00;
+    border: 2px solid #E2FF00;
 }
 
 .btn-secondary:hover {
-    background: #ffeb3b;
+    background: #E2FF00;
     color: #000;
 }
 
@@ -652,7 +654,7 @@ header {
 }
 
 .user-welcome {
-    color: #ffeb3b;
+    color: #E2FF00;
     font-weight: bold;
     margin-right: 15px;
 }
@@ -674,18 +676,18 @@ header {
     background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
     margin: 5% auto;
     padding: 2rem;
-    border: 4px solid #ffeb3b;
+    border: 4px solid #E2FF00;
     border-radius: 20px;
     width: 90%;
     max-width: 600px;
     max-height: 90vh;
     overflow-y: auto;
-    box-shadow: 0 25px 70px rgba(255,235,59,0.4);
+    box-shadow: 0 25px 70px rgba(226,255,0,0.4);
     color: #fff;
 }
 
 .close {
-    color: #ffeb3b;
+    color: #E2FF00;
     float: right;
     font-size: 2.2rem;
     font-weight: bold;
@@ -694,7 +696,7 @@ header {
 }
 
 .close:hover {
-    color: #ffc107;
+    color: #b8cc00;
 }
 
 /* Modal Header */
@@ -703,7 +705,7 @@ header {
     align-items: center;
     margin-bottom: 1.5rem;
     padding-bottom: 1rem;
-    border-bottom: 2px solid #ffeb3b;
+    border-bottom: 2px solid #E2FF00;
 }
 
 .modal-logo {
@@ -715,18 +717,18 @@ header {
     filter: brightness(1.3) contrast(1.2) drop-shadow(2px 2px 4px rgba(0,0,0,0.8));
     /* Removed circular styling - preserve original image */
     border-radius: 0;
-    background: rgba(255, 235, 59, 0.1);
+    background: rgba(226, 255, 0, 0.1);
     padding: 5px;
 }
 
 .modal-header h2 {
     margin: 0;
-    color: #ffeb3b;
+    color: #E2FF00;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
 }
 
 .modal h2 {
-    color: #ffeb3b;
+    color: #E2FF00;
     margin-bottom: 1.5rem;
     text-align: center;
     font-size: 2.2rem;
@@ -742,7 +744,7 @@ header {
 .form-group label {
     display: block;
     margin-bottom: 0.5rem;
-    color: #ffeb3b;
+    color: #E2FF00;
     font-weight: 700;
     text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
 }
@@ -752,7 +754,7 @@ header {
 .form-group textarea {
     width: 100%;
     padding: 12px;
-    border: 2px solid #ffeb3b;
+    border: 2px solid #E2FF00;
     border-radius: 8px;
     background: rgba(0,0,0,0.3);
     color: #fff;
@@ -765,9 +767,9 @@ header {
 .form-group select:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: #ffc107;
+    border-color: #b8cc00;
     background: rgba(0,0,0,0.5);
-    box-shadow: 0 0 20px rgba(255,235,59,0.4);
+    box-shadow: 0 0 20px rgba(226,255,0,0.4);
 }
 
 .form-group input::placeholder,
