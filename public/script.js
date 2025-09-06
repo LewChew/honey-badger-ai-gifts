@@ -2,6 +2,14 @@
 let currentUser = null;
 let authToken = localStorage.getItem('authToken');
 
+// Signup flow data storage
+let signupData = {
+    email: '',
+    name: '',
+    phone: '',
+    password: ''
+};
+
 // Modal functionality
 function showModal(modalId) {
     // Check if user is logged in and trying to send honey badger
@@ -26,6 +34,61 @@ function updateGiftOptions() {
         giftCardOptions.style.display = 'block';
     } else {
         giftCardOptions.style.display = 'none';
+    }
+}
+
+// Multi-step signup flow functions
+function startSignupFlow() {
+    // Reset signup data
+    signupData = {
+        email: '',
+        name: '',
+        phone: '',
+        password: ''
+    };
+    showModal('signupStep1Modal');
+}
+
+function goToSignupStep(step) {
+    // Close all signup modals
+    closeModal('signupStep1Modal');
+    closeModal('signupStep2Modal');
+    closeModal('signupStep3Modal');
+    closeModal('signupStep4Modal');
+    
+    // Show the requested step
+    showModal(`signupStep${step}Modal`);
+    
+    // Pre-fill fields if going back
+    if (step === 1 && signupData.email) {
+        document.getElementById('signupEmail').value = signupData.email;
+    } else if (step === 2) {
+        if (signupData.name) document.getElementById('signupName').value = signupData.name;
+        if (signupData.phone) document.getElementById('signupPhone').value = signupData.phone;
+    } else if (step === 3) {
+        if (signupData.password) {
+            document.getElementById('signupPassword').value = signupData.password;
+            document.getElementById('confirmPassword').value = signupData.password;
+        }
+    } else if (step === 4) {
+        updateReviewInfo();
+    }
+}
+
+function updateReviewInfo() {
+    document.getElementById('reviewEmail').textContent = signupData.email;
+    document.getElementById('reviewName').textContent = signupData.name;
+    document.getElementById('reviewPhone').textContent = signupData.phone || 'Not provided';
+}
+
+// Function called by "Send a Badger" buttons
+function showCreateAccountFlow() {
+    if (currentUser) {
+        // User is already logged in, just scroll to dashboard
+        document.getElementById('dashboard').scrollIntoView({ behavior: 'smooth' });
+    } else {
+        // User not logged in, start signup flow
+        startSignupFlow();
     }
 }
 
@@ -56,516 +119,383 @@ async function makeAPIRequest(endpoint, data, requiresAuth = false) {
             headers: headers,
             body: JSON.stringify(data)
         });
-        
+
         const result = await response.json();
         
-        // Handle token expiration
+        // Handle authentication errors
         if (response.status === 401 || response.status === 403) {
-            handleTokenExpiration();
-            throw new Error(result.message || 'Authentication failed');
+            console.log('Authentication failed, clearing token');
+            localStorage.removeItem('authToken');
+            authToken = null;
+            currentUser = null;
+            updateAuthState();
         }
-        
-        if (!response.ok) {
-            throw new Error(result.message || 'Request failed');
-        }
-        
-        return result;
+
+        return {
+            success: response.ok,
+            data: result,
+            status: response.status
+        };
     } catch (error) {
-        console.error('API Error:', error);
-        throw error;
+        console.error('API Request failed:', error);
+        return {
+            success: false,
+            data: { message: 'Network error occurred' },
+            status: 0
+        };
     }
 }
 
-// Check authentication status on page load
-async function checkAuthStatus() {
-    if (!authToken) return;
+// Authentication functions
+async function login(email, password) {
+    const result = await makeAPIRequest('/api/login', {
+        loginEmail: email,
+        loginPassword: password
+    });
 
-    try {
-        const response = await fetch('/api/auth/me', {
-            headers: {
-                'Authorization': `Bearer ${authToken}`
-            }
-        });
-
-        if (response.ok) {
-            const result = await response.json();
-            currentUser = result.user;
-            updateUIForLoggedInUser(currentUser);
-        } else {
-            handleTokenExpiration();
-        }
-    } catch (error) {
-        console.error('Auth check failed:', error);
-        handleTokenExpiration();
+    if (result.success && result.data.success) {
+        authToken = result.data.token;
+        currentUser = result.data.user;
+        localStorage.setItem('authToken', authToken);
+        updateAuthState();
+        closeModal('loginModal');
+        return true;
+    } else {
+        throw new Error(result.data.message || 'Login failed');
     }
 }
 
-// Handle token expiration
-function handleTokenExpiration() {
+async function signup(userData) {
+    const result = await makeAPIRequest('/api/signup', {
+        signupName: userData.name,
+        signupEmail: userData.email,
+        signupPassword: userData.password,
+        signupPhone: userData.phone || null
+    });
+
+    if (result.success && result.data.success) {
+        authToken = result.data.token;
+        currentUser = result.data.user;
+        localStorage.setItem('authToken', authToken);
+        updateAuthState();
+        
+        // Close all signup modals
+        closeModal('signupStep1Modal');
+        closeModal('signupStep2Modal');
+        closeModal('signupStep3Modal');
+        closeModal('signupStep4Modal');
+        
+        return true;
+    } else {
+        throw new Error(result.data.message || 'Signup failed');
+    }
+}
+
+async function logout() {
+    if (authToken) {
+        await makeAPIRequest('/api/auth/logout', {}, true);
+    }
+    
+    localStorage.removeItem('authToken');
     authToken = null;
     currentUser = null;
-    localStorage.removeItem('authToken');
-    updateUIForLoggedOutUser();
+    updateAuthState();
 }
 
-// Show loading state
-function showLoading(button, text = 'Loading...') {
-    button.disabled = true;
-    button.dataset.originalText = button.textContent;
-    button.textContent = text;
-}
+function updateAuthState() {
+    const landingPage = document.getElementById('landingPage');
+    const dashboard = document.getElementById('dashboard');
+    const headerButtons = document.querySelector('.nav-buttons');
 
-// Hide loading state
-function hideLoading(button) {
-    button.disabled = false;
-    button.textContent = button.dataset.originalText || button.textContent;
-}
-
-// Show error message in form
-function showFormError(formId, message) {
-    let errorDiv = document.querySelector(`#${formId} .error-message`);
-    if (!errorDiv) {
-        errorDiv = document.createElement('div');
-        errorDiv.className = 'error-message';
-        errorDiv.style.cssText = 'color: #ff4444; margin-bottom: 15px; padding: 10px; background: rgba(255,68,68,0.1); border-radius: 5px; border: 1px solid #ff4444;';
-        document.getElementById(formId).insertBefore(errorDiv, document.querySelector(`#${formId} button`));
+    if (currentUser) {
+        // User is logged in - show dashboard
+        landingPage.style.display = 'none';
+        dashboard.style.display = 'block';
+        
+        // Update header to show logout
+        headerButtons.innerHTML = `
+            <span style="color: #E2FF00; margin-right: 15px;">Welcome, ${currentUser.name}!</span>
+            <button class="btn-secondary" onclick="logout()">
+                Logout
+            </button>
+        `;
+        
+        // Load user's honey badgers
+        loadHoneyBadgers();
+    } else {
+        // User is not logged in - show landing page
+        landingPage.style.display = 'block';
+        dashboard.style.display = 'none';
+        
+        // Reset header buttons
+        headerButtons.innerHTML = `
+            <button class="btn-secondary" onclick="showModal('loginModal')">
+                Login
+            </button>
+            <button class="btn-primary" onclick="showCreateAccountFlow()">
+                Send a Badger
+            </button>
+        `;
     }
-    errorDiv.textContent = message;
-    setTimeout(() => errorDiv.remove(), 5000);
 }
 
-// Show success message in form
-function showFormSuccess(formId, message) {
-    let successDiv = document.querySelector(`#${formId} .success-message`);
-    if (!successDiv) {
-        successDiv = document.createElement('div');
-        successDiv.className = 'success-message';
-        successDiv.style.cssText = 'color: #44ff44; margin-bottom: 15px; padding: 10px; background: rgba(68,255,68,0.1); border-radius: 5px; border: 1px solid #44ff44;';
-        document.getElementById(formId).insertBefore(successDiv, document.querySelector(`#${formId} button`));
+async function loadHoneyBadgers() {
+    try {
+        const result = await makeAPIRequest('/api/honey-badgers', {}, true);
+        
+        if (result.success && result.data.success) {
+            const honeyBadgers = result.data.honeyBadgers;
+            const sentList = document.getElementById('sentBadgersList');
+            
+            if (honeyBadgers.length === 0) {
+                sentList.innerHTML = '<p class="no-badgers">No honey badgers sent yet. Send your first one! 🍯</p>';
+            } else {
+                sentList.innerHTML = honeyBadgers.map(badger => `
+                    <div class="badger-item">
+                        <div class="badger-header">
+                            <strong>${badger.recipientName}</strong>
+                            <span class="badger-status status-${badger.status}">${badger.status}</span>
+                        </div>
+                        <div class="badger-details">
+                            <p><strong>Gift:</strong> ${badger.giftValue}</p>
+                            <p><strong>Challenge:</strong> ${badger.challenge}</p>
+                            <p><strong>Sent:</strong> ${new Date(badger.createdAt).toLocaleDateString()}</p>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+    } catch (error) {
+        console.error('Failed to load honey badgers:', error);
     }
-    successDiv.textContent = message;
-    setTimeout(() => successDiv.remove(), 3000);
 }
 
-// Initialize word carousel
-function initializeWordCarousel() {
-    const words = document.querySelectorAll('.carousel-word');
-    if (words.length === 0) return;
+async function sendHoneyBadger(formData) {
+    const result = await makeAPIRequest('/api/send-honey-badger', formData, true);
     
+    if (result.success && result.data.success) {
+        alert(`🍯 Honey Badger sent successfully!\nTracking ID: ${result.data.trackingId}`);
+        
+        // Reset form
+        document.getElementById('dashboardSendForm').reset();
+        
+        // Reload honey badgers list
+        loadHoneyBadgers();
+        
+        return true;
+    } else {
+        throw new Error(result.data.message || 'Failed to send Honey Badger');
+    }
+}
+
+// Word carousel animation
+function startWordCarousel() {
+    const words = document.querySelectorAll('.carousel-word');
     let currentIndex = 0;
     
-    // Set initial state
-    words.forEach((word, index) => {
-        word.classList.remove('active');
-        if (index === 0) {
-            word.classList.add('active');
-        }
-    });
-    
-    // Cycle through words
     setInterval(() => {
         words[currentIndex].classList.remove('active');
         currentIndex = (currentIndex + 1) % words.length;
         words[currentIndex].classList.add('active');
-    }, 2000); // Change word every 2 seconds
+    }, 2000);
 }
 
 // Form submission handlers
 document.addEventListener('DOMContentLoaded', function() {
-    // Check auth status on load
-    checkAuthStatus();
+    // Start word carousel animation
+    startWordCarousel();
     
-    // Initialize word carousel
-    initializeWordCarousel();
-
-    // Send Honey Badger form (Dashboard)
-    const dashboardSendForm = document.getElementById('dashboardSendForm');
-    if (dashboardSendForm) {
-        dashboardSendForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            
-            if (!currentUser) {
-                alert('Please login first to send a Honey Badger! 🍯');
-                showModal('loginModal');
-                return;
+    // Check if user is already logged in
+    if (authToken) {
+        // Verify token is still valid
+        fetch('/api/auth/me', {
+            headers: {
+                'Authorization': `Bearer ${authToken}`
             }
-
-            const submitButton = this.querySelector('button[type="submit"]');
-            showLoading(submitButton, 'Sending Honey Badger...');
-            
-            const formData = new FormData(this);
-            const data = Object.fromEntries(formData.entries());
-            
-            try {
-                const result = await makeAPIRequest('/api/send-honey-badger', data, true);
-                showFormSuccess('dashboardSendForm', `🍯 ${result.message}`);
-                setTimeout(() => {
-                    this.reset();
-                    // Optionally refresh the badgers list
-                    loadBadgersList();
-                }, 2000);
-            } catch (error) {
-                showFormError('dashboardSendForm', error.message || 'Failed to send Honey Badger. Please try again.');
-            } finally {
-                hideLoading(submitButton);
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                currentUser = data.user;
+                updateAuthState();
+            } else {
+                // Token is invalid
+                localStorage.removeItem('authToken');
+                authToken = null;
+                updateAuthState();
             }
+        })
+        .catch(() => {
+            // Network error or token invalid
+            localStorage.removeItem('authToken');
+            authToken = null;
+            updateAuthState();
         });
+    } else {
+        updateAuthState();
     }
 
     // Login form
     document.getElementById('loginForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         
-        const submitButton = this.querySelector('button[type="submit"]');
-        showLoading(submitButton, 'Logging in...');
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
         
-        const formData = new FormData(this);
-        const data = Object.fromEntries(formData.entries());
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Logging in...';
+        submitBtn.disabled = true;
         
         try {
-            const result = await makeAPIRequest('/api/login', data);
-            
-            // Store authentication data
-            authToken = result.token;
-            currentUser = result.user;
-            localStorage.setItem('authToken', authToken);
-            
-            showFormSuccess('loginForm', `Welcome back, ${result.user.name}! 🍯`);
-            
-            setTimeout(() => {
-                closeModal('loginModal');
-                this.reset();
-                updateUIForLoggedInUser(result.user);
-                // Show dashboard instead of landing page
-                showDashboard();
-            }, 1500);
-            
+            await login(email, password);
+            this.reset();
         } catch (error) {
-            showFormError('loginForm', error.message || 'Login failed. Please check your credentials.');
+            alert('Login failed: ' + error.message);
         } finally {
-            hideLoading(submitButton);
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
         }
     });
 
-    // Signup form
-    document.getElementById('signupForm').addEventListener('submit', async function(e) {
+    // Signup Step 1: Email
+    document.getElementById('signupStep1Form').addEventListener('submit', function(e) {
         e.preventDefault();
         
-        const submitButton = this.querySelector('button[type="submit"]');
-        showLoading(submitButton, 'Creating account...');
+        const email = document.getElementById('signupEmail').value.trim();
         
-        const formData = new FormData(this);
-        const data = Object.fromEntries(formData.entries());
-        
-        // Simple password confirmation check
-        const password = data.signupPassword;
-        const confirmPassword = document.getElementById('confirmPassword')?.value;
-        if (confirmPassword && password !== confirmPassword) {
-            showFormError('signupForm', 'Passwords do not match!');
-            hideLoading(submitButton);
+        if (!email) {
+            alert('Please enter your email address');
             return;
         }
         
-        try {
-            const result = await makeAPIRequest('/api/signup', data);
-            
-            // Store authentication data
-            authToken = result.token;
-            currentUser = result.user;
-            localStorage.setItem('authToken', authToken);
-            
-            showFormSuccess('signupForm', `Welcome to Honey Badger, ${result.user.name}! 🍯`);
-            
-            setTimeout(() => {
-                closeModal('signupModal');
-                this.reset();
-                updateUIForLoggedInUser(result.user);
-                // Show dashboard instead of landing page
-                showDashboard();
-            }, 1500);
-            
-        } catch (error) {
-            if (error.message.includes('Validation failed')) {
-                showFormError('signupForm', 'Please check your input: Password must contain uppercase, lowercase, and numbers.');
-            } else {
-                showFormError('signupForm', error.message || 'Signup failed. Please try again.');
-            }
-        } finally {
-            hideLoading(submitButton);
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            alert('Please enter a valid email address');
+            return;
         }
+        
+        // Store email and go to next step
+        signupData.email = email;
+        goToSignupStep(2);
     });
 
-    // Initialize animations and scroll effects
-    initializeAnimations();
-});
-
-// Show dashboard
-function showDashboard() {
-    document.getElementById('landingPage').style.display = 'none';
-    document.getElementById('dashboard').style.display = 'block';
-    loadBadgersList();
-}
-
-// Show landing page
-function showLandingPage() {
-    document.getElementById('dashboard').style.display = 'none';
-    document.getElementById('landingPage').style.display = 'block';
-}
-
-// Load badgers list
-async function loadBadgersList() {
-    if (!authToken) return;
-    
-    try {
-        // Load sent badgers
-        const sentResponse = await fetch('/api/badgers/sent', {
-            headers: {
-                'Authorization': `Bearer ${authToken}`
-            }
-        });
-        
-        if (sentResponse.ok) {
-            const sentData = await sentResponse.json();
-            displayBadgers('sentBadgersList', sentData.badgers || []);
-        }
-        
-        // Load received badgers
-        const receivedResponse = await fetch('/api/badgers/received', {
-            headers: {
-                'Authorization': `Bearer ${authToken}`
-            }
-        });
-        
-        if (receivedResponse.ok) {
-            const receivedData = await receivedResponse.json();
-            displayBadgers('receivedBadgersList', receivedData.badgers || []);
-        }
-    } catch (error) {
-        console.error('Failed to load badgers:', error);
-    }
-}
-
-// Display badgers in list
-function displayBadgers(listId, badgers) {
-    const listElement = document.getElementById(listId);
-    
-    if (!badgers || badgers.length === 0) {
-        listElement.innerHTML = '<div class="empty-state">No honey badgers yet. Send one to get started!</div>';
-        return;
-    }
-    
-    listElement.innerHTML = badgers.map(badger => `
-        <div class="badger-item">
-            <div class="badger-header">
-                <span class="badger-title">${badger.recipientName || 'Unknown'}</span>
-                <span class="badger-status status-${badger.status || 'pending'}">${badger.status || 'Pending'}</span>
-            </div>
-            <div class="badger-info">
-                <strong>Gift:</strong> ${badger.giftType} - ${badger.giftValue}<br>
-                <strong>Challenge:</strong> ${badger.challenge}
-            </div>
-            <div class="badger-meta">
-                Sent ${new Date(badger.createdAt).toLocaleDateString()}
-            </div>
-        </div>
-    `).join('');
-}
-
-// Update UI for logged in user
-function updateUIForLoggedInUser(user) {
-    const navButtons = document.querySelector('.nav-buttons');
-    navButtons.innerHTML = `
-        <span class="user-welcome">👋 ${user.name || user.email}</span>
-        <button class="btn btn-secondary" onclick="logout()">Logout</button>
-    `;
-    
-    // Show dashboard if on landing page
-    if (document.getElementById('landingPage').style.display !== 'none') {
-        showDashboard();
-    }
-}
-
-// Update UI for logged out user
-function updateUIForLoggedOutUser() {
-    const navButtons = document.querySelector('.nav-buttons');
-    navButtons.innerHTML = `
-        <button class="btn-primary" onclick="showCreateAccountFlow()">
-            Send a Badger
-        </button>
-    `;
-    
-    // Show landing page
-    showLandingPage();
-}
-
-// Show create account flow
-function showCreateAccountFlow() {
-    if (currentUser) {
-        // If logged in, go directly to dashboard
-        showDashboard();
-    } else {
-        // If not logged in, show signup modal
-        showModal('signupModal');
-    }
-}
-
-// Logout function
-async function logout() {
-    try {
-        if (authToken) {
-            await fetch('/api/auth/logout', {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${authToken}`
-                }
-            });
-        }
-    } catch (error) {
-        console.error('Logout error:', error);
-    }
-    
-    // Clear local state
-    authToken = null;
-    currentUser = null;
-    localStorage.removeItem('authToken');
-    updateUIForLoggedOutUser();
-    
-    alert('Logged out successfully! Come back soon! 🍯');
-}
-
-// Animation initialization
-function initializeAnimations() {
-    const cards = document.querySelectorAll('.feature-card, .example-card, .gift-card');
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.animation = 'fadeInUp 0.6s ease-out';
-                entry.target.style.opacity = '1';
-            }
-        });
-    }, {
-        threshold: 0.1
-    });
-
-    cards.forEach(card => {
-        card.style.opacity = '0';
-        observer.observe(card);
-    });
-}
-
-// Add some fun interactive effects
-document.addEventListener('DOMContentLoaded', function() {
-    // Add particle effect to hero section
-    createParticleEffect();
-    
-    // Add typing effect to hero text
-    setTimeout(() => {
-        addTypingEffect();
-    }, 1000);
-});
-
-function createParticleEffect() {
-    const hero = document.querySelector('.hero');
-    if (!hero) return;
-    
-    for (let i = 0; i < 20; i++) {
-        const particle = document.createElement('div');
-        particle.style.cssText = `
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: #ffeb3b;
-            border-radius: 50%;
-            pointer-events: none;
-            opacity: 0.6;
-            animation: float ${3 + Math.random() * 4}s ease-in-out infinite;
-        `;
-        
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.top = Math.random() * 100 + '%';
-        particle.style.animationDelay = Math.random() * 2 + 's';
-        
-        hero.appendChild(particle);
-    }
-    
-    // Add CSS for particle animation
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.6; }
-            50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
-        }
-        
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    `;
-    document.head.appendChild(style);
-}
-
-function addTypingEffect() {
-    const subtitle = document.querySelector('.hero p');
-    if (!subtitle) return;
-    
-    const originalText = subtitle.textContent;
-    subtitle.textContent = '';
-    
-    let i = 0;
-    const typeWriter = () => {
-        if (i < originalText.length) {
-            subtitle.textContent += originalText.charAt(i);
-            i++;
-            setTimeout(typeWriter, 50);
-        }
-    };
-    
-    typeWriter();
-}
-
-// Add smooth scrolling for any internal links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
+    // Signup Step 2: Personal Info
+    document.getElementById('signupStep2Form').addEventListener('submit', function(e) {
         e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
+        
+        const name = document.getElementById('signupName').value.trim();
+        const phone = document.getElementById('signupPhone').value.trim();
+        
+        if (!name) {
+            alert('Please enter your full name');
+            return;
+        }
+        
+        if (name.length < 2) {
+            alert('Name must be at least 2 characters long');
+            return;
+        }
+        
+        // Store data and go to next step
+        signupData.name = name;
+        signupData.phone = phone;
+        goToSignupStep(3);
+    });
+
+    // Signup Step 3: Password
+    document.getElementById('signupStep3Form').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const password = document.getElementById('signupPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+        
+        if (!password) {
+            alert('Please enter a password');
+            return;
+        }
+        
+        if (password.length < 6) {
+            alert('Password must be at least 6 characters long');
+            return;
+        }
+        
+        // Validate password requirements
+        const hasUpper = /[A-Z]/.test(password);
+        const hasLower = /[a-z]/.test(password);
+        const hasNumber = /\d/.test(password);
+        
+        if (!hasUpper || !hasLower || !hasNumber) {
+            alert('Password must contain at least one uppercase letter, one lowercase letter, and one number');
+            return;
+        }
+        
+        if (password !== confirmPassword) {
+            alert('Passwords do not match');
+            return;
+        }
+        
+        // Store password and go to review step
+        signupData.password = password;
+        goToSignupStep(4);
+    });
+
+    // Signup Step 4: Review & Complete
+    document.getElementById('signupStep4Form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const agreeTerms = document.getElementById('agreeTerms').checked;
+        
+        if (!agreeTerms) {
+            alert('Please agree to the Terms of Service and Privacy Policy');
+            return;
+        }
+        
+        const submitBtn = document.getElementById('createAccountBtn');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Creating Account...';
+        submitBtn.disabled = true;
+        
+        try {
+            await signup(signupData);
+            // Reset signup data
+            signupData = { email: '', name: '', phone: '', password: '' };
+            alert('🍯 Welcome to Honey Badger! Your account has been created successfully.');
+        } catch (error) {
+            alert('Signup failed: ' + error.message);
+        } finally {
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
         }
     });
-});
 
-// Add Easter egg - Konami code
-let konamiCode = [];
-const konamiSequence = [
-    'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
-    'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight',
-    'KeyB', 'KeyA'
-];
-
-document.addEventListener('keydown', function(e) {
-    konamiCode.push(e.code);
-    
-    if (konamiCode.length > konamiSequence.length) {
-        konamiCode.shift();
-    }
-    
-    if (konamiCode.join(',') === konamiSequence.join(',')) {
-        // Easter egg activated!
-        document.body.style.filter = 'hue-rotate(180deg)';
-        alert('🍯 SUPER HONEY BADGER MODE ACTIVATED! 🦡');
-        setTimeout(() => {
-            document.body.style.filter = 'none';
-        }, 5000);
-        konamiCode = [];
-    }
+    // Dashboard send honey badger form
+    document.getElementById('dashboardSendForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
+        
+        // Validate required fields
+        if (!data.recipientName || !data.recipientContact || !data.giftType || 
+            !data.giftValue || !data.challenge || !data.duration) {
+            alert('Please fill in all required fields');
+            return;
+        }
+        
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Sending...';
+        submitBtn.disabled = true;
+        
+        try {
+            await sendHoneyBadger(data);
+        } catch (error) {
+            alert('Failed to send Honey Badger: ' + error.message);
+        } finally {
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+        }
+    });
 });
