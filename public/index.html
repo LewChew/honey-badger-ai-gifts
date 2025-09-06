@@ -17,6 +17,9 @@
                     <span class="logo-text">HONEY BADGER</span>
                 </div>
                 <div class="nav-buttons">
+                    <button class="btn-secondary" onclick="showModal('loginModal')">
+                        Login
+                    </button>
                     <button class="btn-primary" onclick="showCreateAccountFlow()">
                         Send a Badger
                     </button>
@@ -254,51 +257,142 @@
             </form>
             <p style="text-align: center; margin-top: 15px; color: #ccc;">
                 New to Honey Badger? 
-                <a href="#" onclick="closeModal('loginModal'); showModal('signupModal');" style="color: #E2FF00; text-decoration: none;">Create your account</a>
+                <a href="#" onclick="closeModal('loginModal'); startSignupFlow();" style="color: #E2FF00; text-decoration: none;">Create your account</a>
             </p>
         </div>
     </div>
 
-    <!-- Signup Modal -->
-    <div id="signupModal" class="modal">
+    <!-- Signup Step 1: Email -->
+    <div id="signupStep1Modal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal('signupModal')">&times;</span>
+            <span class="close" onclick="closeModal('signupStep1Modal')">&times;</span>
             <div class="modal-header">
                 <div class="modal-title">
                     <h2>Join the Pack!</h2>
-                    <p class="modal-subtitle">Unleash your AI gift companion</p>
+                    <p class="modal-subtitle">Step 1 of 4: Let's start with your email</p>
                 </div>
             </div>
-            <form id="signupForm">
+            <form id="signupStep1Form">
                 <div class="form-group">
-                    <label for="signupName">Full Name:</label>
-                    <input type="text" id="signupName" name="signupName" required placeholder="Enter your full name">
-                </div>
-                <div class="form-group">
-                    <label for="signupEmail">Email:</label>
-                    <input type="email" id="signupEmail" name="signupEmail" required placeholder="Enter your email">
-                </div>
-                <div class="form-group">
-                    <label for="signupPhone">Phone (Optional):</label>
-                    <input type="tel" id="signupPhone" name="signupPhone" placeholder="+1234567890">
-                </div>
-                <div class="form-group">
-                    <label for="signupPassword">Password:</label>
-                    <input type="password" id="signupPassword" name="signupPassword" required placeholder="Create a secure password">
-                    <small style="color: #aaa; font-size: 0.85rem;">Must be 6+ characters with uppercase, lowercase, and numbers</small>
-                </div>
-                <div class="form-group">
-                    <label for="confirmPassword">Confirm Password:</label>
-                    <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Confirm your password">
+                    <label for="signupEmail">Email Address:</label>
+                    <input type="email" id="signupEmail" name="signupEmail" required placeholder="Enter your email address" autocomplete="email">
                 </div>
                 <button type="submit" class="btn" style="width: 100%;">
-                    Create Account
+                    Continue
                 </button>
             </form>
             <p style="text-align: center; margin-top: 15px; color: #ccc;">
                 Already have an account? 
-                <a href="#" onclick="closeModal('signupModal'); showModal('loginModal');" style="color: #E2FF00; text-decoration: none;">Login here</a>
+                <a href="#" onclick="closeModal('signupStep1Modal'); showModal('loginModal');" style="color: #E2FF00; text-decoration: none;">Login here</a>
             </p>
+        </div>
+    </div>
+
+    <!-- Signup Step 2: Personal Info -->
+    <div id="signupStep2Modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('signupStep2Modal')">&times;</span>
+            <div class="modal-header">
+                <div class="modal-title">
+                    <h2>Tell us about yourself</h2>
+                    <p class="modal-subtitle">Step 2 of 4: Personal information</p>
+                </div>
+            </div>
+            <form id="signupStep2Form">
+                <div class="form-group">
+                    <label for="signupName">Full Name:</label>
+                    <input type="text" id="signupName" name="signupName" required placeholder="Enter your full name" autocomplete="name">
+                </div>
+                <div class="form-group">
+                    <label for="signupPhone">Phone Number (Optional):</label>
+                    <input type="tel" id="signupPhone" name="signupPhone" placeholder="+1 (555) 123-4567" autocomplete="tel">
+                    <small style="color: #aaa; font-size: 0.85rem;">Used for Honey Badger notifications</small>
+                </div>
+                <div class="form-buttons">
+                    <button type="button" class="btn-secondary" onclick="goToSignupStep(1)">
+                        Back
+                    </button>
+                    <button type="submit" class="btn">
+                        Continue
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Signup Step 3: Password -->
+    <div id="signupStep3Modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('signupStep3Modal')">&times;</span>
+            <div class="modal-header">
+                <div class="modal-title">
+                    <h2>Secure your account</h2>
+                    <p class="modal-subtitle">Step 3 of 4: Create a strong password</p>
+                </div>
+            </div>
+            <form id="signupStep3Form">
+                <div class="form-group">
+                    <label for="signupPassword">Password:</label>
+                    <input type="password" id="signupPassword" name="signupPassword" required placeholder="Create a secure password" autocomplete="new-password">
+                    <small style="color: #aaa; font-size: 0.85rem;">Must be 6+ characters with uppercase, lowercase, and numbers</small>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password:</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Confirm your password" autocomplete="new-password">
+                </div>
+                <div class="form-buttons">
+                    <button type="button" class="btn-secondary" onclick="goToSignupStep(2)">
+                        Back
+                    </button>
+                    <button type="submit" class="btn">
+                        Continue
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Signup Step 4: Review & Complete -->
+    <div id="signupStep4Modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('signupStep4Modal')">&times;</span>
+            <div class="modal-header">
+                <div class="modal-title">
+                    <h2>Almost done!</h2>
+                    <p class="modal-subtitle">Step 4 of 4: Review your information</p>
+                </div>
+            </div>
+            <div class="review-info">
+                <div class="review-item">
+                    <strong>Email:</strong>
+                    <span id="reviewEmail"></span>
+                </div>
+                <div class="review-item">
+                    <strong>Name:</strong>
+                    <span id="reviewName"></span>
+                </div>
+                <div class="review-item">
+                    <strong>Phone:</strong>
+                    <span id="reviewPhone"></span>
+                </div>
+            </div>
+            <form id="signupStep4Form">
+                <div class="terms-section">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="agreeTerms" required>
+                        <span class="checkmark"></span>
+                        I agree to the <a href="#" style="color: #E2FF00;">Terms of Service</a> and <a href="#" style="color: #E2FF00;">Privacy Policy</a>
+                    </label>
+                </div>
+                <div class="form-buttons">
+                    <button type="button" class="btn-secondary" onclick="goToSignupStep(3)">
+                        Back
+                    </button>
+                    <button type="submit" class="btn" id="createAccountBtn">
+                        Create Account
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
