@@ -5,10 +5,23 @@ const path = require('path');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
+const cron = require('node-cron');
 require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+// Validate Twilio environment variables
+if (process.env.ENABLE_SMS === 'true') {
+    const requiredTwilioVars = ['TWILIO_ACCOUNT_SID', 'TWILIO_AUTH_TOKEN', 'TWILIO_PHONE_NUMBER'];
+    const missingVars = requiredTwilioVars.filter(varName => !process.env[varName]);
+    
+    if (missingVars.length > 0) {
+        console.warn('⚠️ Warning: Missing Twilio environment variables:', missingVars.join(', '));
+        console.warn('   SMS functionality will be disabled.');
+        process.env.ENABLE_SMS = 'false';
+    }
+}
 
 // In-memory user storage (replace with database in production)
 const users = new Map();
@@ -24,9 +37,24 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Request logging middleware
+app.use((req, res, next) => {
+    console.log(`${new Date().toISOString()} - ${req.method} ${req.path}`);
+    next();
+});
+
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
+
+// Import gift routes (only if file exists)
+let giftsRouter;
+try {
+    giftsRouter = require('./api/routes/gifts');
+    console.log('✅ Gift routes loaded successfully');
+} catch (error) {
+    console.warn('⚠️ Gift routes not found. Some API functionality may be limited.');
+}
 
 // Auth middleware
 const authenticateToken = (req, res, next) => {
@@ -45,6 +73,11 @@ const authenticateToken = (req, res, next) => {
         next();
     });
 };
+
+// Mount gift routes if available
+if (giftsRouter) {
+    app.use('/api', giftsRouter);
+}
 
 // Routes
 app.get('/', (req, res) => {
@@ -236,10 +269,9 @@ app.post('/api/auth/logout', authenticateToken, (req, res) => {
 });
 
 // Protected route: Send Honey Badger (requires authentication)
-app.post('/api/send-honey-badger', authenticateToken, (req, res) => {
+app.post('/api/send-honey-badger', authenticateToken, async (req, res) => {
     const { recipientName, recipientContact, giftType, giftValue, challenge, message, duration } = req.body;
     
-    // Here you would integrate with your AI service, payment processor, etc.
     console.log('New Honey Badger request from:', req.user.email, {
         recipientName,
         recipientContact,
@@ -250,11 +282,43 @@ app.post('/api/send-honey-badger', authenticateToken, (req, res) => {
         duration
     });
     
+    // If SMS is enabled and gift routes are available, use the new system
+    if (process.env.ENABLE_SMS === 'true' && giftsRouter) {
+        // Forward to the new gift creation endpoint
+        req.body = {
+            recipientPhone: recipientContact,
+            recipientName,
+            senderName: req.user.name,
+            giftType,
+            giftDetails: {
+                value: giftValue,
+                description: message
+            },
+            challengeType: 'custom',
+            challengeDescription: challenge,
+            challengeRequirements: {
+                totalSteps: duration || 1
+            }
+        };
+        
+        // Call the gift creation endpoint
+        return app._router.handle(req, res, () => {
+            res.json({
+                success: true,
+                message: 'Honey Badger sent successfully!',
+                trackingId: 'HB' + Date.now(),
+                sender: req.user.name
+            });
+        });
+    }
+    
+    // Fallback response if SMS not configured
     res.json({
         success: true,
         message: 'Honey Badger sent successfully!',
         trackingId: 'HB' + Date.now(),
-        sender: req.user.name
+        sender: req.user.name,
+        note: 'SMS notifications not configured. Gift created but recipient will not receive SMS.'
     });
 });
 
@@ -297,25 +361,116 @@ app.get('/health', (req, res) => {
         features: {
             authentication: 'enabled',
             encryption: 'bcrypt',
-            tokenAuth: 'JWT'
+            tokenAuth: 'JWT',
+            sms: process.env.ENABLE_SMS === 'true' ? 'enabled' : 'disabled',
+            twilio: process.env.TWILIO_ACCOUNT_SID ? 'configured' : 'not configured'
         }
     });
 });
 
+// API documentation endpoint
+app.get('/api', (req, res) => {
+    res.json({
+        message: '🦡 Honey Badger AI Gifts API',
+        version: '1.0.0',
+        endpoints: {
+            auth: {
+                signup: 'POST /api/signup',
+                login: 'POST /api/login',
+                profile: 'GET /api/auth/me',
+                logout: 'POST /api/auth/logout'
+            },
+            honeyBadgers: {
+                send: 'POST /api/send-honey-badger',
+                list: 'GET /api/honey-badgers'
+            },
+            gifts: giftsRouter ? {
+                create: 'POST /api/gifts',
+                messages: {
+                    sendInitial: 'POST /api/messages/send-initial',
+                    sendReminder: 'POST /api/messages/send-reminder'
+                },
+                challenges: {
+                    getProgress: 'GET /api/challenges/:challengeId/progress',
+                    updateProgress: 'PUT /api/challenges/:challengeId/progress'
+                },
+                recipients: {
+                    getGifts: 'GET /api/recipients/:phone/gifts'
+                },
+                webhooks: {
+                    twilioIncoming: 'POST /api/webhooks/twilio/incoming'
+                }
+            } : 'Gift routes not configured',
+            health: 'GET /health'
+        }
+    });
+});
+
+// Scheduled task for sending reminders (runs every hour)
+if (process.env.ENABLE_SCHEDULED_REMINDERS === 'true') {
+    const cronSchedule = process.env.REMINDER_CRON_SCHEDULE || '0 * * * *';
+    cron.schedule(cronSchedule, async () => {
+        console.log('🔔 Running scheduled reminder check...');
+        // This would check all active challenges and send reminders as needed
+        // Implementation would depend on your database setup
+    });
+    console.log('📅 Scheduled reminders enabled with cron:', cronSchedule);
+}
+
 // 404 handler
 app.use((req, res) => {
-    res.status(404).json({ error: 'Route not found' });
+    res.status(404).json({ 
+        success: false,
+        error: 'Route not found',
+        path: req.path,
+        method: req.method
+    });
 });
 
 // Error handler
 app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ error: 'Something went wrong!' });
+    console.error('❌ Error:', err);
+    res.status(err.status || 500).json({ 
+        success: false,
+        error: err.message || 'Internal server error',
+        ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+    });
+});
+
+// Graceful shutdown handlers
+process.on('SIGTERM', () => {
+    console.log('SIGTERM received. Shutting down gracefully...');
+    process.exit(0);
+});
+
+process.on('SIGINT', () => {
+    console.log('SIGINT received. Shutting down gracefully...');
+    process.exit(0);
 });
 
 app.listen(PORT, () => {
-    console.log(`🍯 Honey Badger server running on port ${PORT}`);
-    console.log(`Visit http://localhost:${PORT} to see your app`);
-    console.log(`🔐 Authentication: Enabled (JWT + bcrypt)`);
-    console.log(`👥 Users registered: ${users.size}`);
+    console.log('');
+    console.log('🦡 Honey Badger AI Gifts Server');
+    console.log('================================');
+    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`🌍 Visit http://localhost:${PORT} to see your app`);
+    console.log(`📡 API endpoint: http://localhost:${PORT}/api`);
+    console.log('');
+    console.log('Features:');
+    console.log(`  🔐 Authentication: Enabled (JWT + bcrypt)`);
+    console.log(`  👥 Users registered: ${users.size}`);
+    console.log(`  📱 SMS (Twilio): ${process.env.ENABLE_SMS === 'true' ? '✅ Enabled' : '❌ Disabled'}`);
+    console.log(`  📧 Email: ${process.env.ENABLE_EMAIL === 'true' ? '✅ Enabled' : '❌ Disabled'}`);
+    console.log(`  🔔 Scheduled Reminders: ${process.env.ENABLE_SCHEDULED_REMINDERS === 'true' ? '✅ Enabled' : '❌ Disabled'}`);
+    
+    if (process.env.ENABLE_SMS === 'true' && process.env.TWILIO_ACCOUNT_SID) {
+        console.log('');
+        console.log('Twilio Configuration:');
+        console.log(`  📞 Phone Number: ${process.env.TWILIO_PHONE_NUMBER}`);
+        console.log(`  🔗 Webhook URL: ${process.env.WEBHOOK_BASE_URL}${process.env.TWILIO_WEBHOOK_PATH || '/api/webhooks/twilio/incoming'}`);
+    }
+    
+    console.log('================================');
 });
+
+module.exports = app;
