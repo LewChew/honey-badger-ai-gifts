@@ -8,7 +8,7 @@
     "dev": "nodemon server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["ai", "gifts", "motivation", "challenges", "delivery"],
+  "keywords": ["ai", "gifts", "motivation", "challenges", "delivery", "twilio", "sms"],
   "author": "LewChew",
   "license": "MIT",
   "dependencies": {
@@ -20,7 +20,12 @@
     "path": "^0.12.7",
     "bcryptjs": "^2.4.3",
     "jsonwebtoken": "^9.0.2",
-    "express-validator": "^7.0.1"
+    "express-validator": "^7.0.1",
+    "twilio": "^4.19.0",
+    "uuid": "^9.0.1",
+    "node-cron": "^3.0.3",
+    "multer": "^1.4.5-lts.1",
+    "axios": "^1.6.2"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"
