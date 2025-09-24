@@ -74,6 +74,12 @@ header {
     transition: all 0.3s ease;
 }
 
+.tv-icon {
+    width: 500px;
+    height: 350px;
+    filter: drop-shadow(0 0 8px rgba(226, 255, 0, 0.4));
+    transition: all 0.3s ease;
+}
 .logo-icon:hover {
     transform: scale(1.1);
     filter: drop-shadow(0 0 15px rgba(226, 255, 0, 0.6));
