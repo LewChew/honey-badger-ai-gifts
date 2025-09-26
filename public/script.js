@@ -10,6 +10,14 @@ let signupData = {
     password: ''
 };
 
+// Form state for expandable sections
+let formState = {
+    giftType: '',
+    challengeType: '',
+    typeSpecificData: {},
+    challengeData: {}
+};
+
 // Modal functionality
 function showModal(modalId) {
     // Check if user is logged in and trying to send honey badger
@@ -25,16 +33,121 @@ function closeModal(modalId) {
     document.getElementById(modalId).style.display = 'none';
 }
 
-// Update gift options based on gift type selection
-function updateGiftOptions() {
-    const giftType = document.getElementById('giftType').value;
-    const giftCardOptions = document.getElementById('giftCardOptions');
+// Toggle expandable sections
+function toggleSection(sectionName) {
+    const section = document.getElementById(`${sectionName}Section`);
+    const content = document.getElementById(`${sectionName}Content`);
     
-    if (giftType === 'giftcard') {
-        giftCardOptions.style.display = 'block';
+    if (section.classList.contains('collapsed')) {
+        // Expand
+        section.classList.remove('collapsed');
+        section.classList.add('expanded');
+        content.style.display = 'block';
+        
+        // Animate content expansion
+        setTimeout(() => {
+            content.style.maxHeight = content.scrollHeight + 'px';
+        }, 10);
     } else {
-        giftCardOptions.style.display = 'none';
+        // Collapse
+        section.classList.add('collapsed');
+        section.classList.remove('expanded');
+        content.style.maxHeight = '0';
+        
+        setTimeout(() => {
+            content.style.display = 'none';
+        }, 300);
     }
+}
+
+// Handle gift type change
+function handleGiftTypeChange() {
+    const giftType = document.getElementById('giftType').value;
+    formState.giftType = giftType;
+    
+    // Hide all type-specific details
+    const typeDetails = document.querySelectorAll('.type-details');
+    typeDetails.forEach(detail => {
+        detail.style.display = 'none';
+    });
+    
+    // Show relevant type-specific details
+    const typeSpecificSection = document.getElementById('typeSpecificSection');
+    const typeSpecificTitle = document.getElementById('typeSpecificTitle');
+    const typeSpecificStatus = document.getElementById('typeSpecificStatus');
+    const sendBtn = document.getElementById('sendBadgerBtn');
+    const submitHint = document.getElementById('submitHint');
+    
+    if (giftType) {
+        // Show the type-specific section
+        typeSpecificSection.style.display = 'block';
+        
+        // Show challenge and additional sections
+        document.getElementById('challengeSection').style.display = 'block';
+        document.getElementById('additionalSection').style.display = 'block';
+        
+        // Enable submit button
+        sendBtn.disabled = false;
+        submitHint.textContent = 'Configure your gift details above';
+        
+        // Update section title based on gift type
+        const titles = {
+            'giftcard': '🎁 Gift Card Details',
+            'cash': '💵 Cash Transfer Details',
+            'photo': '📸 Photo/Video Details',
+            'message': '💌 Custom Message',
+            'physical': '📦 Physical Item Details'
+        };
+        
+        typeSpecificTitle.textContent = titles[giftType] || '🎁 Gift Details';
+        typeSpecificStatus.textContent = 'Click to configure';
+        
+        // Show the relevant details form
+        const detailsMap = {
+            'giftcard': 'giftCardDetails',
+            'cash': 'cashDetails',
+            'photo': 'photoDetails',
+            'message': 'messageDetails',
+            'physical': 'physicalDetails'
+        };
+        
+        const detailsId = detailsMap[giftType];
+        if (detailsId) {
+            document.getElementById(detailsId).style.display = 'block';
+        }
+    } else {
+        // Hide sections if no gift type selected
+        typeSpecificSection.style.display = 'none';
+        document.getElementById('challengeSection').style.display = 'none';
+        document.getElementById('additionalSection').style.display = 'none';
+        
+        // Disable submit button
+        sendBtn.disabled = true;
+        submitHint.textContent = 'Select a gift type to continue';
+    }
+}
+
+// Update challenge options
+function updateChallengeOptions() {
+    const challengeType = document.getElementById('challengeType').value;
+    const durationDiv = document.getElementById('challengeDuration');
+    
+    if (challengeType === 'multiday' || challengeType === 'fitness') {
+        durationDiv.style.display = 'block';
+    } else {
+        durationDiv.style.display = 'none';
+    }
+    
+    // Update status text
+    const challengeStatus = document.getElementById('challengeStatus');
+    if (challengeType) {
+        challengeStatus.textContent = `${challengeType.charAt(0).toUpperCase() + challengeType.slice(1)} challenge selected`;
+    }
+}
+
+// Update gift options based on gift type selection (legacy function for compatibility)
+function updateGiftOptions() {
+    handleGiftTypeChange();
 }
 
 // Multi-step signup flow functions
@@ -271,13 +384,59 @@ async function loadHoneyBadgers() {
 }
 
 async function sendHoneyBadger(formData) {
-    const result = await makeAPIRequest('/api/send-honey-badger', formData, true);
+    // Collect all form data including expanded sections
+    const completeData = {
+        recipientName: formData.recipientName,
+        recipientContact: formData.recipientEmail || formData.recipientPhone,
+        giftType: formData.giftType,
+        giftValue: '',
+        challenge: formData.challengeDescription || 'Complete the challenge',
+        message: formData.personalNote || '',
+        duration: formData.duration || 'immediate'
+    };
+    
+    // Set gift value based on type
+    switch(formData.giftType) {
+        case 'giftcard':
+            completeData.giftValue = `${formData.giftCardAmount} ${formData.giftCardBrand || 'Gift Card'}`;
+            break;
+        case 'cash':
+            completeData.giftValue = `${formData.cashAmount} via ${formData.cashPlatform}`;
+            break;
+        case 'photo':
+            completeData.giftValue = formData.mediaDescription || 'Photo/Video';
+            break;
+        case 'message':
+            completeData.giftValue = 'Custom Message';
+            completeData.message = formData.customMessage;
+            break;
+        case 'physical':
+            completeData.giftValue = `${formData.itemDescription} (${formData.itemValue})`;
+            break;
+        default:
+            completeData.giftValue = 'Mystery Gift';
+    }
+    
+    const result = await makeAPIRequest('/api/send-honey-badger', completeData, true);
     
     if (result.success && result.data.success) {
         alert(`🍯 Honey Badger sent successfully!\nTracking ID: ${result.data.trackingId}`);
         
         // Reset form
         document.getElementById('dashboardSendForm').reset();
+        
+        // Reset form state
+        formState = {
+            giftType: '',
+            challengeType: '',
+            typeSpecificData: {},
+            challengeData: {}
+        };
+        
+        // Hide expandable sections
+        document.getElementById('typeSpecificSection').style.display = 'none';
+        document.getElementById('challengeSection').style.display = 'none';
+        document.getElementById('additionalSection').style.display = 'none';
         
         // Reload honey badgers list
         loadHoneyBadgers();
@@ -478,8 +637,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const data = Object.fromEntries(formData.entries());
         
         // Validate required fields
-        if (!data.recipientName || !data.recipientContact || !data.giftType || 
-            !data.giftValue || !data.challenge || !data.duration) {
+        if (!data.recipientName || !data.recipientEmail || !data.giftType) {
             alert('Please fill in all required fields');
             return;
         }
