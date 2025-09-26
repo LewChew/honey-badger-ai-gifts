@@ -121,6 +121,13 @@ header {
     background: linear-gradient(135deg, #FFE55C 0%, #E2FF00 100%);
 }
 
+.btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: 0 2px 8px rgba(226, 255, 0, 0.1);
+}
+
 .btn-secondary {
     background: transparent;
     color: #E2FF00;
@@ -507,6 +514,108 @@ header {
     margin-top: 0.5rem;
     color: #aaa;
     font-size: 0.85rem;
+}
+
+/* Expandable Form Sections */
+.form-section {
+    margin-bottom: 1.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 15px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.form-section.basic-info {
+    padding: 1.5rem;
+    background: transparent;
+}
+
+.form-section.collapsed {
+    border: 1px solid rgba(226, 255, 0, 0.2);
+}
+
+.section-header {
+    padding: 1.2rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(226, 255, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.section-header.expandable {
+    cursor: pointer;
+}
+
+.section-header.expandable:hover {
+    background: rgba(226, 255, 0, 0.1);
+}
+
+.section-title {
+    color: #E2FF00;
+    font-size: 1.2rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.expand-icon {
+    display: inline-block;
+    transition: transform 0.3s ease;
+    font-size: 0.8em;
+}
+
+.form-section.expanded .expand-icon {
+    transform: rotate(90deg);
+}
+
+.section-status {
+    color: #999;
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+.section-content {
+    padding: 0 1.5rem;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+.form-section.expanded .section-content {
+    padding: 1.5rem;
+    max-height: 1000px;
+}
+
+.type-details {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Submit Section */
+.form-submit-section {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(226, 255, 0, 0.2);
+    text-align: center;
+}
+
+.submit-hint {
+    color: #999;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+    font-style: italic;
 }
 
 /* Review Info Styles */
