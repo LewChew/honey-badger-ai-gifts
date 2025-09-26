@@ -151,80 +151,223 @@
                         </div>
                     </div>
 
-                    <!-- Right Panel - Send Honey Badger -->
+                    <!-- Right Panel - Send Honey Badger (Simplified) -->
                     <div class="dashboard-right">
                         <div class="send-panel">
                             <div class="send-header">
                                 <div class="send-title">
                                     <h2>Send a Honey Badger</h2>
-                                    <p class="send-subtitle">Deploy your AI motivator</p>
+                                    <p class="send-subtitle">Quick Setup - Deploy your AI motivator</p>
                                 </div>
                             </div>
                             
                             <form id="dashboardSendForm" class="send-form">
-                                <div class="form-group">
-                                    <label for="recipientName">Recipient Name:</label>
-                                    <input type="text" id="recipientName" name="recipientName" required>
+                                <!-- Step 1: Basic Information (Always Visible) -->
+                                <div class="form-section basic-info">
+                                    <h3 class="section-title">📝 Basic Information</h3>
+                                    
+                                    <div class="form-group">
+                                        <label for="recipientName">Recipient Name:</label>
+                                        <input type="text" id="recipientName" name="recipientName" placeholder="Who's getting this gift?" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="recipientEmail">Email:</label>
+                                        <input type="email" id="recipientEmail" name="recipientEmail" placeholder="their.email@example.com" required>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="recipientPhone">Phone (Optional):</label>
+                                        <input type="tel" id="recipientPhone" name="recipientPhone" placeholder="+1 (555) 123-4567">
+                                        <small style="color: #aaa;">For SMS notifications</small>
+                                    </div>
+                                    
+                                    <div class="form-group">
+                                        <label for="giftType">Gift Type:</label>
+                                        <select id="giftType" name="giftType" required onchange="handleGiftTypeChange()">
+                                            <option value="">Select gift type</option>
+                                            <option value="giftcard">🎁 Gift Card</option>
+                                            <option value="cash">💵 Cash (Venmo/PayPal)</option>
+                                            <option value="photo">📸 Photo/Video</option>
+                                            <option value="message">💌 Custom Message</option>
+                                            <option value="physical">📦 Physical Item</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <!-- Step 2: Type-Specific Details (Expandable) -->
+                                <div id="typeSpecificSection" class="form-section collapsed" style="display: none;">
+                                    <div class="section-header expandable" onclick="toggleSection('typeSpecific')">
+                                        <h3 class="section-title">
+                                            <span class="expand-icon">▶</span>
+                                            <span id="typeSpecificTitle">🎁 Gift Details</span>
+                                        </h3>
+                                        <span class="section-status" id="typeSpecificStatus">Click to configure</span>
+                                    </div>
+                                    
+                                    <div id="typeSpecificContent" class="section-content" style="display: none;">
+                                        <!-- Gift Card Options -->
+                                        <div id="giftCardDetails" class="type-details" style="display: none;">
+                                            <div class="form-group">
+                                                <label for="giftCardBrand">Choose Gift Card:</label>
+                                                <select id="giftCardBrand" name="giftCardBrand">
+                                                    <option value="">Select brand</option>
+                                                    <option value="amazon">Amazon</option>
+                                                    <option value="starbucks">Starbucks</option>
+                                                    <option value="dunkin">Dunkin'</option>
+                                                    <option value="dicks">Dick's Sporting Goods</option>
+                                                    <option value="fortnite">Fortnite</option>
+                                                    <option value="sephora">Sephora</option>
+                                                    <option value="lululemon">Lululemon</option>
+                                                    <option value="custom">Other (specify)</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="giftCardAmount">Amount:</label>
+                                                <input type="text" id="giftCardAmount" name="giftCardAmount" placeholder="$50">
+                                            </div>
+                                        </div>
+
+                                        <!-- Cash Options -->
+                                        <div id="cashDetails" class="type-details" style="display: none;">
+                                            <div class="form-group">
+                                                <label for="cashPlatform">Payment Platform:</label>
+                                                <select id="cashPlatform" name="cashPlatform">
+                                                    <option value="venmo">Venmo</option>
+                                                    <option value="paypal">PayPal</option>
+                                                    <option value="cashapp">Cash App</option>
+                                                    <option value="zelle">Zelle</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="cashAmount">Amount:</label>
+                                                <input type="text" id="cashAmount" name="cashAmount" placeholder="$100">
+                                            </div>
+                                        </div>
+
+                                        <!-- Photo/Video Options -->
+                                        <div id="photoDetails" class="type-details" style="display: none;">
+                                            <div class="form-group">
+                                                <label for="mediaDescription">What are you sharing?</label>
+                                                <textarea id="mediaDescription" name="mediaDescription" placeholder="Describe the photo/video you'll share"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <!-- Message Options -->
+                                        <div id="messageDetails" class="type-details" style="display: none;">
+                                            <div class="form-group">
+                                                <label for="customMessage">Your Message:</label>
+                                                <textarea id="customMessage" name="customMessage" placeholder="Write your special message here" rows="4"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <!-- Physical Item Options -->
+                                        <div id="physicalDetails" class="type-details" style="display: none;">
+                                            <div class="form-group">
+                                                <label for="itemDescription">Item Description:</label>
+                                                <input type="text" id="itemDescription" name="itemDescription" placeholder="e.g., Nintendo Switch, Concert Tickets">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="itemValue">Estimated Value:</label>
+                                                <input type="text" id="itemValue" name="itemValue" placeholder="$300">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Step 3: Challenge Configuration (Expandable) -->
+                                <div id="challengeSection" class="form-section collapsed" style="display: none;">
+                                    <div class="section-header expandable" onclick="toggleSection('challenge')">
+                                        <h3 class="section-title">
+                                            <span class="expand-icon">▶</span>
+                                            🎯 Challenge Setup
+                                        </h3>
+                                        <span class="section-status" id="challengeStatus">Click to define unlock requirements</span>
+                                    </div>
+                                    
+                                    <div id="challengeContent" class="section-content" style="display: none;">
+                                        <div class="form-group">
+                                            <label for="challengeType">Challenge Type:</label>
+                                            <select id="challengeType" name="challengeType" onchange="updateChallengeOptions()">
+                                                <option value="simple">Simple Task</option>
+                                                <option value="photo">Photo Challenge</option>
+                                                <option value="video">Video Challenge</option>
+                                                <option value="fitness">Fitness Challenge</option>
+                                                <option value="multiday">Multi-Day Challenge</option>
+                                                <option value="custom">Custom Challenge</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="challengeDescription">Challenge Description:</label>
+                                            <textarea id="challengeDescription" name="challengeDescription" 
+                                                placeholder="What should they do to unlock this gift?" rows="3"></textarea>
+                                        </div>
+                                        
+                                        <div id="challengeDuration" class="form-group" style="display: none;">
+                                            <label for="duration">Duration:</label>
+                                            <select id="duration" name="duration">
+                                                <option value="1">1 Day</option>
+                                                <option value="7">7 Days</option>
+                                                <option value="14">14 Days</option>
+                                                <option value="30">30 Days</option>
+                                                <option value="60">60 Days</option>
+                                                <option value="custom">Custom</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="reminderFrequency">Reminder Frequency:</label>
+                                            <select id="reminderFrequency" name="reminderFrequency">
+                                                <option value="none">No Reminders</option>
+                                                <option value="daily">Daily</option>
+                                                <option value="every3days">Every 3 Days</option>
+                                                <option value="weekly">Weekly</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Step 4: Additional Options (Expandable) -->
+                                <div id="additionalSection" class="form-section collapsed" style="display: none;">
+                                    <div class="section-header expandable" onclick="toggleSection('additional')">
+                                        <h3 class="section-title">
+                                            <span class="expand-icon">▶</span>
+                                            ✨ Additional Options
+                                        </h3>
+                                        <span class="section-status">Optional settings</span>
+                                    </div>
+                                    
+                                    <div id="additionalContent" class="section-content" style="display: none;">
+                                        <div class="form-group">
+                                            <label for="personalNote">Personal Note (Optional):</label>
+                                            <textarea id="personalNote" name="personalNote" 
+                                                placeholder="Add a personal message to accompany your gift" rows="2"></textarea>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label for="unlockDate">Earliest Unlock Date:</label>
+                                            <input type="date" id="unlockDate" name="unlockDate">
+                                            <small style="color: #aaa;">Leave blank for immediate availability</small>
+                                        </div>
+                                        
+                                        <div class="form-group">
+                                            <label class="checkbox-container">
+                                                <input type="checkbox" id="notifyOnComplete" name="notifyOnComplete" checked>
+                                                <span class="checkmark"></span>
+                                                Notify me when challenge is completed
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
                                 
-                                <div class="form-group">
-                                    <label for="recipientContact">Email/Phone:</label>
-                                    <input type="text" id="recipientContact" name="recipientContact" required>
+                                <!-- Submit Button -->
+                                <div class="form-submit-section">
+                                    <button type="submit" class="btn-primary send-btn" id="sendBadgerBtn" disabled>
+                                        🚀 Send Honey Badger
+                                    </button>
+                                    <p class="submit-hint" id="submitHint">Select a gift type to continue</p>
                                 </div>
-                                
-                                <div class="form-group">
-                                    <label for="giftType">Gift Type:</label>
-                                    <select id="giftType" name="giftType" required onchange="updateGiftOptions()">
-                                        <option value="">Select gift type</option>
-                                        <option value="giftcard">Gift Card</option>
-                                        <option value="cash">Cash (Venmo/PayPal)</option>
-                                        <option value="photo">Photo/Video</option>
-                                        <option value="message">Custom Message</option>
-                                        <option value="physical">Physical Item</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="form-group" id="giftCardOptions" style="display: none;">
-                                    <label for="giftCard">Choose Gift Card:</label>
-                                    <select id="giftCard" name="giftCard">
-                                        <option value="">Select gift card</option>
-                                        <option value="dicks">Dick's Sporting Goods</option>
-                                        <option value="fortnite">Fortnite</option>
-                                        <option value="sephora">Sephora</option>
-                                        <option value="lululemon">Lululemon</option>
-                                        <option value="starbucks">Starbucks</option>
-                                        <option value="dunkin">Dunkin'</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="giftValue">Gift Value:</label>
-                                    <input type="text" id="giftValue" name="giftValue" placeholder="e.g., $100, Family Photo" required>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="challenge">Challenge:</label>
-                                    <textarea id="challenge" name="challenge" placeholder="What should they do to unlock this?" required></textarea>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="message">Personal Message:</label>
-                                    <textarea id="message" name="message" placeholder="Optional personal note"></textarea>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="duration">Duration:</label>
-                                    <select id="duration" name="duration" required>
-                                        <option value="immediate">Immediate</option>
-                                        <option value="daily">Daily for 7 days</option>
-                                        <option value="weekly">Weekly for 4 weeks</option>
-                                        <option value="monthly">Monthly for 3 months</option>
-                                    </select>
-                                </div>
-                                
-                                <button type="submit" class="btn-primary send-btn">
-                                    🚀 Send Honey Badger
-                                </button>
                             </form>
                         </div>
                     </div>
