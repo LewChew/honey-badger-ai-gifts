@@ -80,6 +80,25 @@ header {
     filter: drop-shadow(0 0 8px rgba(226, 255, 0, 0.4));
     transition: all 0.3s ease;
 }
+
+/* Inline badger icon for "Send a Honey Badger" title */
+.inline-badger-icon {
+    width: 1.2em;
+    height: 1.2em;
+    vertical-align: middle;
+    margin-right: 0.5em;
+    filter: drop-shadow(0 0 8px rgba(226, 255, 0, 0.4));
+    transition: all 0.3s ease;
+}
+
+.title-with-icon {
+    display: flex;
+    align-items: center;
+    color: #E2FF00;
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
 .logo-icon:hover {
     transform: scale(1.1);
     filter: drop-shadow(0 0 15px rgba(226, 255, 0, 0.6));
@@ -810,6 +829,7 @@ header {
     color: #E2FF00;
     font-size: 1.8rem;
     margin-bottom: 0.5rem;
+    text-shadow: 0 0 10px rgba(226, 255, 0, 0.3);
 }
 
 .send-subtitle {
