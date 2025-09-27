@@ -83,8 +83,8 @@ header {
 
 /* Inline badger icon for "Send a Honey Badger" title */
 .inline-badger-icon {
-    width: 2.2em;
-    height: 2.2em;
+    width: 3.2em;
+    height: 3.2em;
     vertical-align: middle;
     margin-right: 0.5em;
     filter: drop-shadow(0 0 8px rgba(226, 255, 0, 0.4));
