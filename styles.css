@@ -1,0 +1,228 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #333;
+}
+
+.container {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 800px;
+    margin: 20px;
+}
+
+.screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Login Screen */
+h1 {
+    text-align: center;
+    color: #764ba2;
+    margin-bottom: 1rem;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+input, select, textarea {
+    padding: 0.75rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #764ba2;
+}
+
+button {
+    padding: 0.75rem 1.5rem;
+    background: #764ba2;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: #5a3891;
+}
+
+/* Logged In Screen */
+header {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.user-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logout-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    background: #e74c3c;
+}
+
+.logout-btn:hover {
+    background: #c0392b;
+}
+
+/* Send Honey Badger Section - Key styling for the icon and text */
+.send-honey-badger-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 2rem;
+    gap: 1rem;
+}
+
+.honey-badger-icon {
+    width: 2rem;
+    height: 2rem;
+    object-fit: contain;
+}
+
+.send-honey-badger-section h2 {
+    color: #764ba2;
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+/* Gift Form */
+.gift-form {
+    background: #f9f9f9;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: #555;
+}
+
+textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.1rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    margin-top: 1rem;
+}
+
+.submit-btn:hover {
+    background: linear-gradient(135deg, #5569d8 0%, #5a3891 100%);
+}
+
+/* Sent Gifts Section */
+.sent-gifts {
+    margin-top: 2rem;
+}
+
+.sent-gifts h3 {
+    color: #764ba2;
+    margin-bottom: 1rem;
+}
+
+.gifts-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.gift-item {
+    background: #f9f9f9;
+    padding: 1rem;
+    border-radius: 8px;
+    border-left: 4px solid #764ba2;
+}
+
+.gift-item h4 {
+    color: #764ba2;
+    margin-bottom: 0.5rem;
+}
+
+.gift-item p {
+    margin-bottom: 0.25rem;
+    color: #666;
+}
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+    .container {
+        padding: 1.5rem;
+    }
+    
+    .send-honey-badger-section {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .honey-badger-icon {
+        width: 3rem;
+        height: 3rem;
+    }
+    
+    .send-honey-badger-section h2 {
+        font-size: 1.5rem;
+    }
+}
+
+/* Links */
+a {
+    color: #764ba2;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Center text for login screen */
+#loginScreen p {
+    text-align: center;
+    color: #666;
+}
