@@ -718,6 +718,15 @@ header {
     color: #ccc;
 }
 
+/* Network Section - Full Width at Top */
+.network-section-top {
+    margin-bottom: 3rem;
+}
+
+.network-section-top .activity-section {
+    width: 100%;
+}
+
 /* Top section with activity panels on left and TV on right */
 .dashboard-top-section {
     display: grid;
@@ -767,6 +776,69 @@ header {
 .activity-section h2 {
     color: #E2FF00;
     font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+/* Collapsible Send Form Section */
+.send-section-collapsible {
+    cursor: pointer;
+    padding: 0;
+}
+
+.collapsible-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 2rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.collapsible-header:hover {
+    background: rgba(226, 255, 0, 0.05);
+}
+
+.title-with-icon-small {
+    display: flex;
+    align-items: center;
+    color: #E2FF00;
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.inline-badger-icon-small {
+    width: 2em;
+    height: 2em;
+    vertical-align: middle;
+    margin-right: 0.5em;
+    filter: drop-shadow(0 0 8px rgba(226, 255, 0, 0.4));
+    transition: all 0.3s ease;
+}
+
+.collapsible-header .expand-icon {
+    color: #E2FF00;
+    font-size: 1.2rem;
+    transition: transform 0.3s ease;
+}
+
+.collapsible-header .expand-icon.expanded {
+    transform: rotate(180deg);
+}
+
+.collapsible-content {
+    padding: 0 2rem 2rem 2rem;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.send-panel-compact {
+    padding-top: 1rem;
+}
+
+.send-subtitle-compact {
+    color: #ccc;
+    font-size: 0.95rem;
     margin-bottom: 1.5rem;
     text-align: center;
 }
@@ -908,6 +980,10 @@ header {
         grid-template-columns: repeat(2, 1fr);
     }
 
+    .network-section-top {
+        margin-bottom: 2rem;
+    }
+
     .dashboard-top-section {
         grid-template-columns: 1fr;
         gap: 2rem;
@@ -921,6 +997,15 @@ header {
     .tv-icon {
         width: 300px;
         height: 200px;
+    }
+
+    .title-with-icon-small {
+        font-size: 1.2rem;
+    }
+
+    .inline-badger-icon-small {
+        width: 1.5em;
+        height: 1.5em;
     }
 
     .dashboard-grid {

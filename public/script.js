@@ -60,6 +60,24 @@ function toggleSection(sectionName) {
     }
 }
 
+// Toggle Send Form Collapsible Section
+function toggleSendForm() {
+    const content = document.getElementById('sendFormContent');
+    const icon = document.getElementById('sendFormExpandIcon');
+
+    if (content.style.display === 'none' || content.style.display === '') {
+        // Expand
+        content.style.display = 'block';
+        icon.classList.add('expanded');
+        icon.textContent = '▲';
+    } else {
+        // Collapse
+        content.style.display = 'none';
+        icon.classList.remove('expanded');
+        icon.textContent = '▼';
+    }
+}
+
 // Handle gift type change
 function handleGiftTypeChange() {
     const giftType = document.getElementById('giftType').value;
