@@ -127,19 +127,19 @@
         <main>
             <div class="container">
                 
-                <div class="dashboard-header">
-                     <div class="feature-icon">
-                                 <img src="/assets/Honey_Badger_tv.svg" alt="Honey Badger TV" class="tv-icon" id="bodyGift">
-                    </div>
-                </div>
-
-                <div class="dashboard-grid">
+                <div class="dashboard-top-section">
                     <!-- Left Panel - Recent Activity -->
-                    <div class="dashboard-left">
+                    <div class="dashboard-sections-left">
                         <div class="activity-section">
                             <h2>📤 Badgers In the Wild</h2>
                             <div id="sentBadgersList" class="badgers-list">
                                 <!-- Sent badgers will be populated here -->
+                            </div>
+                        </div>
+
+                        <div class="activity-section">
+                            <h2>🌍 Your Network</h2>
+                            <div id="networkList" class="badgers-list">
                             </div>
                         </div>
 
@@ -150,12 +150,16 @@
                             </div>
                         </div>
                     </div>
-                       <div class="activity-section">
-                            <h2>Your Network</h2>
-                            <div id="receivedBadgersList" class="badgers-list">
-                            </div>
+
+                    <!-- Right Panel - Honey Badger TV -->
+                    <div class="dashboard-tv-right">
+                        <div class="tv-container">
+                            <img src="/assets/Honey_Badger_tv.svg" alt="Honey Badger TV" class="tv-icon" id="bodyGift">
                         </div>
                     </div>
+                </div>
+
+                <div class="dashboard-grid">
 
                     <!-- Right Panel - Send Honey Badger (Simplified) -->
                     <div class="dashboard-right">
