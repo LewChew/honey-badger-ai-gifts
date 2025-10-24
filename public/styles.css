@@ -718,13 +718,18 @@ header {
     color: #ccc;
 }
 
-/* Network Section - Full Width at Top */
-.network-section-top {
-    margin-bottom: 3rem;
+/* Network Section on Right Side Below TV */
+.network-section-right {
+    margin-top: 2rem;
 }
 
-.network-section-top .activity-section {
-    width: 100%;
+.dashboard-tv-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    position: sticky;
+    top: 120px;
 }
 
 /* Top section with activity panels on left and TV on right */
@@ -740,14 +745,6 @@ header {
     display: flex;
     flex-direction: column;
     gap: 2rem;
-}
-
-.dashboard-tv-right {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    position: sticky;
-    top: 120px;
 }
 
 .tv-container {
@@ -980,10 +977,6 @@ header {
         grid-template-columns: repeat(2, 1fr);
     }
 
-    .network-section-top {
-        margin-bottom: 2rem;
-    }
-
     .dashboard-top-section {
         grid-template-columns: 1fr;
         gap: 2rem;
@@ -991,7 +984,11 @@ header {
 
     .dashboard-tv-right {
         position: static;
-        order: -1; /* Move TV to top on mobile */
+        order: 1; /* Keep TV and network on right side on mobile */
+    }
+
+    .network-section-right {
+        margin-top: 1.5rem;
     }
 
     .tv-icon {
