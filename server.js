@@ -26,15 +26,6 @@ if (process.env.ENABLE_SMS === 'true') {
 // In-memory user storage (replace with database in production)
 const users = new Map();
 
-// Pre-populate admin user
-users.set('lewischewning@gmail.com', {
-    email: 'lewischewning@gmail.com',
-    password: '$2a$12$ankRlg6IOXfLSbe.ytGUTubpp/av16s.pxb1/IVvRC/5X.8wx7mgW',
-    name: 'Lewis Chewning',
-    phone: '',
-    createdAt: new Date().toISOString()
-});
-
 // JWT secret (use environment variable in production)
 const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production';
 
