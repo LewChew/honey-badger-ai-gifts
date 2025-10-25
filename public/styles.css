@@ -649,31 +649,85 @@ header {
 }
 
 .modal-content {
-    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+    /* Fur texture background - lighter version for readability */
+    background:
+        /* Fine hair strands - diagonal patterns */
+        repeating-linear-gradient(
+            42deg,
+            rgba(0, 0, 0, 0.15) 0px,
+            rgba(0, 0, 0, 0.1) 0.5px,
+            transparent 0.5px,
+            transparent 1.5px,
+            rgba(0, 0, 0, 0.15) 1.5px
+        ),
+        repeating-linear-gradient(
+            -42deg,
+            rgba(0, 0, 0, 0.12) 0px,
+            transparent 0.5px,
+            transparent 1.5px,
+            rgba(0, 0, 0, 0.12) 1.5px
+        ),
+        /* Fur clumps - subtle spots */
+        radial-gradient(ellipse at 15% 20%, rgba(0, 0, 0, 0.25) 0%, transparent 40px),
+        radial-gradient(ellipse at 85% 30%, rgba(0, 0, 0, 0.2) 0%, transparent 50px),
+        radial-gradient(ellipse at 30% 80%, rgba(0, 0, 0, 0.22) 0%, transparent 45px),
+        radial-gradient(ellipse at 70% 70%, rgba(0, 0, 0, 0.2) 0%, transparent 40px),
+        radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0.18) 0%, transparent 60px),
+        /* Color variations for depth */
+        radial-gradient(ellipse at 20% 60%, rgba(50, 50, 50, 0.3) 0%, transparent 35%),
+        radial-gradient(ellipse at 80% 40%, rgba(45, 45, 45, 0.25) 0%, transparent 30%),
+        /* Base dark gradient with slight variation */
+        linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 25%, #353535 50%, #1a1a1a 75%, #2a2a2a 100%),
+        /* Yellow honey badger accent stripe at top */
+        linear-gradient(180deg, #E2FF00 0%, rgba(226, 255, 0, 0.3) 8%, transparent 8%);
+    background-size:
+        3px 3px,
+        3px 3px,
+        100% 100%,
+        100% 100%,
+        100% 100%,
+        100% 100%,
+        100% 100%,
+        100% 100%,
+        100% 100%,
+        100% 100%,
+        100% 100%;
     margin: 5% auto;
     padding: 2rem;
-    border: 1px solid rgba(226, 255, 0, 0.3);
+    border: 3px solid #E2FF00;
     border-radius: 20px;
     width: 90%;
     max-width: 500px;
     position: relative;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.7),
+        0 0 30px rgba(226, 255, 0, 0.3),
+        inset 0 2px 4px rgba(255, 255, 255, 0.05),
+        inset 0 -3px 6px rgba(0, 0, 0, 0.3);
 }
 
 .close {
-    color: #ccc;
+    color: #E2FF00;
     float: right;
     font-size: 2rem;
     font-weight: bold;
     cursor: pointer;
-    transition: color 0.3s;
+    transition: all 0.3s;
     position: absolute;
     right: 20px;
     top: 15px;
+    text-shadow:
+        0 0 10px rgba(226, 255, 0, 0.4),
+        2px 2px 3px rgba(0, 0, 0, 0.7);
+    z-index: 10;
 }
 
 .close:hover {
-    color: #E2FF00;
+    color: #fff;
+    transform: scale(1.2) rotate(90deg);
+    text-shadow:
+        0 0 20px rgba(226, 255, 0, 0.8),
+        2px 2px 4px rgba(0, 0, 0, 0.9);
 }
 
 .modal-header {
@@ -686,7 +740,13 @@ header {
     color: #E2FF00;
     font-size: 2rem;
     margin-bottom: 0.5rem;
-    text-shadow: 0 0 10px rgba(226, 255, 0, 0.3);
+    font-family: Impact, 'Arial Black', sans-serif;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-shadow:
+        0 0 15px rgba(226, 255, 0, 0.6),
+        2px 2px 4px rgba(0, 0, 0, 0.8),
+        -1px -1px 2px rgba(255, 255, 255, 0.1);
 }
 
 .modal-subtitle {
