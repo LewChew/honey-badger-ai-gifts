@@ -140,46 +140,124 @@ header {
     background: linear-gradient(135deg, #FFE55C 0%, #E2FF00 100%);
 }
 
-/* Hero Badger Button - Large and Animalistic with Fur Texture */
+/* Hero Badger Button - Large and Animalistic with Enhanced Fur Texture */
 .btn-hero-badger {
-    /* Fur texture using layered gradients */
+    /* Enhanced fur texture using multiple layered gradients */
     background:
-        /* Fur hair pattern - dark strands */
+        /* Fine hair strands - diagonal patterns */
         repeating-linear-gradient(
-            45deg,
-            rgba(0, 0, 0, 0.3) 0px,
-            transparent 1px,
+            42deg,
+            rgba(0, 0, 0, 0.5) 0px,
+            rgba(0, 0, 0, 0.4) 0.5px,
+            transparent 0.5px,
+            transparent 1.5px,
+            rgba(0, 0, 0, 0.5) 1.5px,
+            rgba(0, 0, 0, 0.4) 2px,
             transparent 2px,
-            rgba(0, 0, 0, 0.3) 3px
+            transparent 3px
         ),
         repeating-linear-gradient(
-            -45deg,
+            -42deg,
+            rgba(0, 0, 0, 0.4) 0px,
+            rgba(0, 0, 0, 0.3) 0.5px,
+            transparent 0.5px,
+            transparent 1.5px,
+            rgba(0, 0, 0, 0.4) 1.5px,
+            rgba(0, 0, 0, 0.3) 2px,
+            transparent 2px,
+            transparent 3px
+        ),
+        /* Additional vertical fur strands */
+        repeating-linear-gradient(
+            90deg,
+            rgba(0, 0, 0, 0.25) 0px,
+            transparent 0.5px,
+            transparent 2px,
+            rgba(0, 0, 0, 0.25) 2px,
+            transparent 2.5px,
+            transparent 4px
+        ),
+        /* Horizontal fur direction variation */
+        repeating-linear-gradient(
+            0deg,
             rgba(0, 0, 0, 0.2) 0px,
-            transparent 1px,
-            transparent 2px,
-            rgba(0, 0, 0, 0.2) 3px
+            transparent 0.5px,
+            transparent 3px,
+            rgba(0, 0, 0, 0.2) 3px,
+            transparent 3.5px,
+            transparent 6px
         ),
-        /* Radial spots for fur texture depth */
-        radial-gradient(circle at 20% 30%, rgba(0, 0, 0, 0.4) 0%, transparent 3px),
-        radial-gradient(circle at 60% 70%, rgba(0, 0, 0, 0.3) 0%, transparent 4px),
-        radial-gradient(circle at 80% 20%, rgba(0, 0, 0, 0.35) 0%, transparent 3px),
-        radial-gradient(circle at 40% 90%, rgba(0, 0, 0, 0.3) 0%, transparent 4px),
-        radial-gradient(circle at 90% 60%, rgba(0, 0, 0, 0.4) 0%, transparent 3px),
-        radial-gradient(circle at 15% 80%, rgba(0, 0, 0, 0.3) 0%, transparent 3px),
-        radial-gradient(circle at 70% 40%, rgba(0, 0, 0, 0.35) 0%, transparent 4px),
-        /* Base honey badger fur colors */
-        linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 25%, #4a4a4a 50%, #2a2a2a 75%, #3a3a3a 100%),
-        /* Yellow honey badger stripe */
-        linear-gradient(180deg, transparent 0%, transparent 20%, #E2FF00 20%, #FFD700 50%, #E2FF00 80%, transparent 80%);
+        /* Fur clumps - larger radial spots */
+        radial-gradient(ellipse at 12% 25%, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 3px, transparent 6px),
+        radial-gradient(ellipse at 25% 15%, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.25) 4px, transparent 7px),
+        radial-gradient(ellipse at 35% 85%, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.3) 3px, transparent 6px),
+        radial-gradient(ellipse at 48% 45%, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.25) 4px, transparent 7px),
+        radial-gradient(ellipse at 58% 75%, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 3px, transparent 5px),
+        radial-gradient(ellipse at 65% 20%, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.3) 4px, transparent 6px),
+        radial-gradient(ellipse at 72% 55%, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.25) 3px, transparent 6px),
+        radial-gradient(ellipse at 78% 90%, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 4px, transparent 7px),
+        radial-gradient(ellipse at 85% 35%, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.3) 3px, transparent 5px),
+        radial-gradient(ellipse at 92% 68%, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.25) 4px, transparent 6px),
+        radial-gradient(ellipse at 5% 60%, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 3px, transparent 5px),
+        radial-gradient(ellipse at 18% 92%, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.3) 4px, transparent 7px),
+        radial-gradient(ellipse at 42% 12%, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.25) 3px, transparent 6px),
+        radial-gradient(ellipse at 55% 95%, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 4px, transparent 6px),
+        radial-gradient(ellipse at 88% 8%, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.3) 3px, transparent 5px),
+        radial-gradient(ellipse at 95% 50%, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.25) 4px, transparent 7px),
+        /* Color variations in fur for depth */
+        radial-gradient(ellipse at 30% 40%, rgba(60, 60, 60, 0.4) 0%, transparent 25%),
+        radial-gradient(ellipse at 70% 60%, rgba(50, 50, 50, 0.35) 0%, transparent 30%),
+        radial-gradient(ellipse at 15% 75%, rgba(55, 55, 55, 0.3) 0%, transparent 20%),
+        radial-gradient(ellipse at 85% 25%, rgba(45, 45, 45, 0.4) 0%, transparent 25%),
+        /* Noise-like texture for individual hairs */
+        repeating-linear-gradient(
+            37deg,
+            transparent 0px,
+            transparent 1px,
+            rgba(0, 0, 0, 0.15) 1px,
+            transparent 1.5px,
+            transparent 2.5px
+        ),
+        repeating-linear-gradient(
+            -53deg,
+            transparent 0px,
+            transparent 1px,
+            rgba(0, 0, 0, 0.12) 1px,
+            transparent 1.5px,
+            transparent 2.5px
+        ),
+        /* Base honey badger fur colors with more variation */
+        linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 15%, #4a4a4a 30%, #353535 45%, #2a2a2a 60%, #4a4a4a 75%, #323232 90%, #3a3a3a 100%),
+        /* Yellow honey badger stripe with gradient edges */
+        linear-gradient(180deg, transparent 0%, transparent 18%, rgba(226, 255, 0, 0.3) 18%, #E2FF00 22%, #FFD700 50%, #E2FF00 78%, rgba(226, 255, 0, 0.3) 82%, transparent 82%);
     background-size:
+        3px 3px,
+        3px 3px,
         4px 4px,
-        4px 4px,
+        6px 6px,
         100% 100%,
         100% 100%,
         100% 100%,
         100% 100%,
         100% 100%,
         100% 100%,
+        100% 100%,
+        100% 100%,
+        100% 100%,
+        100% 100%,
+        100% 100%,
+        100% 100%,
+        100% 100%,
+        100% 100%,
+        100% 100%,
+        100% 100%,
+        100% 100%,
+        100% 100%,
+        100% 100%,
+        100% 100%,
+        100% 100%,
+        2.5px 2.5px,
+        2.5px 2.5px,
         100% 100%,
         100% 100%;
     color: #fff;
@@ -194,14 +272,17 @@ header {
         0 8px 25px rgba(0, 0, 0, 0.7),
         0 0 30px rgba(226, 255, 0, 0.4),
         inset 0 2px 4px rgba(255, 255, 255, 0.1),
-        inset 0 -4px 8px rgba(0, 0, 0, 0.4);
+        inset 0 -4px 8px rgba(0, 0, 0, 0.4),
+        inset 2px 0 3px rgba(0, 0, 0, 0.3),
+        inset -2px 0 3px rgba(0, 0, 0, 0.3);
     text-transform: uppercase;
     letter-spacing: 3px;
     font-family: Impact, 'Arial Black', sans-serif;
     text-shadow:
         2px 2px 4px rgba(0, 0, 0, 0.8),
         -1px -1px 2px rgba(255, 255, 255, 0.2),
-        0 0 20px rgba(226, 255, 0, 0.6);
+        0 0 20px rgba(226, 255, 0, 0.6),
+        1px 1px 0 rgba(0, 0, 0, 0.9);
     position: relative;
     overflow: hidden;
     animation: badgerPulse 2s ease-in-out infinite;
