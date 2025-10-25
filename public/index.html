@@ -372,8 +372,31 @@
 
                     <!-- Right Panel - Honey Badger TV and Network -->
                     <div class="dashboard-tv-right">
-                        <div class="tv-container">
-                            <img src="/assets/Honey_Badger_tv.svg" alt="Honey Badger TV" class="tv-icon" id="bodyGift">
+                        <!-- Carousel Container -->
+                        <div class="tv-carousel-container">
+                            <div class="tv-carousel">
+                                <!-- TV Slide -->
+                                <div class="carousel-slide active" id="tvSlide">
+                                    <img src="/assets/Honey_Badger_tv.svg" alt="Honey Badger TV" class="tv-icon">
+                                </div>
+
+                                <!-- Chatbot Slide -->
+                                <div class="carousel-slide" id="chatbotSlide">
+                                    <div class="chatbot-preview" onclick="openChatbot()">
+                                        <div class="chatbot-icon">
+                                            <img src="/assets/honeycomb_badger_face.svg" alt="Honey Badger Chat" class="chatbot-avatar">
+                                        </div>
+                                        <h3 class="chatbot-title">Chat with Honey Badger</h3>
+                                        <p class="chatbot-subtitle">Click to start a conversation</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Carousel Navigation Dots -->
+                            <div class="carousel-dots">
+                                <span class="dot active" onclick="goToSlide(0)"></span>
+                                <span class="dot" onclick="goToSlide(1)"></span>
+                            </div>
                         </div>
 
                         <!-- Your Network below TV -->
@@ -549,6 +572,50 @@
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Chatbot Modal -->
+    <div id="chatbotModal" class="modal chatbot-modal">
+        <div class="modal-content chatbot-modal-content">
+            <span class="close" onclick="closeChatbot()">&times;</span>
+            <div class="modal-header">
+                <div class="chatbot-header">
+                    <img src="/assets/honeycomb_badger_face.svg" alt="Honey Badger" class="chatbot-header-icon">
+                    <div class="chatbot-header-text">
+                        <h2>Honey Badger Chat</h2>
+                        <p class="modal-subtitle">Your AI assistant is here to help</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chatbot-messages" id="chatbotMessages">
+                <div class="chat-message bot-message">
+                    <div class="message-avatar">
+                        <img src="/assets/honeycomb_badger_face.svg" alt="Bot">
+                    </div>
+                    <div class="message-content">
+                        <p>Hey there! I'm your Honey Badger assistant. How can I help you today?</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chatbot-input-container">
+                <form id="chatbotForm" onsubmit="sendMessage(event)">
+                    <div class="chat-input-group">
+                        <input
+                            type="text"
+                            id="chatInput"
+                            placeholder="Type your message here..."
+                            autocomplete="off"
+                            required
+                        >
+                        <button type="submit" class="btn-chat-send">
+                            Send
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 

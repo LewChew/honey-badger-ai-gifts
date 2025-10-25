@@ -675,3 +675,157 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+// ===========================
+// Carousel Functionality
+// ===========================
+
+let currentSlide = 0;
+let carouselInterval = null;
+
+// Start auto-rotation when dashboard loads
+function startCarousel() {
+    carouselInterval = setInterval(() => {
+        currentSlide = (currentSlide + 1) % 2;
+        goToSlide(currentSlide);
+    }, 5000); // Rotate every 5 seconds
+}
+
+// Stop carousel rotation
+function stopCarousel() {
+    if (carouselInterval) {
+        clearInterval(carouselInterval);
+        carouselInterval = null;
+    }
+}
+
+// Go to specific slide
+function goToSlide(slideIndex) {
+    currentSlide = slideIndex;
+
+    // Update slides
+    const slides = document.querySelectorAll('.carousel-slide');
+    slides.forEach((slide, index) => {
+        if (index === slideIndex) {
+            slide.classList.add('active');
+        } else {
+            slide.classList.remove('active');
+        }
+    });
+
+    // Update dots
+    const dots = document.querySelectorAll('.dot');
+    dots.forEach((dot, index) => {
+        if (index === slideIndex) {
+            dot.classList.add('active');
+        } else {
+            dot.classList.remove('active');
+        }
+    });
+
+    // Restart auto-rotation timer
+    stopCarousel();
+    startCarousel();
+}
+
+// ===========================
+// Chatbot Functionality
+// ===========================
+
+// Open chatbot modal
+function openChatbot() {
+    document.getElementById('chatbotModal').style.display = 'block';
+    document.getElementById('chatInput').focus();
+}
+
+// Close chatbot modal
+function closeChatbot() {
+    document.getElementById('chatbotModal').style.display = 'none';
+}
+
+// Send message in chatbot
+function sendMessage(event) {
+    event.preventDefault();
+
+    const input = document.getElementById('chatInput');
+    const message = input.value.trim();
+
+    if (!message) return;
+
+    // Add user message to chat
+    addMessage(message, 'user');
+
+    // Clear input
+    input.value = '';
+
+    // Simulate bot response (replace with actual API call later)
+    setTimeout(() => {
+        const botResponse = getBotResponse(message);
+        addMessage(botResponse, 'bot');
+    }, 1000);
+}
+
+// Add message to chat display
+function addMessage(text, sender) {
+    const messagesContainer = document.getElementById('chatbotMessages');
+
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `chat-message ${sender}-message`;
+
+    const avatarDiv = document.createElement('div');
+    avatarDiv.className = 'message-avatar';
+
+    const avatarImg = document.createElement('img');
+    if (sender === 'bot') {
+        avatarImg.src = '/assets/honeycomb_badger_face.svg';
+        avatarImg.alt = 'Bot';
+    } else {
+        // Use a simple user icon or first letter
+        avatarImg.src = '/assets/honeycomb_badger_face.svg'; // Placeholder
+        avatarImg.alt = 'You';
+    }
+    avatarDiv.appendChild(avatarImg);
+
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'message-content';
+
+    const textP = document.createElement('p');
+    textP.textContent = text;
+    contentDiv.appendChild(textP);
+
+    messageDiv.appendChild(avatarDiv);
+    messageDiv.appendChild(contentDiv);
+
+    messagesContainer.appendChild(messageDiv);
+
+    // Scroll to bottom
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+// Get bot response (placeholder - replace with API call)
+function getBotResponse(userMessage) {
+    const lowerMessage = userMessage.toLowerCase();
+
+    if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
+        return "Hey there! How can I help you with your Honey Badger experience today?";
+    } else if (lowerMessage.includes('help')) {
+        return "I can help you with sending gifts, tracking challenges, managing your network, and more. What would you like to know?";
+    } else if (lowerMessage.includes('send') || lowerMessage.includes('gift')) {
+        return "To send a gift, click on the 'Send a Honey Badger' section on the left. You can choose the gift type, recipient, and challenge!";
+    } else if (lowerMessage.includes('challenge')) {
+        return "Challenges are fun tasks your recipients complete to unlock their gifts. You can set photo challenges, fitness goals, multi-day tasks, and more!";
+    } else if (lowerMessage.includes('thank')) {
+        return "You're welcome! Happy to help. Let me know if you need anything else!";
+    } else {
+        return "That's an interesting question! I'm here to help with your Honey Badger gifts. Feel free to ask me about sending gifts, challenges, or managing your account.";
+    }
+}
+
+// Initialize carousel when dashboard is shown
+document.addEventListener('DOMContentLoaded', () => {
+    // Start carousel if dashboard is visible
+    const dashboard = document.getElementById('dashboard');
+    if (dashboard && dashboard.style.display !== 'none') {
+        startCarousel();
+    }
+});
