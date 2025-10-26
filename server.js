@@ -26,6 +26,10 @@ if (process.env.ENABLE_SMS === 'true') {
 // In-memory user storage (replace with database in production)
 const users = new Map();
 
+// In-memory password reset tokens (replace with database in production)
+// Structure: { token: { email, expiresAt } }
+const resetTokens = new Map();
+
 // JWT secret (use environment variable in production)
 const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production';
 
@@ -268,6 +272,141 @@ app.post('/api/auth/logout', authenticateToken, (req, res) => {
     });
 });
 
+// Request password reset token
+app.post('/api/auth/forgot-password', [
+    body('email').isEmail().normalizeEmail().withMessage('Valid email is required')
+], async (req, res) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                success: false,
+                message: 'Please provide a valid email address',
+                errors: errors.array()
+            });
+        }
+
+        const { email } = req.body;
+
+        // Check if user exists
+        const user = users.get(email);
+        if (!user) {
+            // For security, return success even if user doesn't exist
+            // This prevents email enumeration attacks
+            return res.json({
+                success: true,
+                message: 'If an account exists with that email, a reset token has been generated. Check the console for the token.'
+            });
+        }
+
+        // Generate reset token (6-digit code for simplicity)
+        const resetToken = Math.floor(100000 + Math.random() * 900000).toString();
+
+        // Store token with 15-minute expiration
+        const expiresAt = Date.now() + 15 * 60 * 1000; // 15 minutes
+        resetTokens.set(resetToken, {
+            email: email,
+            expiresAt: expiresAt
+        });
+
+        // In production, send this via email
+        // For now, log it to console
+        console.log('🔐 Password Reset Token Generated');
+        console.log('================================');
+        console.log(`Email: ${email}`);
+        console.log(`Token: ${resetToken}`);
+        console.log(`Expires: ${new Date(expiresAt).toLocaleString()}`);
+        console.log('================================');
+
+        res.json({
+            success: true,
+            message: 'Reset token generated! Check the server console for your token.',
+            // In development, include the token in response
+            ...(process.env.NODE_ENV === 'development' && { token: resetToken })
+        });
+
+    } catch (error) {
+        console.error('Forgot password error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error'
+        });
+    }
+});
+
+// Reset password with token
+app.post('/api/auth/reset-password', [
+    body('token').notEmpty().withMessage('Reset token is required'),
+    body('newPassword').isLength({ min: 6 }).withMessage('Password must be at least 6 characters')
+        .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/).withMessage('Password must contain uppercase, lowercase, and number')
+], async (req, res) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                success: false,
+                message: 'Validation failed',
+                errors: errors.array()
+            });
+        }
+
+        const { token, newPassword } = req.body;
+
+        // Check if token exists
+        const resetData = resetTokens.get(token);
+        if (!resetData) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid or expired reset token'
+            });
+        }
+
+        // Check if token has expired
+        if (Date.now() > resetData.expiresAt) {
+            resetTokens.delete(token);
+            return res.status(400).json({
+                success: false,
+                message: 'Reset token has expired. Please request a new one.'
+            });
+        }
+
+        // Get user
+        const user = users.get(resetData.email);
+        if (!user) {
+            resetTokens.delete(token);
+            return res.status(404).json({
+                success: false,
+                message: 'User not found'
+            });
+        }
+
+        // Hash new password
+        const saltRounds = 12;
+        const hashedPassword = await bcrypt.hash(newPassword, saltRounds);
+
+        // Update user password
+        user.password = hashedPassword;
+        users.set(resetData.email, user);
+
+        // Delete used token
+        resetTokens.delete(token);
+
+        console.log('✅ Password reset successful for:', resetData.email);
+
+        res.json({
+            success: true,
+            message: 'Password has been reset successfully. You can now login with your new password.'
+        });
+
+    } catch (error) {
+        console.error('Reset password error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Internal server error'
+        });
+    }
+});
+
 // Protected route: Send Honey Badger (requires authentication)
 app.post('/api/send-honey-badger', authenticateToken, async (req, res) => {
     const { recipientName, recipientContact, giftType, giftValue, challenge, message, duration } = req.body;
@@ -378,7 +517,9 @@ app.get('/api', (req, res) => {
                 signup: 'POST /api/signup',
                 login: 'POST /api/login',
                 profile: 'GET /api/auth/me',
-                logout: 'POST /api/auth/logout'
+                logout: 'POST /api/auth/logout',
+                forgotPassword: 'POST /api/auth/forgot-password',
+                resetPassword: 'POST /api/auth/reset-password'
             },
             honeyBadgers: {
                 send: 'POST /api/send-honey-badger',

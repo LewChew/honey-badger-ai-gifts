@@ -430,6 +430,9 @@
                     <label for="loginPassword">Password:</label>
                     <input type="password" id="loginPassword" name="loginPassword" required placeholder="Enter your password">
                 </div>
+                <p style="text-align: right; margin-top: -10px; margin-bottom: 15px;">
+                    <a href="#" onclick="closeModal('loginModal'); showModal('forgotPasswordModal');" style="color: #E2FF00; text-decoration: none; font-size: 0.9rem;">Forgot Password?</a>
+                </p>
                 <button type="submit" class="btn" style="width: 100%;">
                     Login
                 </button>
@@ -616,6 +619,69 @@
                     </div>
                 </form>
             </div>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('forgotPasswordModal')">&times;</span>
+            <div class="modal-header">
+                <div class="modal-title">
+                    <h2>Reset Your Password</h2>
+                    <p class="modal-subtitle">Enter your email to receive a reset token</p>
+                </div>
+            </div>
+            <form id="forgotPasswordForm">
+                <div class="form-group">
+                    <label for="resetEmail">Email Address:</label>
+                    <input type="email" id="resetEmail" name="resetEmail" required placeholder="Enter your email address">
+                    <small style="color: #aaa; font-size: 0.85rem;">We'll send you a password reset token via the console (email integration coming soon)</small>
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">
+                    Request Reset Token
+                </button>
+            </form>
+            <p style="text-align: center; margin-top: 15px; color: #ccc;">
+                Remember your password?
+                <a href="#" onclick="closeModal('forgotPasswordModal'); showModal('loginModal');" style="color: #E2FF00; text-decoration: none;">Back to Login</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Reset Password Modal -->
+    <div id="resetPasswordModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('resetPasswordModal')">&times;</span>
+            <div class="modal-header">
+                <div class="modal-title">
+                    <h2>Enter New Password</h2>
+                    <p class="modal-subtitle">Complete your password reset</p>
+                </div>
+            </div>
+            <form id="resetPasswordForm">
+                <div class="form-group">
+                    <label for="resetToken">Reset Token:</label>
+                    <input type="text" id="resetToken" name="resetToken" required placeholder="Enter the reset token from console">
+                    <small style="color: #aaa; font-size: 0.85rem;">Check your browser console or server logs for the token</small>
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">New Password:</label>
+                    <input type="password" id="newPassword" name="newPassword" required placeholder="Create a new password">
+                    <small style="color: #aaa; font-size: 0.85rem;">Must be 6+ characters with uppercase, lowercase, and numbers</small>
+                </div>
+                <div class="form-group">
+                    <label for="confirmNewPassword">Confirm New Password:</label>
+                    <input type="password" id="confirmNewPassword" name="confirmNewPassword" required placeholder="Confirm your new password">
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">
+                    Reset Password
+                </button>
+            </form>
+            <p style="text-align: center; margin-top: 15px; color: #ccc;">
+                Don't have a token?
+                <a href="#" onclick="closeModal('resetPasswordModal'); showModal('forgotPasswordModal');" style="color: #E2FF00; text-decoration: none;">Request one</a>
+            </p>
         </div>
     </div>
 

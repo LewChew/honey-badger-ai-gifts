@@ -515,20 +515,136 @@ document.addEventListener('DOMContentLoaded', function() {
     // Login form
     document.getElementById('loginForm').addEventListener('submit', async function(e) {
         e.preventDefault();
-        
+
         const email = document.getElementById('loginEmail').value;
         const password = document.getElementById('loginPassword').value;
-        
+
         const submitBtn = this.querySelector('button[type="submit"]');
         const originalText = submitBtn.textContent;
         submitBtn.textContent = 'Logging in...';
         submitBtn.disabled = true;
-        
+
         try {
             await login(email, password);
             this.reset();
         } catch (error) {
             alert('Login failed: ' + error.message);
+        } finally {
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+        }
+    });
+
+    // Forgot Password form
+    document.getElementById('forgotPasswordForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const email = document.getElementById('resetEmail').value;
+
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Generating token...';
+        submitBtn.disabled = true;
+
+        try {
+            const response = await fetch('/api/auth/forgot-password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                // Show success message with token (if in development)
+                let message = data.message;
+                if (data.token) {
+                    message += `\n\nYour reset token: ${data.token}\n\nThis token will expire in 15 minutes.`;
+                }
+                alert(message);
+
+                // Close forgot password modal and open reset password modal
+                closeModal('forgotPasswordModal');
+                showModal('resetPasswordModal');
+
+                // Pre-fill token if available
+                if (data.token) {
+                    document.getElementById('resetToken').value = data.token;
+                }
+
+                this.reset();
+            } else {
+                alert('Error: ' + data.message);
+            }
+        } catch (error) {
+            alert('Failed to request password reset. Please try again.');
+            console.error('Forgot password error:', error);
+        } finally {
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+        }
+    });
+
+    // Reset Password form
+    document.getElementById('resetPasswordForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const token = document.getElementById('resetToken').value.trim();
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+
+        // Validate passwords match
+        if (newPassword !== confirmNewPassword) {
+            alert('Passwords do not match!');
+            return;
+        }
+
+        // Validate password requirements
+        if (newPassword.length < 6) {
+            alert('Password must be at least 6 characters long');
+            return;
+        }
+
+        const hasUpper = /[A-Z]/.test(newPassword);
+        const hasLower = /[a-z]/.test(newPassword);
+        const hasNumber = /\d/.test(newPassword);
+
+        if (!hasUpper || !hasLower || !hasNumber) {
+            alert('Password must contain at least one uppercase letter, one lowercase letter, and one number');
+            return;
+        }
+
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Resetting password...';
+        submitBtn.disabled = true;
+
+        try {
+            const response = await fetch('/api/auth/reset-password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ token, newPassword })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                alert('Success! ' + data.message);
+
+                // Close reset modal and open login modal
+                closeModal('resetPasswordModal');
+                this.reset();
+                showModal('loginModal');
+            } else {
+                alert('Error: ' + data.message);
+            }
+        } catch (error) {
+            alert('Failed to reset password. Please try again.');
+            console.error('Reset password error:', error);
         } finally {
             submitBtn.textContent = originalText;
             submitBtn.disabled = false;
