@@ -997,6 +997,23 @@ header {
     margin-top: 2rem;
 }
 
+/* Full Width Network Section */
+.network-section-full-width {
+    width: 100%;
+    margin-top: 2rem;
+    padding: 0;
+}
+
+.network-section-full-width .activity-section {
+    width: 100%;
+}
+
+.network-section-full-width .badgers-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
 .dashboard-tv-right {
     display: flex;
     flex-direction: column;
@@ -1271,6 +1288,11 @@ header {
         margin-top: 1.5rem;
     }
 
+    .network-section-full-width .badgers-list {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
     .tv-icon {
         width: 300px;
         height: 200px;
@@ -1361,6 +1383,25 @@ header {
 
     .chatbot-title {
         font-size: 1.2rem;
+    }
+
+    .chatbot-inline-container {
+        height: 300px;
+        padding: 1rem;
+    }
+
+    .chatbot-inline-title {
+        font-size: 1rem;
+    }
+
+    .btn-paw-send {
+        width: 45px;
+        height: 45px;
+    }
+
+    .paw-icon {
+        width: 25px;
+        height: 25px;
     }
 }
 
@@ -1472,6 +1513,194 @@ header {
 .chatbot-subtitle {
     color: #ccc;
     font-size: 1rem;
+}
+
+/* Inline Chatbot in Carousel */
+.chatbot-inline-container {
+    background:
+        /* Fine hair strands - diagonal patterns */
+        repeating-linear-gradient(42deg, rgba(0, 0, 0, 0.5) 0px, transparent 1px, transparent 2px, rgba(0, 0, 0, 0.5) 3px),
+        repeating-linear-gradient(-42deg, rgba(0, 0, 0, 0.4) 0px, transparent 1px, transparent 2px, rgba(0, 0, 0, 0.4) 3px),
+        repeating-linear-gradient(84deg, rgba(20, 20, 20, 0.3) 0px, transparent 2px, transparent 4px, rgba(20, 20, 20, 0.3) 6px),
+        repeating-linear-gradient(-84deg, rgba(30, 30, 30, 0.3) 0px, transparent 2px, transparent 4px, rgba(30, 30, 30, 0.3) 6px),
+        /* Elliptical fur clumps */
+        radial-gradient(ellipse at 12% 25%, rgba(0, 0, 0, 0.6) 0%, transparent 8%),
+        radial-gradient(ellipse at 88% 15%, rgba(10, 10, 10, 0.5) 0%, transparent 6%),
+        radial-gradient(ellipse at 45% 35%, rgba(15, 15, 15, 0.4) 0%, transparent 7%),
+        radial-gradient(ellipse at 72% 45%, rgba(0, 0, 0, 0.5) 0%, transparent 9%),
+        radial-gradient(ellipse at 22% 65%, rgba(20, 20, 20, 0.6) 0%, transparent 8%),
+        /* Base dark black */
+        linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 15%, #1a1a1a 30%, #0a0a0a 45%, #1a1a1a 60%, #0a0a0a 75%, #1a1a1a 90%, #0a0a0a 100%),
+        #000000;
+    border: 4px solid #E2FF00;
+    border-radius: 20px;
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 500px;
+    height: 350px;
+    display: flex;
+    flex-direction: column;
+    box-shadow:
+        inset 0 2px 8px rgba(0, 0, 0, 0.6),
+        0 4px 12px rgba(0, 0, 0, 0.8),
+        0 0 20px rgba(226, 255, 0, 0.2);
+}
+
+.chatbot-inline-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid rgba(226, 255, 0, 0.3);
+}
+
+.chatbot-inline-title {
+    color: #FFFFFF;
+    font-size: 1.3rem;
+    font-weight: 900;
+    font-family: Impact, 'Arial Black', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-shadow:
+        2px 2px 4px rgba(0, 0, 0, 0.8),
+        0 0 10px rgba(226, 255, 0, 0.3);
+    margin: 0;
+}
+
+.expand-chat-btn {
+    background: rgba(226, 255, 0, 0.1);
+    border: 2px solid rgba(226, 255, 0, 0.4);
+    color: #E2FF00;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.expand-chat-btn:hover {
+    background: rgba(226, 255, 0, 0.2);
+    border-color: #E2FF00;
+    transform: scale(1.1);
+}
+
+.chatbot-inline-messages {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    border: 1px solid rgba(226, 255, 0, 0.2);
+}
+
+.chatbot-inline-messages .chat-message {
+    margin-bottom: 0.75rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.chatbot-inline-messages .bot-message {
+    justify-content: flex-start;
+}
+
+.chatbot-inline-messages .user-message {
+    justify-content: flex-end;
+}
+
+.chatbot-inline-messages .message-content {
+    background: rgba(226, 255, 0, 0.1);
+    border: 1px solid rgba(226, 255, 0, 0.3);
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    max-width: 80%;
+}
+
+.chatbot-inline-messages .user-message .message-content {
+    background: rgba(226, 255, 0, 0.2);
+    border-color: rgba(226, 255, 0, 0.5);
+}
+
+.chatbot-inline-messages .message-content p {
+    margin: 0;
+    color: #fff;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.chatbot-inline-input-container {
+    margin-top: auto;
+}
+
+.chat-input-group-inline {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.chat-input-group-inline input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    background: rgba(0, 0, 0, 0.4);
+    border: 2px solid rgba(226, 255, 0, 0.3);
+    border-radius: 12px;
+    color: #fff;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.chat-input-group-inline input:focus {
+    outline: none;
+    border-color: #E2FF00;
+    background: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 10px rgba(226, 255, 0, 0.2);
+}
+
+.chat-input-group-inline input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Paw-shaped Send Button */
+.btn-paw-send {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #E2FF00 0%, #c9e600 100%);
+    border: 3px solid #1a1a1a;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    box-shadow:
+        0 4px 8px rgba(0, 0, 0, 0.5),
+        inset 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+.btn-paw-send:hover {
+    transform: scale(1.1) rotate(-5deg);
+    box-shadow:
+        0 6px 12px rgba(0, 0, 0, 0.6),
+        0 0 20px rgba(226, 255, 0, 0.4),
+        inset 0 1px 2px rgba(255, 255, 255, 0.3);
+}
+
+.btn-paw-send:active {
+    transform: scale(0.95) rotate(-5deg);
+}
+
+.paw-icon {
+    width: 30px;
+    height: 30px;
+    color: #1a1a1a;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
 }
 
 /* Carousel Dots */

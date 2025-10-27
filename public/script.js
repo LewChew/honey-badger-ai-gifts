@@ -860,7 +860,7 @@ function closeChatbot() {
 }
 
 // Send message in chatbot
-function sendMessage(event) {
+async function sendMessage(event) {
     event.preventDefault();
 
     const input = document.getElementById('chatInput');
@@ -874,11 +874,35 @@ function sendMessage(event) {
     // Clear input
     input.value = '';
 
-    // Simulate bot response (replace with actual API call later)
-    setTimeout(() => {
-        const botResponse = getBotResponse(message);
-        addMessage(botResponse, 'bot');
-    }, 1000);
+    // Add to conversation history
+    conversationHistory.push({
+        role: 'user',
+        content: message
+    });
+
+    // Show typing indicator
+    const typingIndicator = addMessage('...', 'bot');
+    typingIndicator.classList.add('typing-indicator');
+
+    // Get AI response
+    const response = await getAIBotResponse(message, conversationHistory);
+
+    // Remove typing indicator
+    typingIndicator.remove();
+
+    // Add bot response
+    addMessage(response.message, 'bot');
+
+    // Add to conversation history
+    conversationHistory.push({
+        role: 'assistant',
+        content: response.message
+    });
+
+    // Log if using fallback
+    if (response.fallback) {
+        console.log('Using fallback response (AI not available)');
+    }
 }
 
 // Add message to chat display
@@ -918,8 +942,55 @@ function addMessage(text, sender) {
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }
 
-// Get bot response (placeholder - replace with API call)
-function getBotResponse(userMessage) {
+// Conversation history for AI context
+let conversationHistory = [];
+let inlineConversationHistory = [];
+
+// Get AI bot response from backend
+async function getAIBotResponse(userMessage, conversationHistory) {
+    try {
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`
+            },
+            body: JSON.stringify({
+                message: userMessage,
+                conversationHistory: conversationHistory
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            return {
+                success: true,
+                message: data.message,
+                model: data.model,
+                fallback: data.fallback
+            };
+        } else {
+            // If API returns fallback response
+            return {
+                success: true,
+                message: data.fallbackResponse || "I'm here to help! Ask me about sending gifts or creating challenges.",
+                fallback: true
+            };
+        }
+    } catch (error) {
+        console.error('AI chat error:', error);
+        // Fallback to simple response
+        return {
+            success: false,
+            message: getFallbackResponse(userMessage),
+            fallback: true
+        };
+    }
+}
+
+// Fallback responses when AI is unavailable (client-side)
+function getFallbackResponse(userMessage) {
     const lowerMessage = userMessage.toLowerCase();
 
     if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
@@ -927,7 +998,7 @@ function getBotResponse(userMessage) {
     } else if (lowerMessage.includes('help')) {
         return "I can help you with sending gifts, tracking challenges, managing your network, and more. What would you like to know?";
     } else if (lowerMessage.includes('send') || lowerMessage.includes('gift')) {
-        return "To send a gift, click on the 'Send a Honey Badger' section on the left. You can choose the gift type, recipient, and challenge!";
+        return "To send a gift, click on the 'Send a Honey Badger' section on the right. You can choose the gift type, recipient, and challenge!";
     } else if (lowerMessage.includes('challenge')) {
         return "Challenges are fun tasks your recipients complete to unlock their gifts. You can set photo challenges, fitness goals, multi-day tasks, and more!";
     } else if (lowerMessage.includes('thank')) {
@@ -935,6 +1006,76 @@ function getBotResponse(userMessage) {
     } else {
         return "That's an interesting question! I'm here to help with your Honey Badger gifts. Feel free to ask me about sending gifts, challenges, or managing your account.";
     }
+}
+
+// Send message from inline chat (in carousel)
+async function sendInlineMessage(event) {
+    event.preventDefault();
+
+    const input = document.getElementById('inlineChatInput');
+    const message = input.value.trim();
+
+    if (!message) return;
+
+    // Add user message to inline chat
+    addInlineMessage(message, 'user');
+
+    // Clear input
+    input.value = '';
+
+    // Add to conversation history
+    inlineConversationHistory.push({
+        role: 'user',
+        content: message
+    });
+
+    // Show typing indicator
+    const typingIndicator = addInlineMessage('...', 'bot');
+    typingIndicator.classList.add('typing-indicator');
+
+    // Get AI response
+    const response = await getAIBotResponse(message, inlineConversationHistory);
+
+    // Remove typing indicator
+    typingIndicator.remove();
+
+    // Add bot response
+    addInlineMessage(response.message, 'bot');
+
+    // Add to conversation history
+    inlineConversationHistory.push({
+        role: 'assistant',
+        content: response.message
+    });
+
+    // Log if using fallback
+    if (response.fallback) {
+        console.log('Using fallback response (AI not available)');
+    }
+}
+
+// Add message to inline chat display
+function addInlineMessage(text, sender) {
+    const messagesContainer = document.getElementById('inlineChatMessages');
+
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `chat-message ${sender}-message`;
+
+    const contentDiv = document.createElement('div');
+    contentDiv.className = 'message-content';
+
+    const textElement = document.createElement('p');
+    textElement.textContent = text;
+
+    contentDiv.appendChild(textElement);
+    messageDiv.appendChild(contentDiv);
+    messagesContainer.appendChild(messageDiv);
+
+    // Scroll to bottom
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+    // Return the element so it can be manipulated
+    return messageDiv;
 }
 
 // Initialize carousel when dashboard is shown

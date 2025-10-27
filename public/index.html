@@ -131,10 +131,74 @@
             <div class="container">
 
                 <div class="dashboard-top-section">
-                    <!-- Left Panel - Send Form and Activity Sections -->
+                    <!-- Left Panel - Chatbot Carousel -->
                     <div class="dashboard-sections-left">
+                        <!-- Carousel Container -->
+                        <div class="tv-carousel-container">
+                            <div class="tv-carousel">
+                                <!-- Chatbot Slide (Now First) -->
+                                <div class="carousel-slide active" id="chatbotSlide">
+                                    <div class="chatbot-inline-container">
+                                        <div class="chatbot-inline-header">
+                                            <h3 class="chatbot-inline-title">Chat with Honey Badger</h3>
+                                            <button class="expand-chat-btn" onclick="openChatbot()" title="Expand chat">⛶</button>
+                                        </div>
 
-                        <!-- Send a Badger Panel - Collapsible -->
+                                        <div class="chatbot-inline-messages" id="inlineChatMessages">
+                                            <div class="chat-message bot-message">
+                                                <div class="message-content">
+                                                    <p>Hey there! I'm your Honey Badger assistant. How can I help you today?</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="chatbot-inline-input-container">
+                                            <form id="inlineChatForm" onsubmit="sendInlineMessage(event)">
+                                                <div class="chat-input-group-inline">
+                                                    <input
+                                                        type="text"
+                                                        id="inlineChatInput"
+                                                        placeholder="Type your message..."
+                                                        autocomplete="off"
+                                                    >
+                                                    <button type="submit" class="btn-paw-send" title="Send message">
+                                                        <svg viewBox="0 0 100 100" class="paw-icon">
+                                                            <!-- Main pad -->
+                                                            <ellipse cx="50" cy="65" rx="25" ry="20" fill="currentColor"/>
+                                                            <!-- Toe pads -->
+                                                            <ellipse cx="30" cy="35" rx="10" ry="12" fill="currentColor"/>
+                                                            <ellipse cx="50" cy="30" rx="10" ry="12" fill="currentColor"/>
+                                                            <ellipse cx="70" cy="35" rx="10" ry="12" fill="currentColor"/>
+                                                            <ellipse cx="50" cy="45" rx="8" ry="10" fill="currentColor"/>
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- TV Slide -->
+                                <div class="carousel-slide" id="tvSlide">
+                                    <img src="/assets/Honey_Badger_tv.svg"
+                                         alt="Honey Badger TV"
+                                         class="tv-icon"
+                                         loading="eager"
+                                         onerror="console.error('Failed to load TV image'); this.style.border='2px solid red';"
+                                         onload="console.log('TV image loaded successfully');">
+                                </div>
+                            </div>
+
+                            <!-- Carousel Navigation Dots -->
+                            <div class="carousel-dots">
+                                <span class="dot active" onclick="goToSlide(0)"></span>
+                                <span class="dot" onclick="goToSlide(1)"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Panel - Send Form and Activity Sections -->
+                    <div class="dashboard-tv-right">
                         <div class="activity-section send-section-collapsible">
                             <div class="collapsible-header" onclick="toggleSendForm()">
                                 <h2 class="title-with-icon-small">
@@ -145,13 +209,9 @@
                             </div>
                             <div class="collapsible-content" id="sendFormContent" style="display: none;">
                                 <div class="send-panel-compact">
-                                    <p class="send-subtitle-compact">Deploy AI Honey Badger to your network</p>
-                            
                             <form id="dashboardSendForm" class="send-form">
                                 <!-- Step 1: Basic Information (Always Visible) -->
                                 <div class="form-section basic-info">
-                                    <h3 class="section-title">📝 Basic Information</h3>
-                                    
                                     <div class="form-group">
                                         <label for="recipientName">Recipient Name:</label>
                                         <input type="text" id="recipientName" name="recipientName" placeholder="Who's getting this gift?" required>
@@ -360,51 +420,17 @@
                                 <!-- Sent badgers will be populated here -->
                             </div>
                         </div>
-
-                        <!-- Your Badgers -->
-                        <div class="activity-section">
-                            <h2>📥 Your Badgers</h2>
-                            <div id="receivedBadgersList" class="badgers-list">
-                                <!-- Received badgers will be populated here -->
-                            </div>
-                        </div>
                     </div>
 
                     <!-- Right Panel - Honey Badger TV and Network -->
-                    <div class="dashboard-tv-right">
-                        <!-- Carousel Container -->
-                        <div class="tv-carousel-container">
-                            <div class="tv-carousel">
-                                <!-- Chatbot Slide (Now First) -->
-                                <div class="carousel-slide active" id="chatbotSlide">
-                                    <div class="chatbot-preview" onclick="openChatbot()">
-                                        <h3 class="chatbot-title">Chat with Honey Badger</h3>
-                                    </div>
-                                </div>
+                </div>
 
-                                <!-- TV Slide -->
-                                <div class="carousel-slide" id="tvSlide">
-                                    <img src="/assets/Honey_Badger_tv.svg"
-                                         alt="Honey Badger TV"
-                                         class="tv-icon"
-                                         loading="eager"
-                                         onerror="console.error('Failed to load TV image'); this.style.border='2px solid red';"
-                                         onload="console.log('TV image loaded successfully');">
-                                </div>
-                            </div>
-
-                            <!-- Carousel Navigation Dots -->
-                            <div class="carousel-dots">
-                                <span class="dot active" onclick="goToSlide(0)"></span>
-                                <span class="dot" onclick="goToSlide(1)"></span>
-                            </div>
-                        </div>
-
-                        <!-- Your Network below TV -->
-                        <div class="activity-section network-section-right">
-                            <h2>🌍 Your Network</h2>
-                            <div id="networkList" class="badgers-list">
-                            </div>
+                <!-- Your Network - Full Width Section -->
+                <div class="network-section-full-width">
+                    <div class="activity-section">
+                        <h2>🌍 Your Network</h2>
+                        <div id="networkList" class="badgers-list">
+                            <!-- Network will be populated here -->
                         </div>
                     </div>
                 </div>

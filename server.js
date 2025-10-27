@@ -6,6 +6,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const cron = require('node-cron');
+const Anthropic = require('@anthropic-ai/sdk');
 require('dotenv').config();
 
 const app = express();
@@ -32,6 +33,11 @@ const resetTokens = new Map();
 
 // JWT secret (use environment variable in production)
 const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production';
+
+// Initialize Anthropic client for AI chatbot
+const anthropic = process.env.ANTHROPIC_API_KEY ? new Anthropic({
+    apiKey: process.env.ANTHROPIC_API_KEY
+}) : null;
 
 // Middleware
 app.use(helmet({
@@ -271,6 +277,116 @@ app.post('/api/auth/logout', authenticateToken, (req, res) => {
         message: 'Logged out successfully'
     });
 });
+
+// AI Chatbot endpoint - Powered by Claude 3.5 Haiku
+app.post('/api/chat', authenticateToken, [
+    body('message').trim().notEmpty().withMessage('Message is required'),
+    body('conversationHistory').optional().isArray().withMessage('Conversation history must be an array')
+], async (req, res) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                success: false,
+                message: 'Validation failed',
+                errors: errors.array()
+            });
+        }
+
+        // Check if Anthropic API is configured
+        if (!anthropic) {
+            return res.status(503).json({
+                success: false,
+                message: 'AI chatbot is not configured. Please set ANTHROPIC_API_KEY in environment variables.',
+                fallbackResponse: getFallbackResponse(req.body.message)
+            });
+        }
+
+        const { message, conversationHistory = [] } = req.body;
+
+        // Build the conversation for Claude
+        const messages = [
+            ...conversationHistory.map(msg => ({
+                role: msg.role,
+                content: msg.content
+            })),
+            {
+                role: 'user',
+                content: message
+            }
+        ];
+
+        // System prompt for the Honey Badger assistant
+        const systemPrompt = `You are the Honey Badger AI assistant, a helpful and enthusiastic guide for the Honey Badger gift delivery platform. Your personality is friendly, motivating, and slightly playful - embodying the fearless and persistent spirit of a honey badger.
+
+Key facts about the platform:
+- Users can send AI-powered gift experiences with motivational challenges
+- Recipients unlock gifts by completing challenges (photos, videos, fitness tasks, multi-day goals)
+- You help users navigate the platform, create challenges, and motivate recipients
+- Gift types include: gift cards, cash (Venmo/PayPal), photos/videos, custom messages, and physical items
+- Challenges can be simple tasks, photo challenges, video challenges, fitness goals, or multi-day commitments
+
+Your role:
+- Help users create engaging and appropriate challenges for their gifts
+- Provide motivation and encouragement to both senders and recipients
+- Answer questions about how the platform works
+- Be concise but enthusiastic
+- Use emojis sparingly and appropriately
+- Never give up - you're a honey badger after all!
+
+Keep responses brief (2-3 sentences max) unless explaining complex features.`;
+
+        // Call Claude API
+        const response = await anthropic.messages.create({
+            model: 'claude-3-5-haiku-20241022',
+            max_tokens: 300,
+            system: systemPrompt,
+            messages: messages
+        });
+
+        const aiResponse = response.content[0].text;
+
+        res.json({
+            success: true,
+            message: aiResponse,
+            model: 'claude-3-5-haiku-20241022'
+        });
+
+        console.log(`🤖 AI Chat - User: ${req.user.email} - Message: "${message.substring(0, 50)}..."`);
+
+    } catch (error) {
+        console.error('AI Chat error:', error);
+
+        // Provide fallback response if API fails
+        const fallbackResponse = getFallbackResponse(req.body.message);
+
+        res.status(200).json({
+            success: true,
+            message: fallbackResponse,
+            fallback: true,
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
+    }
+});
+
+// Fallback responses when AI is unavailable
+function getFallbackResponse(userMessage) {
+    const lowerMessage = userMessage.toLowerCase();
+
+    if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
+        return "Hey there! How can I help you with your Honey Badger experience today?";
+    } else if (lowerMessage.includes('help')) {
+        return "I can help you with sending gifts, tracking challenges, managing your network, and more. What would you like to know?";
+    } else if (lowerMessage.includes('send') || lowerMessage.includes('gift')) {
+        return "To send a gift, click on the 'Send a Honey Badger' section on the right. You can choose the gift type, recipient, and challenge!";
+    } else if (lowerMessage.includes('challenge')) {
+        return "Challenges are fun tasks your recipients complete to unlock their gifts. You can set photo challenges, fitness goals, multi-day tasks, and more!";
+    } else if (lowerMessage.includes('thank')) {
+        return "You're welcome! Happy to help. Let me know if you need anything else!";
+    } else {
+        return "That's an interesting question! I'm here to help with your Honey Badger gifts. Feel free to ask me about sending gifts, challenges, or managing your account.";
+    }
+}
 
 // Request password reset token
 app.post('/api/auth/forgot-password', [
@@ -520,6 +636,9 @@ app.get('/api', (req, res) => {
                 logout: 'POST /api/auth/logout',
                 forgotPassword: 'POST /api/auth/forgot-password',
                 resetPassword: 'POST /api/auth/reset-password'
+            },
+            chat: {
+                sendMessage: 'POST /api/chat (AI-powered by Claude 3.5 Haiku)'
             },
             honeyBadgers: {
                 send: 'POST /api/send-honey-badger',
