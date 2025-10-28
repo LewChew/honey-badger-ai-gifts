@@ -130,6 +130,7 @@ ecosystem.config.js
 *.sqlite
 *.sqlite3
 *.db
+data/
 
 # Backup files
 *.backup

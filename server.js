@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 const cron = require('node-cron');
 const Anthropic = require('@anthropic-ai/sdk');
+const db = require('./services/databaseService');
 require('dotenv').config();
 
 const app = express();
@@ -24,10 +25,11 @@ if (process.env.ENABLE_SMS === 'true') {
     }
 }
 
-// In-memory user storage (replace with database in production)
-const users = new Map();
+// SQLite database for persistent storage
+// Database service handles: users, sessions, gift_orders
+// Database file located at: data/users.db
 
-// In-memory password reset tokens (replace with database in production)
+// In-memory password reset tokens (temporary storage for password resets)
 // Structure: { token: { email, expiresAt } }
 const resetTokens = new Map();
 
@@ -114,49 +116,49 @@ app.post('/api/signup', [
 
         const { signupName, signupEmail, signupPassword, signupPhone } = req.body;
 
-        // Check if user already exists
-        if (users.has(signupEmail)) {
+        // Check if user already exists in database
+        const existingUser = await db.getUserByEmail(signupEmail);
+        if (existingUser) {
             return res.status(400).json({
                 success: false,
                 message: 'User already exists with this email'
             });
         }
 
-        // Hash password
-        const saltRounds = 12;
-        const hashedPassword = await bcrypt.hash(signupPassword, saltRounds);
-
-        // Create user
-        const user = {
-            id: Date.now().toString(),
+        // Create user in database (password hashing handled by databaseService)
+        const user = await db.createUser({
             name: signupName,
             email: signupEmail,
-            phone: signupPhone || null,
-            password: hashedPassword,
-            createdAt: new Date().toISOString(),
-            isActive: true
-        };
-
-        users.set(signupEmail, user);
+            password: signupPassword,
+            phone: signupPhone || null
+        });
 
         // Generate JWT token
         const token = jwt.sign(
-            { 
-                id: user.id, 
-                email: user.email, 
-                name: user.name 
+            {
+                id: user.id,
+                email: user.email,
+                name: user.name
             },
             JWT_SECRET,
             { expiresIn: '7d' }
         );
 
-        // Return success response (don't send password)
-        const { password, ...userWithoutPassword } = user;
+        // Save session to database
+        const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(); // 7 days
+        await db.saveSession(user.id, token, expiresAt);
+
+        // Return success response
         res.status(201).json({
             success: true,
             message: 'Account created successfully',
             token,
-            user: userWithoutPassword
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                phone: user.phone
+            }
         });
 
         console.log('✅ New user registered:', signupEmail);
@@ -187,8 +189,8 @@ app.post('/api/login', [
 
         const { loginEmail, loginPassword } = req.body;
 
-        // Find user
-        const user = users.get(loginEmail);
+        // Find user in database
+        const user = await db.getUserByEmail(loginEmail);
         if (!user) {
             return res.status(401).json({
                 success: false,
@@ -197,15 +199,15 @@ app.post('/api/login', [
         }
 
         // Check if user is active
-        if (!user.isActive) {
+        if (!user.is_active) {
             return res.status(401).json({
                 success: false,
                 message: 'Account has been disabled'
             });
         }
 
-        // Verify password
-        const isPasswordValid = await bcrypt.compare(loginPassword, user.password);
+        // Verify password using database service
+        const isPasswordValid = await db.verifyPassword(loginPassword, user.password);
         if (!isPasswordValid) {
             return res.status(401).json({
                 success: false,
@@ -215,17 +217,28 @@ app.post('/api/login', [
 
         // Generate JWT token
         const token = jwt.sign(
-            { 
-                id: user.id, 
-                email: user.email, 
-                name: user.name 
+            {
+                id: user.id,
+                email: user.email,
+                name: user.name
             },
             JWT_SECRET,
             { expiresIn: '7d' }
         );
 
+        // Save session to database
+        const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(); // 7 days
+        await db.saveSession(user.id, token, expiresAt);
+
         // Return success response (don't send password)
-        const { password, ...userWithoutPassword } = user;
+        const userWithoutPassword = {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            phone: user.phone,
+            createdAt: user.created_at,
+            isActive: user.is_active
+        };
         res.json({
             success: true,
             message: 'Login successful',
@@ -245,9 +258,9 @@ app.post('/api/login', [
 });
 
 // Get current user profile
-app.get('/api/auth/me', authenticateToken, (req, res) => {
+app.get('/api/auth/me', authenticateToken, async (req, res) => {
     try {
-        const user = users.get(req.user.email);
+        const user = await db.getUserById(req.user.id);
         if (!user) {
             return res.status(404).json({
                 success: false,
@@ -255,10 +268,17 @@ app.get('/api/auth/me', authenticateToken, (req, res) => {
             });
         }
 
-        const { password, ...userWithoutPassword } = user;
         res.json({
             success: true,
-            user: userWithoutPassword
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                phone: user.phone,
+                createdAt: user.created_at,
+                emailVerified: user.email_verified,
+                phoneVerified: user.phone_verified
+            }
         });
     } catch (error) {
         console.error('Get profile error:', error);
@@ -269,13 +289,28 @@ app.get('/api/auth/me', authenticateToken, (req, res) => {
     }
 });
 
-// Logout (client-side token removal, but we can log it)
-app.post('/api/auth/logout', authenticateToken, (req, res) => {
-    console.log('✅ User logged out:', req.user.email);
-    res.json({
-        success: true,
-        message: 'Logged out successfully'
-    });
+// Logout (invalidate session in database)
+app.post('/api/auth/logout', authenticateToken, async (req, res) => {
+    try {
+        const authHeader = req.headers['authorization'];
+        const token = authHeader && authHeader.split(' ')[1];
+
+        if (token) {
+            await db.deleteSession(token);
+        }
+
+        console.log('✅ User logged out:', req.user.email);
+        res.json({
+            success: true,
+            message: 'Logged out successfully'
+        });
+    } catch (error) {
+        console.error('Logout error:', error);
+        res.json({
+            success: true,
+            message: 'Logged out successfully'
+        });
+    }
 });
 
 // AI Chatbot endpoint - Powered by Claude 3.5 Haiku
@@ -698,10 +733,10 @@ app.get('/api/honey-badgers', authenticateToken, (req, res) => {
 
 // Health check endpoint
 app.get('/health', (req, res) => {
-    res.json({ 
-        status: 'OK', 
+    res.json({
+        status: 'OK',
         timestamp: new Date().toISOString(),
-        users: users.size,
+        database: 'SQLite',
         features: {
             authentication: 'enabled',
             encryption: 'bcrypt',
