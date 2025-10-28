@@ -842,7 +842,7 @@ app.listen(PORT, () => {
     console.log('');
     console.log('Features:');
     console.log(`  🔐 Authentication: Enabled (JWT + bcrypt)`);
-    console.log(`  👥 Users registered: ${users.size}`);
+    console.log(`  💾 Database: SQLite (data/users.db)`);
     console.log(`  📱 SMS (Twilio): ${process.env.ENABLE_SMS === 'true' ? '✅ Enabled' : '❌ Disabled'}`);
     console.log(`  📧 Email: ${process.env.ENABLE_EMAIL === 'true' ? '✅ Enabled' : '❌ Disabled'}`);
     console.log(`  🔔 Scheduled Reminders: ${process.env.ENABLE_SCHEDULED_REMINDERS === 'true' ? '✅ Enabled' : '❌ Disabled'}`);
