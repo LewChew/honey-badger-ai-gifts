@@ -342,7 +342,7 @@ function updateAuthState() {
         // User is logged in - show dashboard
         landingPage.style.display = 'none';
         dashboard.style.display = 'block';
-        
+
         // Update header to show logout
         headerButtons.innerHTML = `
             <span style="color: #E2FF00; margin-right: 15px;">Welcome, ${currentUser.name}!</span>
@@ -350,9 +350,12 @@ function updateAuthState() {
                 Logout
             </button>
         `;
-        
+
         // Load user's honey badgers
         loadHoneyBadgers();
+
+        // Open chatbot by default
+        setTimeout(() => openChatbot(), 500);
     } else {
         // User is not logged in - show landing page
         landingPage.style.display = 'block';
@@ -1084,5 +1087,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const dashboard = document.getElementById('dashboard');
     if (dashboard && dashboard.style.display !== 'none') {
         startCarousel();
+        // Open chatbot by default when user is already logged in
+        setTimeout(() => openChatbot(), 500);
     }
 });
