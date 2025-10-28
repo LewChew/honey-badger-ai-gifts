@@ -353,9 +353,6 @@ function updateAuthState() {
 
         // Load user's honey badgers
         loadHoneyBadgers();
-
-        // Open chatbot by default
-        setTimeout(() => openChatbot(), 500);
     } else {
         // User is not logged in - show landing page
         landingPage.style.display = 'block';
@@ -796,56 +793,10 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ===========================
-// Carousel Functionality
+// Carousel Functionality - NO LONGER NEEDED
 // ===========================
-
-let currentSlide = 0;
-let carouselInterval = null;
-
-// Start auto-rotation when dashboard loads
-function startCarousel() {
-    carouselInterval = setInterval(() => {
-        currentSlide = (currentSlide + 1) % 2;
-        goToSlide(currentSlide);
-    }, 5000); // Rotate every 5 seconds
-}
-
-// Stop carousel rotation
-function stopCarousel() {
-    if (carouselInterval) {
-        clearInterval(carouselInterval);
-        carouselInterval = null;
-    }
-}
-
-// Go to specific slide
-function goToSlide(slideIndex) {
-    currentSlide = slideIndex;
-
-    // Update slides
-    const slides = document.querySelectorAll('.carousel-slide');
-    slides.forEach((slide, index) => {
-        if (index === slideIndex) {
-            slide.classList.add('active');
-        } else {
-            slide.classList.remove('active');
-        }
-    });
-
-    // Update dots
-    const dots = document.querySelectorAll('.dot');
-    dots.forEach((dot, index) => {
-        if (index === slideIndex) {
-            dot.classList.add('active');
-        } else {
-            dot.classList.remove('active');
-        }
-    });
-
-    // Restart auto-rotation timer
-    stopCarousel();
-    startCarousel();
-}
+// Carousel removed - now just showing chatbot inline
+// TV image moved to "Badgers In the Wild" section
 
 // ===========================
 // Chatbot Functionality
@@ -1081,13 +1032,12 @@ function addInlineMessage(text, sender) {
     return messageDiv;
 }
 
-// Initialize carousel when dashboard is shown
+// Initialize when dashboard is shown
 document.addEventListener('DOMContentLoaded', () => {
-    // Start carousel if dashboard is visible
+    // No carousel needed anymore - just one chatbot panel
     const dashboard = document.getElementById('dashboard');
     if (dashboard && dashboard.style.display !== 'none') {
-        startCarousel();
-        // Open chatbot by default when user is already logged in
-        setTimeout(() => openChatbot(), 500);
+        // Dashboard is visible, user is logged in
+        console.log('Dashboard loaded');
     }
 });

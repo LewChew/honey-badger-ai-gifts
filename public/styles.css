@@ -1405,7 +1405,7 @@ header {
     }
 }
 
-/* TV Carousel Styles */
+/* Chatbot Container Styles (formerly carousel) */
 .tv-carousel-container {
     position: relative;
     width: 100%;
@@ -1415,32 +1415,29 @@ header {
 .tv-carousel {
     position: relative;
     width: 100%;
-    height: 400px;
+    height: auto;
     min-height: 350px;
 }
 
+/* TV in Badgers In the Wild section */
+.tv-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 15px;
+    border: 2px solid rgba(226, 255, 0, 0.2);
+}
+
 .carousel-slide {
-    position: absolute;
-    top: 0;
-    left: 0;
+    position: relative;
     width: 100%;
     height: 100%;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.6s ease-in-out, visibility 0.6s ease-in-out;
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.carousel-slide.active {
-    opacity: 1;
-    visibility: visible;
-    z-index: 1;
-}
-
-.tv-container {
-    text-align: center;
 }
 
 /* Chatbot Preview in Carousel */
@@ -1703,31 +1700,9 @@ header {
     filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
 }
 
-/* Carousel Dots */
+/* Carousel Dots - No longer needed with single slide */
 .carousel-dots {
-    text-align: center;
-    padding: 1rem 0;
-}
-
-.dot {
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    margin: 0 5px;
-    background-color: rgba(226, 255, 0, 0.3);
-    border-radius: 50%;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.dot:hover {
-    background-color: rgba(226, 255, 0, 0.6);
-    transform: scale(1.2);
-}
-
-.dot.active {
-    background-color: #E2FF00;
-    box-shadow: 0 0 10px rgba(226, 255, 0, 0.6);
+    display: none;
 }
 
 /* Chatbot Modal Styles */

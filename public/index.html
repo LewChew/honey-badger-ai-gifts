@@ -178,21 +178,6 @@
                                     </div>
                                 </div>
 
-                                <!-- TV Slide -->
-                                <div class="carousel-slide" id="tvSlide">
-                                    <img src="/assets/Honey_Badger_tv.svg"
-                                         alt="Honey Badger TV"
-                                         class="tv-icon"
-                                         loading="eager"
-                                         onerror="console.error('Failed to load TV image'); this.style.border='2px solid red';"
-                                         onload="console.log('TV image loaded successfully');">
-                                </div>
-                            </div>
-
-                            <!-- Carousel Navigation Dots -->
-                            <div class="carousel-dots">
-                                <span class="dot active" onclick="goToSlide(0)"></span>
-                                <span class="dot" onclick="goToSlide(1)"></span>
                             </div>
                         </div>
                     </div>
@@ -416,6 +401,15 @@
                         <!-- Badgers In the Wild -->
                         <div class="activity-section">
                             <h2>📤 Badgers In the Wild</h2>
+
+                            <!-- Honey Badger TV -->
+                            <div class="tv-container">
+                                <img src="/assets/Honey_Badger_tv.svg"
+                                     alt="Honey Badger TV"
+                                     class="tv-icon"
+                                     loading="eager">
+                            </div>
+
                             <div id="sentBadgersList" class="badgers-list">
                                 <!-- Sent badgers will be populated here -->
                             </div>
