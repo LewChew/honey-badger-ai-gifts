@@ -1087,11 +1087,13 @@ document.getElementById('addContactForm')?.addEventListener('submit', async (e) 
             // Reload contacts
             loadContacts();
         } else {
-            alert('Error adding contact: ' + data.message);
+            const errorMsg = data.error ? `${data.message}: ${data.error}` : data.message;
+            alert('Error adding contact: ' + errorMsg);
+            console.error('Server error:', data);
         }
     } catch (error) {
         console.error('Error adding contact:', error);
-        alert('Error adding contact. Please try again.');
+        alert('Error adding contact: ' + error.message);
     }
 });
 

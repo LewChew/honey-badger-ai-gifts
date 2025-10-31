@@ -26,8 +26,15 @@ if (process.env.ENABLE_SMS === 'true') {
 }
 
 // SQLite database for persistent storage
-// Database service handles: users, sessions, gift_orders
+// Database service handles: users, sessions, gift_orders, contacts, special_dates
 // Database file located at: data/users.db
+
+// Verify database connection
+if (!db || !db.db) {
+    console.error('❌ Database service failed to initialize!');
+    console.error('   Make sure sqlite3 is installed: npm install');
+    process.exit(1);
+}
 
 // In-memory password reset tokens (temporary storage for password resets)
 // Structure: { token: { email, expiresAt } }
@@ -550,7 +557,8 @@ app.post('/api/contacts', authenticateToken, [
         console.error('Add contact error:', error);
         res.status(500).json({
             success: false,
-            message: 'Error adding contact'
+            message: 'Error adding contact',
+            error: error.message || 'Unknown error'
         });
     }
 });
