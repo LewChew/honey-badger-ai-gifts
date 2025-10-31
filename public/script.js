@@ -1127,8 +1127,12 @@ function displayContacts(contacts) {
         return;
     }
 
+    // Store contacts globally for modal use
+    window.userContacts = contacts;
+
     networkList.innerHTML = contacts.map(contact => {
         const birthdayDisplay = contact.birthday ? formatBirthdayDisplay(contact.birthday) : '';
+        const contactJson = JSON.stringify(contact).replace(/"/g, '&quot;');
 
         return `
         <div class="contact-card" data-contact-id="${contact.id}">
@@ -1140,6 +1144,7 @@ function displayContacts(contacts) {
                 ${contact.relationship ? `<div class="contact-relationship">${escapeHtml(contact.relationship)}</div>` : ''}
             </div>
             <div class="contact-actions">
+                <button class="btn-contact-send-badger" onclick='sendBadgerToContact(${contactJson})' title="Send Badger">🎁 Send</button>
                 <button class="btn-contact-special-dates" onclick="openSpecialDatesModal(${contact.id}, '${escapeHtml(contact.name)}')" title="Special dates">📅</button>
                 <button class="btn-contact-delete" onclick="deleteContact(${contact.id})" title="Delete contact">🗑️</button>
             </div>
@@ -1339,6 +1344,228 @@ async function deleteSpecialDate(specialDateId) {
         alert('Error deleting special date. Please try again.');
     }
 }
+
+// ============================================
+// Send Badger Modal & Workflow
+// ============================================
+
+let selectedNetworkContact = null;
+
+// Open Send Badger modal
+function openSendBadgerModal(preselectedContact = null) {
+    if (!authToken) {
+        alert('Please login first!');
+        showModal('loginModal');
+        return;
+    }
+
+    // Reset form
+    document.getElementById('sendBadgerForm').reset();
+    selectedNetworkContact = null;
+
+    // Populate network contacts selector
+    populateNetworkContactSelector();
+
+    // If a contact was preselected (from contact card button), populate their info
+    if (preselectedContact) {
+        selectNetworkContact(preselectedContact);
+    }
+
+    showModal('sendBadgerModal');
+}
+
+// Send badger to a specific contact (from contact card)
+function sendBadgerToContact(contact) {
+    openSendBadgerModal(contact);
+}
+
+// Populate network contacts in the modal
+function populateNetworkContactSelector() {
+    const selector = document.getElementById('networkContactSelector');
+
+    if (!window.userContacts || window.userContacts.length === 0) {
+        selector.innerHTML = '<p style="color: #aaa; text-align: center; padding: 20px;">No contacts in your network yet</p>';
+        return;
+    }
+
+    selector.innerHTML = window.userContacts.map(contact => `
+        <div class="network-contact-quick-btn" onclick='selectNetworkContact(${JSON.stringify(contact).replace(/'/g, "\\'")})'
+             data-contact-id="${contact.id}">
+            <div class="network-contact-quick-name">${escapeHtml(contact.name)}</div>
+            <div class="network-contact-quick-details">
+                ${contact.relationship || 'Contact'}
+            </div>
+        </div>
+    `).join('');
+}
+
+// Select a network contact to send to
+function selectNetworkContact(contact) {
+    selectedNetworkContact = contact;
+
+    // Update visual selection
+    document.querySelectorAll('.network-contact-quick-btn').forEach(btn => {
+        btn.classList.remove('selected');
+    });
+    const btn = document.querySelector(`[data-contact-id="${contact.id}"]`);
+    if (btn) {
+        btn.classList.add('selected');
+    }
+
+    // Populate recipient fields
+    document.getElementById('modalRecipientName').value = contact.name || '';
+    document.getElementById('modalRecipientEmail').value = contact.email || '';
+    document.getElementById('modalRecipientPhone').value = contact.phone || '';
+
+    // Mark fields as readonly if populated from network
+    document.getElementById('modalRecipientName').readOnly = true;
+    document.getElementById('modalRecipientEmail').readOnly = !!contact.email;
+    document.getElementById('modalRecipientPhone').readOnly = !!contact.phone;
+}
+
+// Handle gift type change in modal
+function handleModalGiftTypeChange() {
+    const giftType = document.getElementById('modalGiftType').value;
+    const container = document.getElementById('modalGiftDetailsContainer');
+
+    if (!giftType) {
+        container.innerHTML = '';
+        return;
+    }
+
+    let html = '';
+
+    switch(giftType) {
+        case 'giftcard':
+            html = `
+                <div class="form-group">
+                    <label for="modalGiftCardBrand">Choose Gift Card:</label>
+                    <select id="modalGiftCardBrand" name="giftCardBrand">
+                        <option value="">Select brand</option>
+                        <option value="amazon">Amazon</option>
+                        <option value="starbucks">Starbucks</option>
+                        <option value="dunkin">Dunkin'</option>
+                        <option value="dicks">Dick's Sporting Goods</option>
+                        <option value="fortnite">Fortnite</option>
+                        <option value="sephora">Sephora</option>
+                        <option value="lululemon">Lululemon</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="modalGiftCardAmount">Amount:</label>
+                    <input type="text" id="modalGiftCardAmount" name="giftCardAmount" placeholder="$50">
+                </div>
+            `;
+            break;
+        case 'cash':
+            html = `
+                <div class="form-group">
+                    <label for="modalCashPlatform">Payment Platform:</label>
+                    <select id="modalCashPlatform" name="cashPlatform">
+                        <option value="venmo">Venmo</option>
+                        <option value="paypal">PayPal</option>
+                        <option value="cashapp">Cash App</option>
+                        <option value="zelle">Zelle</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="modalCashAmount">Amount:</label>
+                    <input type="text" id="modalCashAmount" name="cashAmount" placeholder="$100">
+                </div>
+            `;
+            break;
+        case 'photo':
+            html = `
+                <div class="form-group">
+                    <label for="modalMediaDescription">What are you sharing?</label>
+                    <textarea id="modalMediaDescription" name="mediaDescription" placeholder="Describe the photo/video you'll share" rows="2"></textarea>
+                </div>
+            `;
+            break;
+        case 'message':
+            html = `
+                <div class="form-group">
+                    <label for="modalCustomMessage">Your Message:</label>
+                    <textarea id="modalCustomMessage" name="customMessage" placeholder="Write your special message here" rows="3"></textarea>
+                </div>
+            `;
+            break;
+        case 'physical':
+            html = `
+                <div class="form-group">
+                    <label for="modalItemDescription">Item Description:</label>
+                    <input type="text" id="modalItemDescription" name="itemDescription" placeholder="e.g., Nintendo Switch, Concert Tickets">
+                </div>
+                <div class="form-group">
+                    <label for="modalItemValue">Estimated Value:</label>
+                    <input type="text" id="modalItemValue" name="itemValue" placeholder="$300">
+                </div>
+            `;
+            break;
+    }
+
+    container.innerHTML = html;
+}
+
+// Update challenge options in modal
+function updateModalChallengeOptions() {
+    const challengeType = document.getElementById('modalChallengeType').value;
+    const durationField = document.getElementById('modalChallengeDuration');
+
+    if (challengeType === 'multiday' || challengeType === 'fitness') {
+        durationField.style.display = 'block';
+    } else {
+        durationField.style.display = 'none';
+    }
+}
+
+// Handle Send Badger form submission
+document.getElementById('sendBadgerForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = {
+        recipientName: document.getElementById('modalRecipientName').value,
+        recipientEmail: document.getElementById('modalRecipientEmail').value,
+        recipientPhone: document.getElementById('modalRecipientPhone').value,
+        giftType: document.getElementById('modalGiftType').value,
+        challengeType: document.getElementById('modalChallengeType').value,
+        challengeDescription: document.getElementById('modalChallengeDescription').value,
+        reminderFrequency: document.getElementById('modalReminderFrequency').value,
+        personalNote: document.getElementById('modalPersonalNote').value,
+        notifyOnComplete: document.getElementById('modalNotifyOnComplete').checked
+    };
+
+    // Add duration if multiday
+    const challengeType = document.getElementById('modalChallengeType').value;
+    if (challengeType === 'multiday' || challengeType === 'fitness') {
+        formData.duration = document.getElementById('modalDuration').value;
+    }
+
+    try {
+        const response = await fetch('/api/send-honey-badger', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`
+            },
+            body: JSON.stringify(formData)
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            alert('Honey Badger sent successfully! 🎁');
+            closeModal('sendBadgerModal');
+            // Reload honey badgers list
+            loadHoneyBadgers();
+        } else {
+            alert('Error sending Honey Badger: ' + data.message);
+        }
+    } catch (error) {
+        console.error('Error sending Honey Badger:', error);
+        alert('Error sending Honey Badger. Please try again.');
+    }
+});
 
 // Initialize when dashboard is shown
 document.addEventListener('DOMContentLoaded', () => {

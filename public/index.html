@@ -195,7 +195,15 @@
 
                     <!-- Right Panel - Send Form and Activity Sections -->
                     <div class="dashboard-tv-right">
-                        <div class="activity-section send-section-collapsible">
+                        <!-- Send a Badger Button -->
+                        <div class="send-badger-button-container">
+                            <button class="btn-send-badger-furry" onclick="openSendBadgerModal()">
+                                <img src="/assets/honeycomb_badger_face.svg" alt="Honey Badger" class="send-badger-icon">
+                                <span class="send-badger-text">Send a Honey Badger</span>
+                            </button>
+                        </div>
+
+                        <div class="activity-section send-section-collapsible" style="display: none;">
                             <div class="collapsible-header" onclick="toggleSendForm()">
                                 <h2 class="title-with-icon-small">
                                     <img src="/assets/honeycomb_badger.svg" alt="Honey Badger" class="inline-badger-icon-small">
@@ -792,6 +800,138 @@
                 <h3 style="color: #E2FF00; font-size: 1rem; margin-top: 20px; margin-bottom: 10px;">Existing Special Dates</h3>
                 <div id="specialDatesList"></div>
             </div>
+        </div>
+    </div>
+
+    <!-- Send Badger Modal -->
+    <div id="sendBadgerModal" class="modal modal-large">
+        <div class="modal-content modal-send-badger">
+            <span class="close" onclick="closeModal('sendBadgerModal')">&times;</span>
+            <div class="modal-header">
+                <div class="modal-title">
+                    <img src="/assets/honeycomb_badger_face.svg" alt="Honey Badger" class="modal-badger-icon">
+                    <div>
+                        <h2>Send a Honey Badger</h2>
+                        <p class="modal-subtitle">Create a gift experience with a challenge</p>
+                    </div>
+                </div>
+            </div>
+
+            <form id="sendBadgerForm" class="send-badger-form">
+                <!-- Network Contact Quick Select -->
+                <div class="form-section network-quick-select">
+                    <h3 style="color: #E2FF00; font-size: 1rem; margin-bottom: 10px;">
+                        <span style="margin-right: 8px;">📇</span>Send to Someone in Your Network
+                    </h3>
+                    <div id="networkContactSelector" class="network-contact-grid">
+                        <!-- Network contacts will be populated here -->
+                    </div>
+                    <div style="text-align: center; margin: 15px 0; color: #aaa;">
+                        <span>— OR —</span>
+                    </div>
+                </div>
+
+                <!-- Recipient Information -->
+                <div class="form-section">
+                    <h3 style="color: #E2FF00; font-size: 1rem; margin-bottom: 10px;">Recipient Information</h3>
+                    <div class="form-group">
+                        <label for="modalRecipientName">Name:</label>
+                        <input type="text" id="modalRecipientName" name="recipientName" placeholder="Who's getting this gift?" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="modalRecipientEmail">Email:</label>
+                        <input type="email" id="modalRecipientEmail" name="recipientEmail" placeholder="their.email@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="modalRecipientPhone">Phone:</label>
+                        <input type="tel" id="modalRecipientPhone" name="recipientPhone" placeholder="+1 (555) 123-4567">
+                        <small style="color: #aaa;">For SMS notifications</small>
+                    </div>
+                </div>
+
+                <!-- Gift Type -->
+                <div class="form-section">
+                    <h3 style="color: #E2FF00; font-size: 1rem; margin-bottom: 10px;">Choose Your Gift</h3>
+                    <div class="form-group">
+                        <label for="modalGiftType">Gift Type:</label>
+                        <select id="modalGiftType" name="giftType" required onchange="handleModalGiftTypeChange()">
+                            <option value="">Select gift type</option>
+                            <option value="giftcard">🎁 Gift Card</option>
+                            <option value="cash">💵 Cash (Venmo/PayPal)</option>
+                            <option value="photo">📸 Photo/Video</option>
+                            <option value="message">💌 Custom Message</option>
+                            <option value="physical">📦 Physical Item</option>
+                        </select>
+                    </div>
+
+                    <!-- Gift Details Container -->
+                    <div id="modalGiftDetailsContainer"></div>
+                </div>
+
+                <!-- Challenge Configuration -->
+                <div class="form-section">
+                    <h3 style="color: #E2FF00; font-size: 1rem; margin-bottom: 10px;">Challenge Setup</h3>
+                    <div class="form-group">
+                        <label for="modalChallengeType">Challenge Type:</label>
+                        <select id="modalChallengeType" name="challengeType" onchange="updateModalChallengeOptions()">
+                            <option value="simple">Simple Task</option>
+                            <option value="photo">Photo Challenge</option>
+                            <option value="video">Video Challenge</option>
+                            <option value="fitness">Fitness Challenge</option>
+                            <option value="multiday">Multi-Day Challenge</option>
+                            <option value="custom">Custom Challenge</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="modalChallengeDescription">Challenge Description:</label>
+                        <textarea id="modalChallengeDescription" name="challengeDescription"
+                            placeholder="What should they do to unlock this gift?" rows="3" required></textarea>
+                    </div>
+                    <div id="modalChallengeDuration" class="form-group" style="display: none;">
+                        <label for="modalDuration">Duration:</label>
+                        <select id="modalDuration" name="duration">
+                            <option value="1">1 Day</option>
+                            <option value="7">7 Days</option>
+                            <option value="14">14 Days</option>
+                            <option value="30">30 Days</option>
+                            <option value="60">60 Days</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="modalReminderFrequency">Reminder Frequency:</label>
+                        <select id="modalReminderFrequency" name="reminderFrequency">
+                            <option value="none">No Reminders</option>
+                            <option value="daily">Daily</option>
+                            <option value="every3days">Every 3 Days</option>
+                            <option value="weekly">Weekly</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Personal Note -->
+                <div class="form-section">
+                    <h3 style="color: #E2FF00; font-size: 1rem; margin-bottom: 10px;">Additional Options</h3>
+                    <div class="form-group">
+                        <label for="modalPersonalNote">Personal Note (Optional):</label>
+                        <textarea id="modalPersonalNote" name="personalNote"
+                            placeholder="Add a personal message to accompany your gift" rows="2"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="modalNotifyOnComplete" name="notifyOnComplete" checked>
+                            <span class="checkmark"></span>
+                            Notify me at all checkpoints along Honey Badger Journey
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="form-submit-section">
+                    <button type="submit" class="btn-primary send-btn">
+                        🚀 Send Honey Badger
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
