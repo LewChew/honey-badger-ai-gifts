@@ -1700,10 +1700,10 @@ function initBadgerCarousel() {
 
     if (slides.length === 0) return; // Carousel not on this page
 
-    // Start auto-rotation every 10 seconds
+    // Start auto-rotation every 7 seconds
     carouselInterval = setInterval(() => {
         nextSlide();
-    }, 10000);
+    }, 7000);
 
     // Add click handlers to indicators
     indicators.forEach((indicator, index) => {
@@ -1713,7 +1713,7 @@ function initBadgerCarousel() {
             clearInterval(carouselInterval);
             carouselInterval = setInterval(() => {
                 nextSlide();
-            }, 10000);
+            }, 7000);
         });
     });
 }
