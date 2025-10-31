@@ -132,6 +132,32 @@ class DatabaseService {
             if (err) console.error('Error creating special_dates table:', err.message);
             else console.log('✅ Special dates table ready');
         });
+
+        // Run migrations to update existing tables
+        this.runMigrations();
+    }
+
+    runMigrations() {
+        // Check if birthday column exists in contacts table
+        this.db.all("PRAGMA table_info(contacts)", (err, columns) => {
+            if (err) {
+                console.error('Error checking contacts table:', err.message);
+                return;
+            }
+
+            const hasBirthday = columns && columns.some(col => col.name === 'birthday');
+
+            if (!hasBirthday) {
+                console.log('📝 Running migration: Adding birthday column to contacts table');
+                this.db.run('ALTER TABLE contacts ADD COLUMN birthday TEXT', (err) => {
+                    if (err) {
+                        console.error('❌ Migration failed:', err.message);
+                    } else {
+                        console.log('✅ Migration successful: birthday column added');
+                    }
+                });
+            }
+        });
     }
 
     // User management methods
