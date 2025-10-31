@@ -1,6 +1,7 @@
 const sqlite3 = require('sqlite3').verbose();
 const bcrypt = require('bcryptjs');
 const path = require('path');
+const fs = require('fs');
 
 class DatabaseService {
     constructor() {
@@ -9,14 +10,21 @@ class DatabaseService {
     }
 
     init() {
+        // Create data directory if it doesn't exist
+        const dataDir = path.join(__dirname, '..', 'data');
+        if (!fs.existsSync(dataDir)) {
+            fs.mkdirSync(dataDir, { recursive: true });
+            console.log('📁 Created data directory');
+        }
+
         // Create database file in a data directory
-        const dbPath = path.join(__dirname, '..', 'data', 'users.db');
-        
+        const dbPath = path.join(dataDir, 'users.db');
+
         this.db = new sqlite3.Database(dbPath, (err) => {
             if (err) {
                 console.error('Error opening database:', err.message);
             } else {
-                console.log('✅ Connected to SQLite database');
+                console.log('✅ Connected to SQLite database at:', dbPath);
                 this.createTables();
             }
         });
