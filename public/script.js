@@ -1350,6 +1350,8 @@ async function deleteSpecialDate(specialDateId) {
 // ============================================
 
 let selectedNetworkContact = null;
+let currentStep = 1;
+const totalSteps = 3;
 
 // Open Send Badger modal
 function openSendBadgerModal(preselectedContact = null) {
@@ -1359,9 +1361,11 @@ function openSendBadgerModal(preselectedContact = null) {
         return;
     }
 
-    // Reset form
+    // Reset form and step
     document.getElementById('sendBadgerForm').reset();
     selectedNetworkContact = null;
+    currentStep = 1;
+    showStep(1);
 
     // Populate network contacts selector
     populateNetworkContactSelector();
@@ -1372,6 +1376,120 @@ function openSendBadgerModal(preselectedContact = null) {
     }
 
     showModal('sendBadgerModal');
+}
+
+// Show specific step
+function showStep(stepNumber) {
+    currentStep = stepNumber;
+
+    // Hide all steps
+    document.querySelectorAll('.form-step').forEach(step => {
+        step.style.display = 'none';
+        step.classList.remove('active');
+    });
+
+    // Show current step
+    const activeStep = document.querySelector(`.form-step[data-step="${stepNumber}"]`);
+    if (activeStep) {
+        activeStep.style.display = 'block';
+        activeStep.classList.add('active');
+    }
+
+    // Update step indicator
+    document.querySelectorAll('.step-item').forEach(item => {
+        const itemStep = parseInt(item.dataset.step);
+        if (itemStep < stepNumber) {
+            item.classList.add('completed');
+            item.classList.remove('active');
+        } else if (itemStep === stepNumber) {
+            item.classList.add('active');
+            item.classList.remove('completed');
+        } else {
+            item.classList.remove('active', 'completed');
+        }
+    });
+
+    // Update navigation buttons
+    const btnPrev = document.getElementById('btnPrevStep');
+    const btnNext = document.getElementById('btnNextStep');
+    const btnSubmit = document.getElementById('btnSubmit');
+
+    if (stepNumber === 1) {
+        btnPrev.style.display = 'none';
+        btnNext.style.display = 'inline-block';
+        btnSubmit.style.display = 'none';
+    } else if (stepNumber === totalSteps) {
+        btnPrev.style.display = 'inline-block';
+        btnNext.style.display = 'none';
+        btnSubmit.style.display = 'inline-block';
+    } else {
+        btnPrev.style.display = 'inline-block';
+        btnNext.style.display = 'inline-block';
+        btnSubmit.style.display = 'none';
+    }
+}
+
+// Validate current step
+function validateStep(stepNumber) {
+    if (stepNumber === 1) {
+        // Validate recipient info
+        const name = document.getElementById('modalRecipientName').value;
+        const email = document.getElementById('modalRecipientEmail').value;
+
+        if (!name || !email) {
+            alert('Please enter recipient name and email');
+            return false;
+        }
+
+        // Basic email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            alert('Please enter a valid email address');
+            return false;
+        }
+
+        return true;
+    } else if (stepNumber === 2) {
+        // Validate gift type
+        const giftType = document.getElementById('modalGiftType').value;
+
+        if (!giftType) {
+            alert('Please select a gift type');
+            return false;
+        }
+
+        return true;
+    } else if (stepNumber === 3) {
+        // Validate challenge description
+        const challengeDesc = document.getElementById('modalChallengeDescription').value;
+
+        if (!challengeDesc) {
+            alert('Please enter a challenge description');
+            return false;
+        }
+
+        return true;
+    }
+
+    return true;
+}
+
+// Next step
+function nextStep() {
+    if (!validateStep(currentStep)) {
+        return;
+    }
+
+    if (currentStep < totalSteps) {
+        showStep(currentStep + 1);
+    }
+}
+
+// Previous step
+function previousStep() {
+    if (currentStep > 1) {
+        showStep(currentStep - 1);
+    }
 }
 
 // Send badger to a specific contact (from contact card)
