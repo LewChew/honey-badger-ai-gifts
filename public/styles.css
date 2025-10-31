@@ -2518,7 +2518,7 @@ header {
     background: rgba(20, 20, 20, 0.5);
 }
 
-.carousel-slide {
+.badger-carousel .carousel-slide {
     display: none;
     position: relative;
     width: 100%;
@@ -2526,12 +2526,12 @@ header {
     transition: opacity 0.8s ease-in-out;
 }
 
-.carousel-slide.active {
+.badger-carousel .carousel-slide.active {
     display: block;
     opacity: 1;
 }
 
-.carousel-slide .tv-icon {
+.badger-carousel .carousel-slide .tv-icon {
     width: 100%;
     height: auto;
     display: block;
@@ -2562,14 +2562,14 @@ header {
     }
 }
 
-.carousel-indicators {
+.badger-carousel .carousel-indicators {
     display: flex;
     justify-content: center;
     gap: 10px;
     margin-top: 15px;
 }
 
-.carousel-indicators .indicator {
+.badger-carousel .carousel-indicators .indicator {
     width: 12px;
     height: 12px;
     border-radius: 50%;
@@ -2579,12 +2579,12 @@ header {
     transition: all 0.3s ease;
 }
 
-.carousel-indicators .indicator:hover {
+.badger-carousel .carousel-indicators .indicator:hover {
     background: rgba(226, 255, 0, 0.5);
     transform: scale(1.2);
 }
 
-.carousel-indicators .indicator.active {
+.badger-carousel .carousel-indicators .indicator.active {
     background: #E2FF00;
     border-color: #E2FF00;
     box-shadow: 0 0 10px rgba(226, 255, 0, 0.6);

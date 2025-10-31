@@ -1699,8 +1699,8 @@ let carouselInterval = null;
 let carouselInitialized = false;
 
 function initBadgerCarousel() {
-    const slides = document.querySelectorAll('.carousel-slide');
-    const indicators = document.querySelectorAll('.carousel-indicators .indicator');
+    const slides = document.querySelectorAll('.badger-carousel .carousel-slide');
+    const indicators = document.querySelectorAll('.badger-carousel .carousel-indicators .indicator');
 
     if (slides.length === 0) return; // Carousel not on this page
     if (carouselInitialized) return; // Already initialized
@@ -1726,8 +1726,8 @@ function initBadgerCarousel() {
 }
 
 function goToSlide(slideIndex) {
-    const slides = document.querySelectorAll('.carousel-slide');
-    const indicators = document.querySelectorAll('.carousel-indicators .indicator');
+    const slides = document.querySelectorAll('.badger-carousel .carousel-slide');
+    const indicators = document.querySelectorAll('.badger-carousel .carousel-indicators .indicator');
 
     // Remove active class from all
     slides.forEach(slide => slide.classList.remove('active'));
@@ -1741,7 +1741,7 @@ function goToSlide(slideIndex) {
 }
 
 function nextSlide() {
-    const slides = document.querySelectorAll('.carousel-slide');
+    const slides = document.querySelectorAll('.badger-carousel .carousel-slide');
     const nextIndex = (currentSlide + 1) % slides.length;
     goToSlide(nextIndex);
 }
