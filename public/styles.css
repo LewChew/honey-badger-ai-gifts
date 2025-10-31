@@ -2304,3 +2304,35 @@ header {
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(226, 255, 0, 0.4);
 }
+
+/* ============================================
+   Compact Modal Styles
+   ============================================ */
+
+.modal-compact {
+    max-width: 450px;
+}
+
+.modal-compact .modal-header {
+    padding: 15px 20px;
+}
+
+.modal-compact .modal-title h2 {
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.form-compact .form-group {
+    margin-bottom: 12px;
+}
+
+.form-compact .form-group:last-of-type {
+    margin-bottom: 0;
+}
+
+.optional-label {
+    font-size: 0.75rem;
+    color: #999;
+    font-weight: 400;
+    font-style: italic;
+}

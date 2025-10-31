@@ -717,33 +717,30 @@
 
     <!-- Add Contact Modal -->
     <div id="addContactModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content modal-compact">
             <span class="close" onclick="closeModal('addContactModal')">&times;</span>
             <div class="modal-header">
                 <div class="modal-title">
-                    <h2>Add Contact to Network</h2>
-                    <p class="modal-subtitle">Add someone to your Honey Badger network</p>
+                    <h2>Add Contact</h2>
                 </div>
             </div>
-            <form id="addContactForm">
+            <form id="addContactForm" class="form-compact">
                 <div class="form-group">
                     <label for="contactName">Name:</label>
                     <input type="text" id="contactName" name="contactName" required placeholder="Enter contact name">
                 </div>
                 <div class="form-group">
-                    <label for="contactEmail">Email:</label>
+                    <label for="contactEmail">Email <span class="optional-label">(optional)</span>:</label>
                     <input type="email" id="contactEmail" name="contactEmail" placeholder="contact@example.com">
-                    <small style="color: #aaa; font-size: 0.85rem;">Optional - for email notifications</small>
                 </div>
                 <div class="form-group">
-                    <label for="contactPhone">Phone Number:</label>
+                    <label for="contactPhone">Phone <span class="optional-label">(optional)</span>:</label>
                     <input type="tel" id="contactPhone" name="contactPhone" placeholder="+1 (555) 123-4567">
-                    <small style="color: #aaa; font-size: 0.85rem;">Optional - for SMS notifications</small>
                 </div>
                 <div class="form-group">
-                    <label for="contactRelationship">Relationship:</label>
+                    <label for="contactRelationship">Relationship <span class="optional-label">(optional)</span>:</label>
                     <select id="contactRelationship" name="contactRelationship">
-                        <option value="">Select relationship (optional)</option>
+                        <option value="">Select relationship</option>
                         <option value="family">Family</option>
                         <option value="friend">Friend</option>
                         <option value="colleague">Colleague</option>
@@ -751,11 +748,10 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="contactBirthday">Birthday:</label>
+                    <label for="contactBirthday">Birthday <span class="optional-label">(optional)</span>:</label>
                     <input type="date" id="contactBirthday" name="contactBirthday">
-                    <small style="color: #aaa; font-size: 0.85rem;">Optional - helps remember special occasions</small>
                 </div>
-                <button type="submit" class="btn" style="width: 100%;">
+                <button type="submit" class="btn" style="width: 100%; margin-top: 15px;">
                     Add Contact
                 </button>
             </form>
