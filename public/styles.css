@@ -2499,3 +2499,93 @@ header {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(226, 255, 0, 0.5);
 }
+
+/* ============================================
+   Badger Carousel
+   ============================================ */
+
+.badger-carousel {
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.carousel-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 12px;
+    background: rgba(20, 20, 20, 0.5);
+}
+
+.carousel-slide {
+    display: none;
+    position: relative;
+    width: 100%;
+    opacity: 0;
+    transition: opacity 0.8s ease-in-out;
+}
+
+.carousel-slide.active {
+    display: block;
+    opacity: 1;
+}
+
+.carousel-slide .tv-icon {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.cyber-overlay {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #E2FF00 0%, #B8CC00 100%);
+    color: #1a1a1a;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+    box-shadow: 0 4px 15px rgba(226, 255, 0, 0.4);
+    animation: cyberPulse 2s infinite;
+}
+
+@keyframes cyberPulse {
+    0%, 100% {
+        box-shadow: 0 4px 15px rgba(226, 255, 0, 0.4);
+    }
+    50% {
+        box-shadow: 0 6px 25px rgba(226, 255, 0, 0.7);
+    }
+}
+
+.carousel-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.carousel-indicators .indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(226, 255, 0, 0.3);
+    border: 2px solid rgba(226, 255, 0, 0.5);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.carousel-indicators .indicator:hover {
+    background: rgba(226, 255, 0, 0.5);
+    transform: scale(1.2);
+}
+
+.carousel-indicators .indicator.active {
+    background: #E2FF00;
+    border-color: #E2FF00;
+    box-shadow: 0 0 10px rgba(226, 255, 0, 0.6);
+}

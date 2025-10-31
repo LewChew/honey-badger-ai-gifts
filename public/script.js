@@ -1687,6 +1687,58 @@ document.getElementById('sendBadgerForm')?.addEventListener('submit', async (e) 
     }
 });
 
+// ============================================
+// Badger Carousel Auto-Rotation
+// ============================================
+
+let currentSlide = 0;
+let carouselInterval = null;
+
+function initBadgerCarousel() {
+    const slides = document.querySelectorAll('.carousel-slide');
+    const indicators = document.querySelectorAll('.carousel-indicators .indicator');
+
+    if (slides.length === 0) return; // Carousel not on this page
+
+    // Start auto-rotation every 10 seconds
+    carouselInterval = setInterval(() => {
+        nextSlide();
+    }, 10000);
+
+    // Add click handlers to indicators
+    indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => {
+            goToSlide(index);
+            // Reset the interval when manually clicking
+            clearInterval(carouselInterval);
+            carouselInterval = setInterval(() => {
+                nextSlide();
+            }, 10000);
+        });
+    });
+}
+
+function goToSlide(slideIndex) {
+    const slides = document.querySelectorAll('.carousel-slide');
+    const indicators = document.querySelectorAll('.carousel-indicators .indicator');
+
+    // Remove active class from all
+    slides.forEach(slide => slide.classList.remove('active'));
+    indicators.forEach(indicator => indicator.classList.remove('active'));
+
+    // Add active class to current
+    slides[slideIndex].classList.add('active');
+    indicators[slideIndex].classList.add('active');
+
+    currentSlide = slideIndex;
+}
+
+function nextSlide() {
+    const slides = document.querySelectorAll('.carousel-slide');
+    const nextIndex = (currentSlide + 1) % slides.length;
+    goToSlide(nextIndex);
+}
+
 // Initialize when dashboard is shown
 document.addEventListener('DOMContentLoaded', () => {
     // No carousel needed anymore - just one chatbot panel
@@ -1695,5 +1747,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // Dashboard is visible, user is logged in
         console.log('Dashboard loaded');
         loadContacts();
+
+        // Initialize badger carousel
+        initBadgerCarousel();
     }
 });
