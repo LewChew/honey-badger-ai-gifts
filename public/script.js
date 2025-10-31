@@ -1057,6 +1057,7 @@ document.getElementById('addContactForm')?.addEventListener('submit', async (e) 
     const email = document.getElementById('contactEmail').value;
     const phone = document.getElementById('contactPhone').value;
     const relationship = document.getElementById('contactRelationship').value;
+    const birthday = document.getElementById('contactBirthday').value;
 
     try {
         const response = await fetch('/api/contacts', {
@@ -1069,7 +1070,8 @@ document.getElementById('addContactForm')?.addEventListener('submit', async (e) 
                 name,
                 email: email || null,
                 phone: phone || null,
-                relationship: relationship || null
+                relationship: relationship || null,
+                birthday: birthday || null
             })
         });
 
@@ -1125,19 +1127,32 @@ function displayContacts(contacts) {
         return;
     }
 
-    networkList.innerHTML = contacts.map(contact => `
+    networkList.innerHTML = contacts.map(contact => {
+        const birthdayDisplay = contact.birthday ? formatBirthdayDisplay(contact.birthday) : '';
+
+        return `
         <div class="contact-card" data-contact-id="${contact.id}">
             <div class="contact-info">
                 <div class="contact-name">${escapeHtml(contact.name)}</div>
                 ${contact.email ? `<div class="contact-detail">📧 ${escapeHtml(contact.email)}</div>` : ''}
                 ${contact.phone ? `<div class="contact-detail">📱 ${escapeHtml(contact.phone)}</div>` : ''}
+                ${contact.birthday ? `<div class="contact-detail">🎂 ${birthdayDisplay}</div>` : ''}
                 ${contact.relationship ? `<div class="contact-relationship">${escapeHtml(contact.relationship)}</div>` : ''}
             </div>
             <div class="contact-actions">
+                <button class="btn-contact-special-dates" onclick="openSpecialDatesModal(${contact.id}, '${escapeHtml(contact.name)}')" title="Special dates">📅</button>
                 <button class="btn-contact-delete" onclick="deleteContact(${contact.id})" title="Delete contact">🗑️</button>
             </div>
         </div>
-    `).join('');
+    `;
+    }).join('');
+}
+
+// Format birthday for display
+function formatBirthdayDisplay(birthday) {
+    const date = new Date(birthday + 'T00:00:00');
+    const options = { month: 'short', day: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
 }
 
 // Delete a contact
@@ -1179,6 +1194,150 @@ function escapeHtml(text) {
         "'": '&#039;'
     };
     return text.replace(/[&<>"']/g, m => map[m]);
+}
+
+// ============================================
+// Special Dates Management
+// ============================================
+
+let currentContactIdForSpecialDates = null;
+
+// Open special dates modal
+function openSpecialDatesModal(contactId, contactName) {
+    currentContactIdForSpecialDates = contactId;
+    document.getElementById('specialDatesContactName').textContent = `For ${contactName}`;
+
+    // Reset form
+    document.getElementById('addSpecialDateForm').reset();
+
+    // Load special dates
+    loadSpecialDates(contactId);
+
+    showModal('specialDatesModal');
+}
+
+// Handle add special date form submission
+document.getElementById('addSpecialDateForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const dateName = document.getElementById('specialDateName').value;
+    const dateValue = document.getElementById('specialDateValue').value;
+    const notes = document.getElementById('specialDateNotes').value;
+
+    try {
+        const response = await fetch(`/api/contacts/${currentContactIdForSpecialDates}/special-dates`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`
+            },
+            body: JSON.stringify({
+                dateName,
+                dateValue,
+                notes: notes || null
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            alert('Special date added successfully!');
+
+            // Reset form
+            document.getElementById('addSpecialDateForm').reset();
+
+            // Reload special dates
+            loadSpecialDates(currentContactIdForSpecialDates);
+        } else {
+            alert('Error adding special date: ' + data.message);
+        }
+    } catch (error) {
+        console.error('Error adding special date:', error);
+        alert('Error adding special date. Please try again.');
+    }
+});
+
+// Load and display special dates for a contact
+async function loadSpecialDates(contactId) {
+    if (!authToken) return;
+
+    try {
+        const response = await fetch(`/api/contacts/${contactId}/special-dates`, {
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            displaySpecialDates(data.specialDates);
+        } else {
+            console.error('Error loading special dates:', data.message);
+        }
+    } catch (error) {
+        console.error('Error loading special dates:', error);
+    }
+}
+
+// Display special dates
+function displaySpecialDates(specialDates) {
+    const specialDatesList = document.getElementById('specialDatesList');
+
+    if (!specialDates || specialDates.length === 0) {
+        specialDatesList.innerHTML = '<p style="color: #aaa; text-align: center; padding: 10px;">No special dates yet. Add one above!</p>';
+        return;
+    }
+
+    specialDatesList.innerHTML = specialDates.map(date => {
+        const dateDisplay = formatDateDisplay(date.date_value);
+
+        return `
+        <div class="special-date-item">
+            <div class="special-date-info">
+                <div class="special-date-name">${escapeHtml(date.date_name)}</div>
+                <div class="special-date-value">📅 ${dateDisplay}</div>
+                ${date.notes ? `<div class="special-date-notes">${escapeHtml(date.notes)}</div>` : ''}
+            </div>
+            <button class="btn-special-date-delete" onclick="deleteSpecialDate(${date.id})" title="Delete">🗑️</button>
+        </div>
+        `;
+    }).join('');
+}
+
+// Format date for display
+function formatDateDisplay(dateValue) {
+    const date = new Date(dateValue + 'T00:00:00');
+    const options = { month: 'long', day: 'numeric', year: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+}
+
+// Delete a special date
+async function deleteSpecialDate(specialDateId) {
+    if (!confirm('Are you sure you want to delete this special date?')) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/special-dates/${specialDateId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            // Reload special dates
+            loadSpecialDates(currentContactIdForSpecialDates);
+        } else {
+            alert('Error deleting special date: ' + data.message);
+        }
+    } catch (error) {
+        console.error('Error deleting special date:', error);
+        alert('Error deleting special date. Please try again.');
+    }
 }
 
 // Initialize when dashboard is shown

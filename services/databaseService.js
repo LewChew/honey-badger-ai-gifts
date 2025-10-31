@@ -80,9 +80,23 @@ class DatabaseService {
                 email TEXT,
                 phone TEXT,
                 relationship TEXT,
+                birthday TEXT,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 FOREIGN KEY (user_id) REFERENCES users (id)
+            )
+        `;
+
+        // Special dates table (important dates for each contact)
+        const createSpecialDatesTable = `
+            CREATE TABLE IF NOT EXISTS special_dates (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                contact_id INTEGER NOT NULL,
+                date_name TEXT NOT NULL,
+                date_value TEXT NOT NULL,
+                notes TEXT,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (contact_id) REFERENCES contacts (id) ON DELETE CASCADE
             )
         `;
 
@@ -104,6 +118,11 @@ class DatabaseService {
         this.db.run(createContactsTable, (err) => {
             if (err) console.error('Error creating contacts table:', err.message);
             else console.log('✅ Contacts table ready');
+        });
+
+        this.db.run(createSpecialDatesTable, (err) => {
+            if (err) console.error('Error creating special_dates table:', err.message);
+            else console.log('✅ Special dates table ready');
         });
     }
 
@@ -291,15 +310,15 @@ class DatabaseService {
 
     // Contact management
     async createContact(userId, contactData) {
-        const { name, email, phone, relationship } = contactData;
+        const { name, email, phone, relationship, birthday } = contactData;
 
         return new Promise((resolve, reject) => {
             const sql = `
-                INSERT INTO contacts (user_id, name, email, phone, relationship)
-                VALUES (?, ?, ?, ?, ?)
+                INSERT INTO contacts (user_id, name, email, phone, relationship, birthday)
+                VALUES (?, ?, ?, ?, ?, ?)
             `;
 
-            this.db.run(sql, [userId, name, email || null, phone || null, relationship || null], function(err) {
+            this.db.run(sql, [userId, name, email || null, phone || null, relationship || null, birthday || null], function(err) {
                 if (err) {
                     reject(new Error('Contact creation failed: ' + err.message));
                 } else {
@@ -309,7 +328,8 @@ class DatabaseService {
                         name,
                         email: email || null,
                         phone: phone || null,
-                        relationship: relationship || null
+                        relationship: relationship || null,
+                        birthday: birthday || null
                     });
                 }
             });
@@ -319,7 +339,7 @@ class DatabaseService {
     async getUserContacts(userId) {
         return new Promise((resolve, reject) => {
             const sql = `
-                SELECT id, name, email, phone, relationship, created_at
+                SELECT id, name, email, phone, relationship, birthday, created_at
                 FROM contacts
                 WHERE user_id = ?
                 ORDER BY created_at DESC
@@ -344,6 +364,80 @@ class DatabaseService {
                     reject(new Error('Contact deletion failed: ' + err.message));
                 } else {
                     resolve(this.changes > 0);
+                }
+            });
+        });
+    }
+
+    // Special dates management
+    async createSpecialDate(contactId, dateData) {
+        const { dateName, dateValue, notes } = dateData;
+
+        return new Promise((resolve, reject) => {
+            const sql = `
+                INSERT INTO special_dates (contact_id, date_name, date_value, notes)
+                VALUES (?, ?, ?, ?)
+            `;
+
+            this.db.run(sql, [contactId, dateName, dateValue, notes || null], function(err) {
+                if (err) {
+                    reject(new Error('Special date creation failed: ' + err.message));
+                } else {
+                    resolve({
+                        id: this.lastID,
+                        contactId,
+                        dateName,
+                        dateValue,
+                        notes: notes || null
+                    });
+                }
+            });
+        });
+    }
+
+    async getContactSpecialDates(contactId) {
+        return new Promise((resolve, reject) => {
+            const sql = `
+                SELECT id, date_name, date_value, notes, created_at
+                FROM special_dates
+                WHERE contact_id = ?
+                ORDER BY date_value ASC
+            `;
+
+            this.db.all(sql, [contactId], (err, rows) => {
+                if (err) {
+                    reject(new Error('Special dates lookup failed: ' + err.message));
+                } else {
+                    resolve(rows);
+                }
+            });
+        });
+    }
+
+    async deleteSpecialDate(specialDateId) {
+        return new Promise((resolve, reject) => {
+            const sql = `DELETE FROM special_dates WHERE id = ?`;
+
+            this.db.run(sql, [specialDateId], function(err) {
+                if (err) {
+                    reject(new Error('Special date deletion failed: ' + err.message));
+                } else {
+                    resolve(this.changes > 0);
+                }
+            });
+        });
+    }
+
+    // Verify contact ownership before special date operations
+    async verifyContactOwnership(userId, contactId) {
+        return new Promise((resolve, reject) => {
+            const sql = `SELECT id FROM contacts WHERE id = ? AND user_id = ?`;
+
+            this.db.get(sql, [contactId, userId], (err, row) => {
+                if (err) {
+                    reject(new Error('Contact verification failed: ' + err.message));
+                } else {
+                    resolve(!!row);
                 }
             });
         });

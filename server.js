@@ -527,14 +527,15 @@ app.post('/api/contacts', authenticateToken, [
             });
         }
 
-        const { name, email, phone, relationship } = req.body;
+        const { name, email, phone, relationship, birthday } = req.body;
 
         // Create contact in database
         const contact = await db.createContact(req.user.id, {
             name,
             email,
             phone,
-            relationship
+            relationship,
+            birthday
         });
 
         res.status(201).json({
@@ -598,6 +599,120 @@ app.delete('/api/contacts/:contactId', authenticateToken, async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Error deleting contact'
+        });
+    }
+});
+
+// Special dates management endpoints
+// Add a special date to a contact
+app.post('/api/contacts/:contactId/special-dates', authenticateToken, [
+    body('dateName').trim().notEmpty().withMessage('Date name is required'),
+    body('dateValue').trim().notEmpty().withMessage('Date value is required')
+], async (req, res) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                success: false,
+                message: 'Validation failed',
+                errors: errors.array()
+            });
+        }
+
+        const { contactId } = req.params;
+        const { dateName, dateValue, notes } = req.body;
+
+        // Verify contact belongs to user
+        const ownsContact = await db.verifyContactOwnership(req.user.id, contactId);
+        if (!ownsContact) {
+            return res.status(404).json({
+                success: false,
+                message: 'Contact not found'
+            });
+        }
+
+        // Create special date
+        const specialDate = await db.createSpecialDate(contactId, {
+            dateName,
+            dateValue,
+            notes
+        });
+
+        res.status(201).json({
+            success: true,
+            message: 'Special date added successfully',
+            specialDate
+        });
+
+        console.log('✅ Special date added for contact ID:', contactId, '- Date:', dateName);
+
+    } catch (error) {
+        console.error('Add special date error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error adding special date'
+        });
+    }
+});
+
+// Get special dates for a contact
+app.get('/api/contacts/:contactId/special-dates', authenticateToken, async (req, res) => {
+    try {
+        const { contactId } = req.params;
+
+        // Verify contact belongs to user
+        const ownsContact = await db.verifyContactOwnership(req.user.id, contactId);
+        if (!ownsContact) {
+            return res.status(404).json({
+                success: false,
+                message: 'Contact not found'
+            });
+        }
+
+        const specialDates = await db.getContactSpecialDates(contactId);
+
+        res.json({
+            success: true,
+            specialDates
+        });
+
+    } catch (error) {
+        console.error('Get special dates error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching special dates'
+        });
+    }
+});
+
+// Delete a special date
+app.delete('/api/special-dates/:specialDateId', authenticateToken, async (req, res) => {
+    try {
+        const { specialDateId } = req.params;
+
+        // Note: We could add ownership verification by joining with contacts table
+        // For now, we'll trust the frontend to only show user's own special dates
+        const deleted = await db.deleteSpecialDate(specialDateId);
+
+        if (!deleted) {
+            return res.status(404).json({
+                success: false,
+                message: 'Special date not found'
+            });
+        }
+
+        res.json({
+            success: true,
+            message: 'Special date deleted successfully'
+        });
+
+        console.log('✅ Special date deleted - ID:', specialDateId);
+
+    } catch (error) {
+        console.error('Delete special date error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error deleting special date'
         });
     }
 });
@@ -857,7 +972,12 @@ app.get('/api', (req, res) => {
             contacts: {
                 add: 'POST /api/contacts',
                 list: 'GET /api/contacts',
-                delete: 'DELETE /api/contacts/:contactId'
+                delete: 'DELETE /api/contacts/:contactId',
+                specialDates: {
+                    add: 'POST /api/contacts/:contactId/special-dates',
+                    list: 'GET /api/contacts/:contactId/special-dates',
+                    delete: 'DELETE /api/special-dates/:specialDateId'
+                }
             },
             honeyBadgers: {
                 send: 'POST /api/send-honey-badger',

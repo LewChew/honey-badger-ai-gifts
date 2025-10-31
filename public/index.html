@@ -742,10 +742,56 @@
                         <option value="other">Other</option>
                     </select>
                 </div>
+                <div class="form-group">
+                    <label for="contactBirthday">Birthday:</label>
+                    <input type="date" id="contactBirthday" name="contactBirthday">
+                    <small style="color: #aaa; font-size: 0.85rem;">Optional - helps remember special occasions</small>
+                </div>
                 <button type="submit" class="btn" style="width: 100%;">
                     Add Contact
                 </button>
             </form>
+        </div>
+    </div>
+
+    <!-- Special Dates Modal -->
+    <div id="specialDatesModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('specialDatesModal')">&times;</span>
+            <div class="modal-header">
+                <div class="modal-title">
+                    <h2>Special Dates</h2>
+                    <p class="modal-subtitle" id="specialDatesContactName"></p>
+                </div>
+            </div>
+
+            <!-- Add Special Date Form -->
+            <div class="special-date-form-section">
+                <h3 style="color: #E2FF00; font-size: 1rem; margin-bottom: 10px;">Add New Special Date</h3>
+                <form id="addSpecialDateForm">
+                    <div class="form-group">
+                        <label for="specialDateName">Occasion:</label>
+                        <input type="text" id="specialDateName" name="specialDateName" required placeholder="e.g., Anniversary, First Date">
+                    </div>
+                    <div class="form-group">
+                        <label for="specialDateValue">Date:</label>
+                        <input type="date" id="specialDateValue" name="specialDateValue" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="specialDateNotes">Notes (Optional):</label>
+                        <textarea id="specialDateNotes" name="specialDateNotes" placeholder="Add any special notes about this date" rows="2"></textarea>
+                    </div>
+                    <button type="submit" class="btn-secondary" style="width: 100%;">
+                        Add Special Date
+                    </button>
+                </form>
+            </div>
+
+            <!-- Special Dates List -->
+            <div class="special-dates-list-section">
+                <h3 style="color: #E2FF00; font-size: 1rem; margin-top: 20px; margin-bottom: 10px;">Existing Special Dates</h3>
+                <div id="specialDatesList"></div>
+            </div>
         </div>
     </div>
 
