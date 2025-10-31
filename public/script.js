@@ -356,6 +356,9 @@ function updateAuthState() {
 
         // Load user's contacts
         loadContacts();
+
+        // Initialize badger carousel
+        initBadgerCarousel();
     } else {
         // User is not logged in - show landing page
         landingPage.style.display = 'block';
@@ -1693,12 +1696,16 @@ document.getElementById('sendBadgerForm')?.addEventListener('submit', async (e) 
 
 let currentSlide = 0;
 let carouselInterval = null;
+let carouselInitialized = false;
 
 function initBadgerCarousel() {
     const slides = document.querySelectorAll('.carousel-slide');
     const indicators = document.querySelectorAll('.carousel-indicators .indicator');
 
     if (slides.length === 0) return; // Carousel not on this page
+    if (carouselInitialized) return; // Already initialized
+
+    carouselInitialized = true;
 
     // Start auto-rotation every 7 seconds
     carouselInterval = setInterval(() => {
@@ -1739,16 +1746,4 @@ function nextSlide() {
     goToSlide(nextIndex);
 }
 
-// Initialize when dashboard is shown
-document.addEventListener('DOMContentLoaded', () => {
-    // No carousel needed anymore - just one chatbot panel
-    const dashboard = document.getElementById('dashboard');
-    if (dashboard && dashboard.style.display !== 'none') {
-        // Dashboard is visible, user is logged in
-        console.log('Dashboard loaded');
-        loadContacts();
-
-        // Initialize badger carousel
-        initBadgerCarousel();
-    }
-});
+// Carousel initialization is handled in updateAuthState() when user logs in
