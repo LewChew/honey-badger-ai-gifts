@@ -353,6 +353,9 @@ function updateAuthState() {
 
         // Load user's honey badgers
         loadHoneyBadgers();
+
+        // Load user's contacts
+        loadContacts();
     } else {
         // User is not logged in - show landing page
         landingPage.style.display = 'block';
@@ -1032,6 +1035,152 @@ function addInlineMessage(text, sender) {
     return messageDiv;
 }
 
+// ============================================
+// Contact Management
+// ============================================
+
+// Show add contact modal
+function showAddContactModal() {
+    if (!authToken) {
+        alert('Please login first!');
+        showModal('loginModal');
+        return;
+    }
+    showModal('addContactModal');
+}
+
+// Handle add contact form submission
+document.getElementById('addContactForm')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById('contactName').value;
+    const email = document.getElementById('contactEmail').value;
+    const phone = document.getElementById('contactPhone').value;
+    const relationship = document.getElementById('contactRelationship').value;
+
+    try {
+        const response = await fetch('/api/contacts', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${authToken}`
+            },
+            body: JSON.stringify({
+                name,
+                email: email || null,
+                phone: phone || null,
+                relationship: relationship || null
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            alert('Contact added successfully!');
+            closeModal('addContactModal');
+
+            // Reset form
+            document.getElementById('addContactForm').reset();
+
+            // Reload contacts
+            loadContacts();
+        } else {
+            alert('Error adding contact: ' + data.message);
+        }
+    } catch (error) {
+        console.error('Error adding contact:', error);
+        alert('Error adding contact. Please try again.');
+    }
+});
+
+// Load and display contacts
+async function loadContacts() {
+    if (!authToken) return;
+
+    try {
+        const response = await fetch('/api/contacts', {
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            displayContacts(data.contacts);
+        } else {
+            console.error('Error loading contacts:', data.message);
+        }
+    } catch (error) {
+        console.error('Error loading contacts:', error);
+    }
+}
+
+// Display contacts in the network list
+function displayContacts(contacts) {
+    const networkList = document.getElementById('networkList');
+
+    if (!contacts || contacts.length === 0) {
+        networkList.innerHTML = '<p style="color: #aaa; text-align: center; padding: 20px;">No contacts yet. Add your first contact!</p>';
+        return;
+    }
+
+    networkList.innerHTML = contacts.map(contact => `
+        <div class="contact-card" data-contact-id="${contact.id}">
+            <div class="contact-info">
+                <div class="contact-name">${escapeHtml(contact.name)}</div>
+                ${contact.email ? `<div class="contact-detail">📧 ${escapeHtml(contact.email)}</div>` : ''}
+                ${contact.phone ? `<div class="contact-detail">📱 ${escapeHtml(contact.phone)}</div>` : ''}
+                ${contact.relationship ? `<div class="contact-relationship">${escapeHtml(contact.relationship)}</div>` : ''}
+            </div>
+            <div class="contact-actions">
+                <button class="btn-contact-delete" onclick="deleteContact(${contact.id})" title="Delete contact">🗑️</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+// Delete a contact
+async function deleteContact(contactId) {
+    if (!confirm('Are you sure you want to delete this contact?')) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/contacts/${contactId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${authToken}`
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            // Reload contacts
+            loadContacts();
+        } else {
+            alert('Error deleting contact: ' + data.message);
+        }
+    } catch (error) {
+        console.error('Error deleting contact:', error);
+        alert('Error deleting contact. Please try again.');
+    }
+}
+
+// Helper function to escape HTML
+function escapeHtml(text) {
+    if (!text) return '';
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    return text.replace(/[&<>"']/g, m => map[m]);
+}
+
 // Initialize when dashboard is shown
 document.addEventListener('DOMContentLoaded', () => {
     // No carousel needed anymore - just one chatbot panel
@@ -1039,5 +1188,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (dashboard && dashboard.style.display !== 'none') {
         // Dashboard is visible, user is logged in
         console.log('Dashboard loaded');
+        loadContacts();
     }
 });

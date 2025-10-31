@@ -71,6 +71,21 @@ class DatabaseService {
             )
         `;
 
+        // Contacts table (network contacts for each user)
+        const createContactsTable = `
+            CREATE TABLE IF NOT EXISTS contacts (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                name TEXT NOT NULL,
+                email TEXT,
+                phone TEXT,
+                relationship TEXT,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                FOREIGN KEY (user_id) REFERENCES users (id)
+            )
+        `;
+
         this.db.run(createUsersTable, (err) => {
             if (err) console.error('Error creating users table:', err.message);
             else console.log('✅ Users table ready');
@@ -84,6 +99,11 @@ class DatabaseService {
         this.db.run(createGiftOrdersTable, (err) => {
             if (err) console.error('Error creating gift_orders table:', err.message);
             else console.log('✅ Gift orders table ready');
+        });
+
+        this.db.run(createContactsTable, (err) => {
+            if (err) console.error('Error creating contacts table:', err.message);
+            else console.log('✅ Contacts table ready');
         });
     }
 
@@ -258,12 +278,72 @@ class DatabaseService {
     async cleanupExpiredSessions() {
         return new Promise((resolve, reject) => {
             const sql = `DELETE FROM sessions WHERE expires_at <= datetime('now')`;
-            
+
             this.db.run(sql, function(err) {
                 if (err) {
                     reject(new Error('Session cleanup failed: ' + err.message));
                 } else {
                     resolve(this.changes);
+                }
+            });
+        });
+    }
+
+    // Contact management
+    async createContact(userId, contactData) {
+        const { name, email, phone, relationship } = contactData;
+
+        return new Promise((resolve, reject) => {
+            const sql = `
+                INSERT INTO contacts (user_id, name, email, phone, relationship)
+                VALUES (?, ?, ?, ?, ?)
+            `;
+
+            this.db.run(sql, [userId, name, email || null, phone || null, relationship || null], function(err) {
+                if (err) {
+                    reject(new Error('Contact creation failed: ' + err.message));
+                } else {
+                    resolve({
+                        id: this.lastID,
+                        userId,
+                        name,
+                        email: email || null,
+                        phone: phone || null,
+                        relationship: relationship || null
+                    });
+                }
+            });
+        });
+    }
+
+    async getUserContacts(userId) {
+        return new Promise((resolve, reject) => {
+            const sql = `
+                SELECT id, name, email, phone, relationship, created_at
+                FROM contacts
+                WHERE user_id = ?
+                ORDER BY created_at DESC
+            `;
+
+            this.db.all(sql, [userId], (err, rows) => {
+                if (err) {
+                    reject(new Error('Contacts lookup failed: ' + err.message));
+                } else {
+                    resolve(rows);
+                }
+            });
+        });
+    }
+
+    async deleteContact(userId, contactId) {
+        return new Promise((resolve, reject) => {
+            const sql = `DELETE FROM contacts WHERE id = ? AND user_id = ?`;
+
+            this.db.run(sql, [contactId, userId], function(err) {
+                if (err) {
+                    reject(new Error('Contact deletion failed: ' + err.message));
+                } else {
+                    resolve(this.changes > 0);
                 }
             });
         });

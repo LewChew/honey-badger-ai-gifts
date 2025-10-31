@@ -512,6 +512,96 @@ function getFallbackResponse(userMessage) {
     }
 }
 
+// Contact management endpoints
+// Add a contact to user's network
+app.post('/api/contacts', authenticateToken, [
+    body('name').trim().notEmpty().withMessage('Contact name is required')
+], async (req, res) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                success: false,
+                message: 'Validation failed',
+                errors: errors.array()
+            });
+        }
+
+        const { name, email, phone, relationship } = req.body;
+
+        // Create contact in database
+        const contact = await db.createContact(req.user.id, {
+            name,
+            email,
+            phone,
+            relationship
+        });
+
+        res.status(201).json({
+            success: true,
+            message: 'Contact added successfully',
+            contact
+        });
+
+        console.log('✅ Contact added for user:', req.user.email, '- Contact:', name);
+
+    } catch (error) {
+        console.error('Add contact error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error adding contact'
+        });
+    }
+});
+
+// Get user's contacts
+app.get('/api/contacts', authenticateToken, async (req, res) => {
+    try {
+        const contacts = await db.getUserContacts(req.user.id);
+
+        res.json({
+            success: true,
+            contacts
+        });
+
+    } catch (error) {
+        console.error('Get contacts error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching contacts'
+        });
+    }
+});
+
+// Delete a contact
+app.delete('/api/contacts/:contactId', authenticateToken, async (req, res) => {
+    try {
+        const { contactId } = req.params;
+        const deleted = await db.deleteContact(req.user.id, contactId);
+
+        if (!deleted) {
+            return res.status(404).json({
+                success: false,
+                message: 'Contact not found'
+            });
+        }
+
+        res.json({
+            success: true,
+            message: 'Contact deleted successfully'
+        });
+
+        console.log('✅ Contact deleted for user:', req.user.email, '- Contact ID:', contactId);
+
+    } catch (error) {
+        console.error('Delete contact error:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error deleting contact'
+        });
+    }
+});
+
 // Request password reset token
 app.post('/api/auth/forgot-password', [
     body('email').isEmail().normalizeEmail().withMessage('Valid email is required')
@@ -763,6 +853,11 @@ app.get('/api', (req, res) => {
             },
             chat: {
                 sendMessage: 'POST /api/chat (AI-powered by Claude 3.5 Haiku)'
+            },
+            contacts: {
+                add: 'POST /api/contacts',
+                list: 'GET /api/contacts',
+                delete: 'DELETE /api/contacts/:contactId'
             },
             honeyBadgers: {
                 send: 'POST /api/send-honey-badger',

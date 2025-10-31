@@ -180,6 +180,17 @@
 
                             </div>
                         </div>
+
+                        <!-- Your Network Section -->
+                        <div class="network-section">
+                            <div class="network-header">
+                                <h3>Your Network</h3>
+                                <button class="btn-add-contact" onclick="showAddContactModal()">+ Add Contact</button>
+                            </div>
+                            <div id="networkList" class="network-list">
+                                <!-- Network contacts will be populated here -->
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Right Panel - Send Form and Activity Sections -->
@@ -417,16 +428,6 @@
                     </div>
 
                     <!-- Right Panel - Honey Badger TV and Network -->
-                </div>
-
-                <!-- Your Network - Full Width Section -->
-                <div class="network-section-full-width">
-                    <div class="activity-section">
-                        <h2>Your Network</h2>
-                        <div id="networkList" class="badgers-list">
-                            <!-- Network will be populated here -->
-                        </div>
-                    </div>
                 </div>
             </div>
         </main>
@@ -703,6 +704,48 @@
                 Don't have a token?
                 <a href="#" onclick="closeModal('resetPasswordModal'); showModal('forgotPasswordModal');" style="color: #E2FF00; text-decoration: none;">Request one</a>
             </p>
+        </div>
+    </div>
+
+    <!-- Add Contact Modal -->
+    <div id="addContactModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('addContactModal')">&times;</span>
+            <div class="modal-header">
+                <div class="modal-title">
+                    <h2>Add Contact to Network</h2>
+                    <p class="modal-subtitle">Add someone to your Honey Badger network</p>
+                </div>
+            </div>
+            <form id="addContactForm">
+                <div class="form-group">
+                    <label for="contactName">Name:</label>
+                    <input type="text" id="contactName" name="contactName" required placeholder="Enter contact name">
+                </div>
+                <div class="form-group">
+                    <label for="contactEmail">Email:</label>
+                    <input type="email" id="contactEmail" name="contactEmail" placeholder="contact@example.com">
+                    <small style="color: #aaa; font-size: 0.85rem;">Optional - for email notifications</small>
+                </div>
+                <div class="form-group">
+                    <label for="contactPhone">Phone Number:</label>
+                    <input type="tel" id="contactPhone" name="contactPhone" placeholder="+1 (555) 123-4567">
+                    <small style="color: #aaa; font-size: 0.85rem;">Optional - for SMS notifications</small>
+                </div>
+                <div class="form-group">
+                    <label for="contactRelationship">Relationship:</label>
+                    <select id="contactRelationship" name="contactRelationship">
+                        <option value="">Select relationship (optional)</option>
+                        <option value="family">Family</option>
+                        <option value="friend">Friend</option>
+                        <option value="colleague">Colleague</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn" style="width: 100%;">
+                    Add Contact
+                </button>
+            </form>
         </div>
     </div>
 
