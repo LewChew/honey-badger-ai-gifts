@@ -874,55 +874,96 @@ app.post('/api/auth/reset-password', [
 
 // Protected route: Send Honey Badger (requires authentication)
 app.post('/api/send-honey-badger', authenticateToken, async (req, res) => {
-    const { recipientName, recipientContact, giftType, giftValue, challenge, message, duration } = req.body;
-    
-    console.log('New Honey Badger request from:', req.user.email, {
+    const {
         recipientName,
-        recipientContact,
+        recipientEmail,
+        recipientPhone,
+        recipientContact, // Legacy field
+        deliveryMethod,
         giftType,
         giftValue,
-        challenge,
-        message,
+        challengeType,
+        challengeDescription,
+        challenge, // Legacy field
+        personalNote,
+        message, // Legacy field
         duration
-    });
-    
-    // If SMS is enabled and gift routes are available, use the new system
-    if (process.env.ENABLE_SMS === 'true' && giftsRouter) {
-        // Forward to the new gift creation endpoint
-        req.body = {
-            recipientPhone: recipientContact,
-            recipientName,
-            senderName: req.user.name,
-            giftType,
-            giftDetails: {
-                value: giftValue,
-                description: message
-            },
-            challengeType: 'custom',
-            challengeDescription: challenge,
-            challengeRequirements: {
-                totalSteps: duration || 1
-            }
-        };
-        
-        // Call the gift creation endpoint
-        return app._router.handle(req, res, () => {
-            res.json({
-                success: true,
-                message: 'Honey Badger sent successfully!',
-                trackingId: 'HB' + Date.now(),
-                sender: req.user.name
+    } = req.body;
+
+    console.log('New Honey Badger request from:', req.user.email, req.body);
+
+    // If gift routes are available and email or SMS is enabled, use the new system
+    if (giftsRouter && (process.env.ENABLE_EMAIL === 'true' || process.env.ENABLE_SMS === 'true')) {
+        try {
+            // Import the sendInitialMessage function dynamically
+            const giftsModule = require('./api/routes/gifts');
+
+            // Create a mock request to the gifts endpoint
+            const express = require('express');
+            const giftReq = {
+                body: {
+                    recipientPhone: recipientPhone || recipientContact,
+                    recipientEmail: recipientEmail,
+                    recipientName,
+                    senderName: req.user.name,
+                    deliveryMethod: deliveryMethod || (recipientEmail ? 'email' : 'sms'),
+                    giftType,
+                    giftDetails: {
+                        value: giftValue,
+                        description: giftValue,
+                        personalMessage: personalNote || message
+                    },
+                    challengeType: challengeType || 'custom',
+                    challengeDescription: challengeDescription || challenge,
+                    challengeRequirements: {
+                        totalSteps: duration || 1
+                    }
+                },
+                user: req.user
+            };
+
+            const giftRes = {
+                status: (code) => ({
+                    json: (data) => {
+                        if (code === 201 && data.success) {
+                            return res.json({
+                                success: true,
+                                message: 'Honey Badger sent successfully!',
+                                trackingId: data.data?.giftId || 'HB' + Date.now(),
+                                sender: req.user.name,
+                                deliveryResults: data.data?.messageSent
+                            });
+                        } else {
+                            return res.status(code).json(data);
+                        }
+                    }
+                }),
+                json: (data) => res.json(data)
+            };
+
+            // Forward to gift routes
+            return giftsRouter.handle(giftReq, giftRes, () => {
+                res.status(500).json({
+                    success: false,
+                    message: 'Failed to process gift request'
+                });
             });
-        });
+        } catch (error) {
+            console.error('Error forwarding to gift routes:', error);
+            return res.status(500).json({
+                success: false,
+                message: 'Failed to send Honey Badger: ' + error.message
+            });
+        }
     }
-    
-    // Fallback response if SMS not configured
+
+    // Fallback response if neither SMS nor Email is configured
     res.json({
         success: true,
         message: 'Honey Badger sent successfully!',
         trackingId: 'HB' + Date.now(),
         sender: req.user.name,
-        note: 'SMS notifications not configured. Gift created but recipient will not receive SMS.'
+        note: 'Email and SMS not configured. Gift created but recipient will not be notified.'
     });
 });
 
