@@ -809,6 +809,14 @@ header {
     font-size: 0.85rem;
 }
 
+.form-hint {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: #999;
+    font-style: italic;
+}
+
 /* Expandable Form Sections */
 .form-section {
     margin-bottom: 1.5rem;

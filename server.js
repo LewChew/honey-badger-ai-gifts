@@ -17,11 +17,23 @@ const PORT = process.env.PORT || 3000;
 if (process.env.ENABLE_SMS === 'true') {
     const requiredTwilioVars = ['TWILIO_ACCOUNT_SID', 'TWILIO_AUTH_TOKEN', 'TWILIO_PHONE_NUMBER'];
     const missingVars = requiredTwilioVars.filter(varName => !process.env[varName]);
-    
+
     if (missingVars.length > 0) {
         console.warn('⚠️ Warning: Missing Twilio environment variables:', missingVars.join(', '));
         console.warn('   SMS functionality will be disabled.');
         process.env.ENABLE_SMS = 'false';
+    }
+}
+
+// Validate SendGrid environment variables
+if (process.env.ENABLE_EMAIL === 'true') {
+    const requiredSendGridVars = ['SENDGRID_API_KEY', 'SENDGRID_FROM_EMAIL'];
+    const missingVars = requiredSendGridVars.filter(varName => !process.env[varName]);
+
+    if (missingVars.length > 0) {
+        console.warn('⚠️ Warning: Missing SendGrid environment variables:', missingVars.join(', '));
+        console.warn('   Email functionality will be disabled.');
+        process.env.ENABLE_EMAIL = 'false';
     }
 }
 

@@ -885,6 +885,15 @@
                             <label for="modalRecipientPhone">Phone <span class="optional-label">(optional)</span>:</label>
                             <input type="tel" id="modalRecipientPhone" name="recipientPhone" placeholder="+1 (555) 123-4567">
                         </div>
+                        <div class="form-group">
+                            <label for="modalDeliveryMethod">Delivery Method:</label>
+                            <select id="modalDeliveryMethod" name="deliveryMethod" required>
+                                <option value="email">📧 Email Only</option>
+                                <option value="sms">📱 SMS Only (requires phone)</option>
+                                <option value="both">📧📱 Both Email & SMS</option>
+                            </select>
+                            <p class="form-hint">Choose how you want to send this Honey Badger</p>
+                        </div>
                     </div>
                 </div>
 

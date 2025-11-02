@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const twilio = require('twilio');
 const { v4: uuidv4 } = require('uuid');
+const sendGridService = require('../../services/sendGridService');
 
 // Initialize Twilio client
 const twilioClient = twilio(
@@ -22,6 +23,7 @@ router.post('/gifts', async (req, res) => {
   try {
     const {
       recipientPhone,
+      recipientEmail,
       recipientName,
       senderName,
       giftType,
@@ -30,14 +32,15 @@ router.post('/gifts', async (req, res) => {
       challengeDescription,
       challengeRequirements,
       expirationDate,
-      reminderFrequency
+      reminderFrequency,
+      deliveryMethod  // 'sms', 'email', or 'both'
     } = req.body;
 
     // Validate required fields
-    if (!recipientPhone || !giftType || !challengeType) {
+    if ((!recipientPhone && !recipientEmail) || !giftType || !challengeType) {
       return res.status(400).json({
         success: false,
-        message: 'Missing required fields'
+        message: 'Missing required fields (need at least phone or email)'
       });
     }
 
@@ -51,6 +54,8 @@ router.post('/gifts', async (req, res) => {
       senderName: senderName || 'Someone special',
       recipientName,
       recipientPhone,
+      recipientEmail,
+      deliveryMethod: deliveryMethod || (recipientEmail && !recipientPhone ? 'email' : 'sms'),
       type: giftType,
       details: giftDetails,
       challengeId,
@@ -452,29 +457,67 @@ router.get('/recipients/:phone/gifts', (req, res) => {
 // Helper functions
 
 async function sendInitialMessage(gift, challenge) {
-  try {
-    const messageBody = `🦡 HONEY BADGER HERE! ${gift.senderName} sent you a special gift!\n\n` +
-      `🎁 Gift: ${gift.type} - ${gift.details?.description || 'A surprise!'}\n\n` +
-      `🎯 Your challenge: ${challenge.description}\n\n` +
-      `Complete it to unlock your gift! I'll be here to help and motivate you. Let's do this!\n\n` +
-      `Reply START when you're ready to begin!`;
+  const results = { sms: null, email: null };
 
-    const message = await twilioClient.messages.create({
-      body: messageBody,
-      from: process.env.TWILIO_PHONE_NUMBER,
-      to: gift.recipientPhone
-    });
+  try {
+    const giftData = {
+      recipientName: gift.recipientName,
+      senderName: gift.senderName,
+      giftType: gift.type,
+      giftValue: gift.details?.description || 'A surprise!',
+      challenge: challenge.description,
+      message: gift.details?.personalMessage || null
+    };
+
+    // Send via SMS if phone number provided and delivery method allows
+    if (gift.recipientPhone && (gift.deliveryMethod === 'sms' || gift.deliveryMethod === 'both')) {
+      try {
+        const messageBody = `🦡 HONEY BADGER HERE! ${gift.senderName} sent you a special gift!\n\n` +
+          `🎁 Gift: ${gift.type} - ${giftData.giftValue}\n\n` +
+          `🎯 Your challenge: ${challenge.description}\n\n` +
+          `Complete it to unlock your gift! I'll be here to help and motivate you. Let's do this!\n\n` +
+          `Reply START when you're ready to begin!`;
+
+        const message = await twilioClient.messages.create({
+          body: messageBody,
+          from: process.env.TWILIO_PHONE_NUMBER,
+          to: gift.recipientPhone
+        });
+
+        results.sms = {
+          success: true,
+          messageId: message.sid,
+          sentAt: new Date()
+        };
+      } catch (smsError) {
+        console.error('Error sending SMS:', smsError);
+        results.sms = {
+          success: false,
+          error: smsError.message
+        };
+      }
+    }
+
+    // Send via Email if email provided and delivery method allows
+    if (gift.recipientEmail && (gift.deliveryMethod === 'email' || gift.deliveryMethod === 'both')) {
+      const emailResult = await sendGridService.sendInitialGiftEmail(gift.recipientEmail, giftData);
+      results.email = emailResult;
+    }
+
+    // Return success if at least one method succeeded
+    const success = (results.sms?.success || results.email?.success);
 
     return {
-      success: true,
-      messageId: message.sid,
+      success,
+      results,
       sentAt: new Date()
     };
   } catch (error) {
     console.error('Error sending initial message:', error);
     return {
       success: false,
-      error: error.message
+      error: error.message,
+      results
     };
   }
 }

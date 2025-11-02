@@ -1440,6 +1440,8 @@ function validateStep(stepNumber) {
         // Validate recipient info
         const name = document.getElementById('modalRecipientName').value;
         const email = document.getElementById('modalRecipientEmail').value;
+        const phone = document.getElementById('modalRecipientPhone').value;
+        const deliveryMethod = document.getElementById('modalDeliveryMethod').value;
 
         if (!name || !email) {
             alert('Please enter recipient name and email');
@@ -1450,6 +1452,12 @@ function validateStep(stepNumber) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(email)) {
             alert('Please enter a valid email address');
+            return false;
+        }
+
+        // Validate phone if SMS delivery is selected
+        if ((deliveryMethod === 'sms' || deliveryMethod === 'both') && !phone) {
+            alert('Please enter a phone number for SMS delivery');
             return false;
         }
 
@@ -1650,6 +1658,7 @@ document.getElementById('sendBadgerForm')?.addEventListener('submit', async (e) 
         recipientName: document.getElementById('modalRecipientName').value,
         recipientEmail: document.getElementById('modalRecipientEmail').value,
         recipientPhone: document.getElementById('modalRecipientPhone').value,
+        deliveryMethod: document.getElementById('modalDeliveryMethod').value,
         giftType: document.getElementById('modalGiftType').value,
         challengeType: document.getElementById('modalChallengeType').value,
         challengeDescription: document.getElementById('modalChallengeDescription').value,
