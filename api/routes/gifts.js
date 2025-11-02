@@ -4,11 +4,21 @@ const twilio = require('twilio');
 const { v4: uuidv4 } = require('uuid');
 const sendGridService = require('../../services/sendGridService');
 
-// Initialize Twilio client
-const twilioClient = twilio(
-  process.env.TWILIO_ACCOUNT_SID,
-  process.env.TWILIO_AUTH_TOKEN
-);
+// Initialize Twilio client (conditional)
+let twilioClient = null;
+if (process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN) {
+  try {
+    twilioClient = twilio(
+      process.env.TWILIO_ACCOUNT_SID,
+      process.env.TWILIO_AUTH_TOKEN
+    );
+    console.log('✅ Twilio client initialized in gift routes');
+  } catch (error) {
+    console.error('❌ Failed to initialize Twilio client:', error.message);
+  }
+} else {
+  console.log('ℹ️  Twilio not configured - SMS delivery will be disabled');
+}
 
 // In-memory storage (replace with database in production)
 const gifts = new Map();
@@ -471,30 +481,38 @@ async function sendInitialMessage(gift, challenge) {
 
     // Send via SMS if phone number provided and delivery method allows
     if (gift.recipientPhone && (gift.deliveryMethod === 'sms' || gift.deliveryMethod === 'both')) {
-      try {
-        const messageBody = `🦡 HONEY BADGER HERE! ${gift.senderName} sent you a special gift!\n\n` +
-          `🎁 Gift: ${gift.type} - ${giftData.giftValue}\n\n` +
-          `🎯 Your challenge: ${challenge.description}\n\n` +
-          `Complete it to unlock your gift! I'll be here to help and motivate you. Let's do this!\n\n` +
-          `Reply START when you're ready to begin!`;
-
-        const message = await twilioClient.messages.create({
-          body: messageBody,
-          from: process.env.TWILIO_PHONE_NUMBER,
-          to: gift.recipientPhone
-        });
-
-        results.sms = {
-          success: true,
-          messageId: message.sid,
-          sentAt: new Date()
-        };
-      } catch (smsError) {
-        console.error('Error sending SMS:', smsError);
+      if (!twilioClient) {
+        console.warn('⚠️  SMS requested but Twilio is not configured');
         results.sms = {
           success: false,
-          error: smsError.message
+          error: 'Twilio not configured - SMS delivery unavailable'
         };
+      } else {
+        try {
+          const messageBody = `🦡 HONEY BADGER HERE! ${gift.senderName} sent you a special gift!\n\n` +
+            `🎁 Gift: ${gift.type} - ${giftData.giftValue}\n\n` +
+            `🎯 Your challenge: ${challenge.description}\n\n` +
+            `Complete it to unlock your gift! I'll be here to help and motivate you. Let's do this!\n\n` +
+            `Reply START when you're ready to begin!`;
+
+          const message = await twilioClient.messages.create({
+            body: messageBody,
+            from: process.env.TWILIO_PHONE_NUMBER,
+            to: gift.recipientPhone
+          });
+
+          results.sms = {
+            success: true,
+            messageId: message.sid,
+            sentAt: new Date()
+          };
+        } catch (smsError) {
+          console.error('Error sending SMS:', smsError);
+          results.sms = {
+            success: false,
+            error: smsError.message
+          };
+        }
       }
     }
 
