@@ -895,64 +895,55 @@ app.post('/api/send-honey-badger', authenticateToken, async (req, res) => {
     // If gift routes are available and email or SMS is enabled, use the new system
     if (giftsRouter && (process.env.ENABLE_EMAIL === 'true' || process.env.ENABLE_SMS === 'true')) {
         try {
-            // Import the sendInitialMessage function dynamically
-            const giftsModule = require('./api/routes/gifts');
-
-            // Create a mock request to the gifts endpoint
-            const express = require('express');
-            const giftReq = {
-                body: {
-                    recipientPhone: recipientPhone || recipientContact,
-                    recipientEmail: recipientEmail,
-                    recipientName,
-                    senderName: req.user.name,
-                    deliveryMethod: deliveryMethod || (recipientEmail ? 'email' : 'sms'),
-                    giftType,
-                    giftDetails: {
-                        value: giftValue,
-                        description: giftValue,
-                        personalMessage: personalNote || message
-                    },
-                    challengeType: challengeType || 'custom',
-                    challengeDescription: challengeDescription || challenge,
-                    challengeRequirements: {
-                        totalSteps: duration || 1
-                    }
+            // Make internal API call to /api/gifts
+            const axios = require('axios');
+            const giftPayload = {
+                recipientPhone: recipientPhone || recipientContact,
+                recipientEmail: recipientEmail,
+                recipientName,
+                senderName: req.user.name,
+                deliveryMethod: deliveryMethod || (recipientEmail ? 'email' : 'sms'),
+                giftType,
+                giftDetails: {
+                    value: giftValue,
+                    description: giftValue,
+                    personalMessage: personalNote || message
                 },
-                user: req.user
+                challengeType: challengeType || 'custom',
+                challengeDescription: challengeDescription || challenge,
+                challengeRequirements: {
+                    totalSteps: duration || 1
+                }
             };
 
-            const giftRes = {
-                status: (code) => ({
-                    json: (data) => {
-                        if (code === 201 && data.success) {
-                            return res.json({
-                                success: true,
-                                message: 'Honey Badger sent successfully!',
-                                trackingId: data.data?.giftId || 'HB' + Date.now(),
-                                sender: req.user.name,
-                                deliveryResults: data.data?.messageSent
-                            });
-                        } else {
-                            return res.status(code).json(data);
-                        }
-                    }
-                }),
-                json: (data) => res.json(data)
-            };
-
-            // Forward to gift routes
-            return giftsRouter.handle(giftReq, giftRes, () => {
-                res.status(500).json({
-                    success: false,
-                    message: 'Failed to process gift request'
-                });
+            const response = await axios.post(`http://localhost:${PORT}/api/gifts`, giftPayload, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             });
+
+            const result = response.data;
+
+            if (result.success) {
+                return res.json({
+                    success: true,
+                    message: 'Honey Badger sent successfully!',
+                    trackingId: result.data?.giftId || 'HB' + Date.now(),
+                    sender: req.user.name,
+                    deliveryResults: result.data?.messageSent
+                });
+            } else {
+                return res.status(response.status).json({
+                    success: false,
+                    message: result.message || 'Failed to send Honey Badger'
+                });
+            }
         } catch (error) {
             console.error('Error forwarding to gift routes:', error);
+            const errorMessage = error.response?.data?.message || error.message;
             return res.status(500).json({
                 success: false,
-                message: 'Failed to send Honey Badger: ' + error.message
+                message: 'Failed to send Honey Badger: ' + errorMessage
             });
         }
     }
