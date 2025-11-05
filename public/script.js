@@ -764,7 +764,8 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (error) {
             // Check if the error is about email already existing
             if (error.message.toLowerCase().includes('email already exists') ||
-                error.message.toLowerCase().includes('already registered')) {
+                error.message.toLowerCase().includes('already registered') ||
+                error.message.toLowerCase().includes('user already exists')) {
                 // Close signup modals
                 closeModal('signupStep4Modal');
                 closeModal('signupStep3Modal');
