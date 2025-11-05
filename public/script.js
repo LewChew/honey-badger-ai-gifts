@@ -762,7 +762,29 @@ document.addEventListener('DOMContentLoaded', function() {
             signupData = { email: '', name: '', phone: '', password: '' };
             alert('🍯 Welcome to Honey Badger! Your account has been created successfully.');
         } catch (error) {
-            alert('Signup failed: ' + error.message);
+            // Check if the error is about email already existing
+            if (error.message.toLowerCase().includes('email already exists') ||
+                error.message.toLowerCase().includes('already registered')) {
+                // Close signup modals
+                closeModal('signupStep4Modal');
+                closeModal('signupStep3Modal');
+                closeModal('signupStep2Modal');
+                closeModal('signupStep1Modal');
+
+                // Pre-fill login email
+                document.getElementById('loginEmail').value = signupData.email;
+
+                // Reset signup data
+                signupData = { email: '', name: '', phone: '', password: '' };
+
+                // Show login modal with helpful message
+                setTimeout(() => {
+                    showModal('loginModal');
+                    alert('This email is already registered. Please login with your password.');
+                }, 100);
+            } else {
+                alert('Signup failed: ' + error.message);
+            }
         } finally {
             submitBtn.textContent = originalText;
             submitBtn.disabled = false;
