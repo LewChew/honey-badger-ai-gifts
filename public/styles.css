@@ -437,8 +437,8 @@ header {
 }
 
 .hero-logo-image {
-    width: 120px;
-    height: 120px;
+    width: 360px;
+    height: 360px;
     filter: drop-shadow(0 0 20px rgba(226, 255, 0, 0.4));
     animation: pulse 3s ease-in-out infinite;
 }
