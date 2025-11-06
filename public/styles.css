@@ -23,24 +23,24 @@ body::before {
     height: 100%;
     z-index: 0;
     pointer-events: none;
-    opacity: 0.15;
+    opacity: 0.35;
     background-color: #000000;
     background-image:
-        radial-gradient(circle farthest-side at 0% 50%, #E2FF00 23.5%, rgba(240,166,17,0) 0),
-        radial-gradient(circle farthest-side at 0% 50%, #FFC700 24%, rgba(240,166,17,0) 0),
-        linear-gradient(#E2FF00 14%, rgba(240,166,17,0) 0, rgba(240,166,17,0) 85%, #E2FF00 0),
-        linear-gradient(150deg, #E2FF00 24%, #FFC700 0, #FFC700 26%, rgba(240,166,17,0) 0, rgba(240,166,17,0) 74%, #FFC700 0, #FFC700 76%, #E2FF00 0),
-        linear-gradient(30deg, #E2FF00 24%, #FFC700 0, #FFC700 26%, rgba(240,166,17,0) 0, rgba(240,166,17,0) 74%, #FFC700 0, #FFC700 76%, #E2FF00 0),
+        radial-gradient(circle farthest-side at 0% 50%, #E2FF00 23.5%, #000000 0),
+        radial-gradient(circle farthest-side at 0% 50%, #FFC700 24%, #000000 0),
+        linear-gradient(#E2FF00 14%, #000000 0, #000000 85%, #E2FF00 0),
+        linear-gradient(150deg, #E2FF00 24%, #FFC700 0, #FFC700 26%, #000000 0, #000000 74%, #FFC700 0, #FFC700 76%, #E2FF00 0),
+        linear-gradient(30deg, #E2FF00 24%, #FFC700 0, #FFC700 26%, #000000 0, #000000 74%, #FFC700 0, #FFC700 76%, #E2FF00 0),
         linear-gradient(90deg, #FFC700 2%, #E2FF00 0, #E2FF00 98%, #FFC700 0%),
         linear-gradient(#E2FF00 2%, #000000 0, #000000 98%, #E2FF00 0%);
     background-size:
-        60px 104px,
-        60px 104px,
-        60px 52px,
-        60px 104px,
-        60px 104px,
-        60px 52px,
-        60px 104px;
+        80px 139px,
+        80px 139px,
+        80px 69px,
+        80px 139px,
+        80px 139px,
+        80px 69px,
+        80px 139px;
     background-position:
         0 0,
         0 0,
