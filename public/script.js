@@ -379,15 +379,25 @@ function updateAuthState() {
 async function loadHoneyBadgers() {
     try {
         const result = await makeAPIRequest('/api/honey-badgers', {}, true);
-        
+
         if (result.success && result.data.success) {
             const honeyBadgers = result.data.honeyBadgers;
             const sentList = document.getElementById('sentBadgersList');
-            
-            if (honeyBadgers.length === 0) {
-                sentList.innerHTML = '<p class="no-badgers">No honey badgers sent yet. Send your first one! 🍯</p>';
+            const carousel = document.querySelector('.badger-carousel');
+
+            // Filter for active badgers (not completed or cancelled)
+            const activeBadgers = honeyBadgers.filter(badger =>
+                badger.status !== 'completed' && badger.status !== 'cancelled'
+            );
+
+            if (activeBadgers.length === 0) {
+                // Show carousel, hide badger list
+                if (carousel) carousel.style.display = 'block';
+                sentList.innerHTML = '<p class="no-badgers">No active honey badgers. Send your first one! 🍯</p>';
             } else {
-                sentList.innerHTML = honeyBadgers.map(badger => `
+                // Hide carousel, show badger list
+                if (carousel) carousel.style.display = 'none';
+                sentList.innerHTML = activeBadgers.map(badger => `
                     <div class="badger-item">
                         <div class="badger-header">
                             <strong>${badger.recipientName}</strong>
