@@ -23,12 +23,12 @@ body::before {
     height: 100%;
     z-index: 0;
     pointer-events: none;
-    opacity: 0.35;
+    opacity: 0.4;
     background-color: #0a0a0a;
-    background-image: url('/assets/honeycomb-3d.svg');
-    background-size: 180px 156px;
+    background-image: url('/assets/honeycomb-tight.svg');
+    background-size: 90px 78px;
     background-repeat: repeat;
-    background-position: center;
+    background-position: 0 0;
 }
 
 .container {
