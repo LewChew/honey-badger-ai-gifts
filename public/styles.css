@@ -6,30 +6,49 @@
 
 body {
     font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 25%, #1f1f1f 50%, #0a0a0a 100%);
+    background-color: #1a1a1a;
     min-height: 100vh;
     color: #fff;
     position: relative;
     overflow-x: hidden;
 }
 
-/* Background Honeycomb Badger Logo - Larger and no white space */
+/* Honeycomb Pattern Background */
 body::before {
     content: '';
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 100vw;
-    height: 100vh;
-    background-image: url('/assets/honeycomb_badger2.svg');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    opacity: 0.08;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     z-index: 0;
     pointer-events: none;
-    filter: brightness(1.2) contrast(1.1);
+    opacity: 0.15;
+    background-color: #000000;
+    background-image:
+        radial-gradient(circle farthest-side at 0% 50%, #E2FF00 23.5%, rgba(240,166,17,0) 0),
+        radial-gradient(circle farthest-side at 0% 50%, #FFC700 24%, rgba(240,166,17,0) 0),
+        linear-gradient(#E2FF00 14%, rgba(240,166,17,0) 0, rgba(240,166,17,0) 85%, #E2FF00 0),
+        linear-gradient(150deg, #E2FF00 24%, #FFC700 0, #FFC700 26%, rgba(240,166,17,0) 0, rgba(240,166,17,0) 74%, #FFC700 0, #FFC700 76%, #E2FF00 0),
+        linear-gradient(30deg, #E2FF00 24%, #FFC700 0, #FFC700 26%, rgba(240,166,17,0) 0, rgba(240,166,17,0) 74%, #FFC700 0, #FFC700 76%, #E2FF00 0),
+        linear-gradient(90deg, #FFC700 2%, #E2FF00 0, #E2FF00 98%, #FFC700 0%),
+        linear-gradient(#E2FF00 2%, #000000 0, #000000 98%, #E2FF00 0%);
+    background-size:
+        60px 104px,
+        60px 104px,
+        60px 52px,
+        60px 104px,
+        60px 104px,
+        60px 52px,
+        60px 104px;
+    background-position:
+        0 0,
+        0 0,
+        0 0,
+        0 0,
+        0 0,
+        0 0,
+        0 0;
 }
 
 .container {
