@@ -145,7 +145,8 @@ class SendGridService {
 
     // Text email templates
     createInitialEmailText(giftData) {
-        const { recipientName, senderName, giftType, giftValue, challenge, message } = giftData;
+        const { recipientName, senderName, giftType, giftValue, challenge, message, giftId } = giftData;
+        const giftUrl = giftId ? `https://honeybadgerapp.com/gift/${giftId}` : 'https://honeybadgerapp.com';
 
         return `
 Hi ${recipientName}!
@@ -161,6 +162,9 @@ ${message ? `Personal message from ${senderName}: "${message}"` : ''}
 
 Your Honey Badger AI coach will be with you every step of the way to help you earn this gift!
 
+View your gift and track your progress:
+${giftUrl}
+
 Let's get started! 💪
 
 Best regards,
@@ -169,7 +173,8 @@ The Honey Badger Team
     }
 
     createReminderEmailText(giftData) {
-        const { recipientName, challenge, progress } = giftData;
+        const { recipientName, challenge, progress, giftId } = giftData;
+        const giftUrl = giftId ? `https://honeybadgerapp.com/gift/${giftId}` : 'https://honeybadgerapp.com';
 
         return `
 Hi ${recipientName}!
@@ -182,13 +187,17 @@ ${progress ? `Progress: ${progress}` : 'Keep going! You can do this!'}
 
 Don't give up now - your gift is waiting for you! 💪
 
+View your gift and progress:
+${giftUrl}
+
 Best regards,
 Your Honey Badger Coach
         `.trim();
     }
 
     createCompletionEmailText(giftData) {
-        const { recipientName, giftType, giftValue, senderName } = giftData;
+        const { recipientName, giftType, giftValue, senderName, giftId } = giftData;
+        const giftUrl = giftId ? `https://honeybadgerapp.com/gift/${giftId}` : 'https://honeybadgerapp.com';
 
         return `
 Hi ${recipientName}!
@@ -201,6 +210,9 @@ Your Gift: ${giftType} - ${giftValue}
 
 ${senderName} is so proud of you! Your Honey Badger coach knew you could do it! 💪
 
+View and claim your gift:
+${giftUrl}
+
 Keep up the amazing work!
 
 Best regards,
@@ -210,7 +222,8 @@ Your Honey Badger Coach
 
     // HTML email templates
     createInitialEmailHtml(giftData) {
-        const { recipientName, senderName, giftType, giftValue, challenge, message } = giftData;
+        const { recipientName, senderName, giftType, giftValue, challenge, message, giftId } = giftData;
+        const giftUrl = giftId ? `https://honeybadgerapp.com/gift/${giftId}` : 'https://honeybadgerapp.com';
 
         return `
 <!DOCTYPE html>
@@ -261,6 +274,11 @@ Your Honey Badger Coach
             ` : ''}
 
             <p>Your Honey Badger AI coach will be with you every step of the way to help you earn this gift!</p>
+
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="${giftUrl}" class="button">Unlock Your Gift 🎁</a>
+            </div>
+
             <p><strong>Let's get started! 💪</strong></p>
         </div>
         <div class="footer">
@@ -274,7 +292,8 @@ Your Honey Badger Coach
     }
 
     createReminderEmailHtml(giftData) {
-        const { recipientName, challenge, progress } = giftData;
+        const { recipientName, challenge, progress, giftId } = giftData;
+        const giftUrl = giftId ? `https://honeybadgerapp.com/gift/${giftId}` : 'https://honeybadgerapp.com';
 
         return `
 <!DOCTYPE html>
@@ -314,6 +333,10 @@ Your Honey Badger Coach
             </div>
             ` : ''}
 
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="${giftUrl}" class="button">Unlock Your Gift 🎁</a>
+            </div>
+
             <p><strong>Don't give up now - your gift is waiting for you! 💪</strong></p>
             <p>You've got this!</p>
         </div>
@@ -328,7 +351,8 @@ Your Honey Badger Coach
     }
 
     createCompletionEmailHtml(giftData) {
-        const { recipientName, giftType, giftValue, senderName } = giftData;
+        const { recipientName, giftType, giftValue, senderName, giftId } = giftData;
+        const giftUrl = giftId ? `https://honeybadgerapp.com/gift/${giftId}` : 'https://honeybadgerapp.com';
 
         return `
 <!DOCTYPE html>
@@ -367,6 +391,11 @@ Your Honey Badger Coach
 
             <p style="font-size: 16px;"><strong>${senderName}</strong> is so proud of you!</p>
             <p>Your Honey Badger coach knew you could do it! 💪</p>
+
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="${giftUrl}" class="button">Unlock Your Gift 🎁</a>
+            </div>
+
             <p><strong>Keep up the amazing work!</strong></p>
         </div>
         <div class="footer">
