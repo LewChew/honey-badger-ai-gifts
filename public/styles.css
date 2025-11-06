@@ -13,7 +13,7 @@ body {
     overflow-x: hidden;
 }
 
-/* Yellow and Black Honeycomb Pattern Background */
+/* Realistic 3D Honeycomb Background */
 body::before {
     content: '';
     position: fixed;
@@ -23,12 +23,12 @@ body::before {
     height: 100%;
     z-index: 0;
     pointer-events: none;
-    opacity: 0.3;
+    opacity: 0.15;
     background-color: #0a0a0a;
-    background-image: url('/assets/honeycomb-tight.svg');
-    background-size: 90px 78px;
+    background-image: url('/assets/honeycomb-3d-realistic.jpg');
+    background-size: 400px 300px;
     background-repeat: repeat;
-    background-position: 0 0;
+    background-position: center;
 }
 
 .container {
