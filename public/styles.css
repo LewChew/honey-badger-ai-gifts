@@ -1917,6 +1917,8 @@ header {
     border-radius: 12px;
     padding: 20px;
     border: 1px solid rgba(226, 255, 0, 0.2);
+    max-height: 300px;
+    overflow-y: auto;
 }
 
 .network-header {
@@ -1930,6 +1932,15 @@ header {
     margin: 0;
     color: #E2FF00;
     font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.network-icon {
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
 }
 
 .btn-add-contact {
