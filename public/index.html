@@ -136,6 +136,17 @@
                 <div class="dashboard-top-section">
                     <!-- Left Panel - Chatbot Carousel -->
                     <div class="dashboard-sections-left">
+                        <!-- Your Network Section -->
+                        <div class="network-section">
+                            <div class="network-header">
+                                <h3>Your Network</h3>
+                                <button class="btn-add-contact" onclick="showAddContactModal()">+ Add Contact</button>
+                            </div>
+                            <div id="networkList" class="network-list">
+                                <!-- Network contacts will be populated here -->
+                            </div>
+                        </div>
+
                         <!-- Carousel Container -->
                         <div class="tv-carousel-container">
                             <div class="tv-carousel">
@@ -190,17 +201,6 @@
                                 <img src="/assets/honeycomb_badger_face.svg" alt="Honey Badger" class="send-badger-icon">
                                 <span class="send-badger-text">Send a Honey Badger</span>
                             </button>
-                        </div>
-
-                        <!-- Your Network Section -->
-                        <div class="network-section">
-                            <div class="network-header">
-                                <h3>Your Network</h3>
-                                <button class="btn-add-contact" onclick="showAddContactModal()">+ Add Contact</button>
-                            </div>
-                            <div id="networkList" class="network-list">
-                                <!-- Network contacts will be populated here -->
-                            </div>
                         </div>
                     </div>
 
