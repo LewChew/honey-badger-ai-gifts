@@ -1,16 +1,32 @@
-<?xml version="1.0" standalone="no"?>
-<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
- "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
-<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
- width="933.000000pt" height="522.000000pt" viewBox="0 0 933.000000 522.000000"
- preserveAspectRatio="xMidYMid meet">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Honeycomb hexagons in network pattern -->
+  <g fill="none" stroke="#E2FF00" stroke-width="3">
+    <!-- Center hexagon -->
+    <path d="M50 30 L62 37.5 L62 52.5 L50 60 L38 52.5 L38 37.5 Z"/>
 
-<g transform="translate(0.000000,522.000000) scale(0.100000,-0.100000)"
-fill="#000000" stroke="none">
-<path d="M5580 2735 c0 -9 6 -12 15 -9 8 4 15 10 15 15 0 5 -7 9 -15 9 -8 0
--15 -7 -15 -15z"/>
-<path d="M3810 2636 c0 -9 5 -16 10 -16 6 0 10 4 10 9 0 6 -4 13 -10 16 -5 3
--10 -1 -10 -9z"/>
-<path d="M4756 1561 c-4 -7 -5 -15 -2 -18 9 -9 19 4 14 18 -4 11 -6 11 -12 0z"/>
-</g>
+    <!-- Top hexagon -->
+    <path d="M50 10 L62 17.5 L62 32.5 L50 40 L38 32.5 L38 17.5 Z"/>
+
+    <!-- Bottom hexagon -->
+    <path d="M50 50 L62 57.5 L62 72.5 L50 80 L38 72.5 L38 57.5 Z"/>
+
+    <!-- Top-right hexagon -->
+    <path d="M68 20 L80 27.5 L80 42.5 L68 50 L56 42.5 L56 27.5 Z"/>
+
+    <!-- Bottom-right hexagon -->
+    <path d="M68 60 L80 67.5 L80 82.5 L68 90 L56 82.5 L56 67.5 Z"/>
+
+    <!-- Top-left hexagon -->
+    <path d="M32 20 L44 27.5 L44 42.5 L32 50 L20 42.5 L20 27.5 Z"/>
+
+    <!-- Bottom-left hexagon -->
+    <path d="M32 60 L44 67.5 L44 82.5 L32 90 L20 82.5 L20 67.5 Z"/>
+  </g>
+
+  <!-- Connection dots at center -->
+  <circle cx="50" cy="45" r="3" fill="#E2FF00"/>
+  <circle cx="50" cy="25" r="2" fill="#E2FF00"/>
+  <circle cx="50" cy="65" r="2" fill="#E2FF00"/>
+  <circle cx="62" cy="35" r="2" fill="#E2FF00"/>
+  <circle cx="38" cy="35" r="2" fill="#E2FF00"/>
 </svg>
