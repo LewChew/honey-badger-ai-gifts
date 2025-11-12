@@ -1182,7 +1182,7 @@ function displayContacts(contacts) {
                 ${contact.relationship ? `<div class="contact-relationship">${escapeHtml(contact.relationship)}</div>` : ''}
             </div>
             <div class="contact-actions">
-                <button class="btn-contact-send-badger" onclick='sendBadgerToContact(${contactJson})' title="Send Badger">🎁 Send</button>
+                <button class="btn-contact-send-badger" onclick='sendBadgerToContact(${contactJson})' title="Send Badger">Send</button>
                 <button class="btn-contact-special-dates" onclick="openSpecialDatesModal(${contact.id}, '${escapeHtml(contact.name)}')" title="Special dates">📅</button>
                 <button class="btn-contact-delete" onclick="deleteContact(${contact.id})" title="Delete contact">🗑️</button>
             </div>

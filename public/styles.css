@@ -1915,9 +1915,9 @@ header {
     margin-top: 20px;
     background: rgba(30, 30, 30, 0.8);
     border-radius: 12px;
-    padding: 20px;
+    padding: 15px;
     border: 1px solid rgba(226, 255, 0, 0.2);
-    max-height: 300px;
+    max-height: 250px;
     overflow-y: auto;
 }
 
@@ -1964,14 +1964,14 @@ header {
 .network-list {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 6px;
 }
 
 .contact-card {
     background: rgba(40, 40, 40, 0.6);
     border: 1px solid rgba(226, 255, 0, 0.1);
-    border-radius: 8px;
-    padding: 15px;
+    border-radius: 6px;
+    padding: 10px 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1989,16 +1989,16 @@ header {
 }
 
 .contact-name {
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 600;
     color: #E2FF00;
-    margin-bottom: 5px;
+    margin-bottom: 4px;
 }
 
 .contact-detail {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: #ccc;
-    margin-bottom: 3px;
+    margin-bottom: 2px;
 }
 
 .contact-relationship {
@@ -2014,17 +2014,17 @@ header {
 
 .contact-actions {
     display: flex;
-    gap: 8px;
+    gap: 6px;
 }
 
 .btn-contact-special-dates {
-    background: rgba(226, 255, 0, 0.1);
-    border: 1px solid rgba(226, 255, 0, 0.3);
+    background: #000000;
+    border: 2px solid #E2FF00;
     color: #E2FF00;
-    padding: 6px 10px;
+    padding: 5px 8px;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 0.9rem;
     transition: all 0.3s ease;
 }
 
@@ -2035,13 +2035,13 @@ header {
 }
 
 .btn-contact-delete {
-    background: rgba(255, 69, 58, 0.2);
-    border: 1px solid rgba(255, 69, 58, 0.3);
-    color: #ff453a;
-    padding: 6px 10px;
+    background: #000000;
+    border: 2px solid #E2FF00;
+    color: #E2FF00;
+    padding: 5px 8px;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 0.9rem;
     transition: all 0.3s ease;
 }
 
@@ -2308,18 +2308,19 @@ header {
 
 /* Send Badger Button on Contact Cards */
 .btn-contact-send-badger {
-    background: linear-gradient(135deg, #E2FF00 0%, #B8CC00 100%);
-    border: none;
-    color: #1a1a1a;
-    padding: 6px 12px;
+    background: #000000;
+    border: 2px solid #E2FF00;
+    color: #E2FF00;
+    padding: 5px 12px;
     border-radius: 6px;
     cursor: pointer;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 600;
     transition: all 0.3s ease;
 }
 
 .btn-contact-send-badger:hover {
+    background: rgba(226, 255, 0, 0.1);
     transform: translateY(-2px);
     box-shadow: 0 4px 15px rgba(226, 255, 0, 0.4);
 }
