@@ -2608,3 +2608,63 @@ header {
     border-color: #E2FF00;
     box-shadow: 0 0 10px rgba(226, 255, 0, 0.6);
 }
+
+/* ============================================
+   Compact Modal Styles for Send Badger
+   ============================================ */
+
+.modal-header-compact {
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.modal-header-compact .modal-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: center;
+}
+
+.modal-header-compact h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.network-quick-select-compact {
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+}
+
+.form-section-compact {
+    padding: 0;
+    margin-bottom: 0.5rem;
+}
+
+.form-group-compact {
+    margin-bottom: 0.75rem;
+}
+
+.form-group-compact:last-child {
+    margin-bottom: 0;
+}
+
+.form-group-compact label {
+    margin-bottom: 0.3rem;
+    font-size: 0.9rem;
+}
+
+.form-group-compact input,
+.form-group-compact select {
+    padding: 0.6rem 0.8rem;
+}
+
+/* Smoother step indicator */
+.step-indicator {
+    margin-bottom: 1.5rem;
+}
+
+.send-badger-form .form-step {
+    padding: 0 0.5rem;
+}

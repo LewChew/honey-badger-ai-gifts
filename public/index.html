@@ -823,13 +823,10 @@
     <div id="sendBadgerModal" class="modal modal-large">
         <div class="modal-content modal-send-badger">
             <span class="close" onclick="closeModal('sendBadgerModal')">&times;</span>
-            <div class="modal-header">
+            <div class="modal-header modal-header-compact">
                 <div class="modal-title">
                     <img src="/assets/honeycomb_badger_face.svg" alt="Honey Badger" class="modal-badger-icon">
-                    <div>
-                        <h2>Send a Honey Badger</h2>
-                        <p class="modal-subtitle">Create a gift experience with a challenge</p>
-                    </div>
+                    <h2>Send a Honey Badger</h2>
                 </div>
             </div>
 
@@ -854,44 +851,40 @@
             <form id="sendBadgerForm" class="send-badger-form">
                 <!-- Step 1: Who (Recipient) -->
                 <div class="form-step active" data-step="1">
-                    <h3 class="step-title">Who are you sending this to?</h3>
-
                     <!-- Network Contact Quick Select -->
-                    <div class="form-section network-quick-select">
-                        <h4 style="color: #E2FF00; font-size: 0.95rem; margin-bottom: 10px;">
-                            <span style="margin-right: 8px;">📇</span>Choose from Your Network
+                    <div class="form-section network-quick-select-compact">
+                        <h4 style="color: #E2FF00; font-size: 0.9rem; margin-bottom: 8px; display: flex; align-items: center; gap: 8px;">
+                            <span>📇</span>Choose from Your Network
                         </h4>
                         <div id="networkContactSelector" class="network-contact-grid">
                             <!-- Network contacts will be populated here -->
                         </div>
-                        <div style="text-align: center; margin: 15px 0; color: #aaa;">
+                        <div style="text-align: center; margin: 10px 0; color: #aaa; font-size: 0.85rem;">
                             <span>— OR —</span>
                         </div>
                     </div>
 
                     <!-- Recipient Information -->
-                    <div class="form-section">
-                        <h4 style="color: #E2FF00; font-size: 0.95rem; margin-bottom: 10px;">Enter Recipient Details</h4>
-                        <div class="form-group">
+                    <div class="form-section form-section-compact">
+                        <div class="form-group form-group-compact">
                             <label for="modalRecipientName">Name:</label>
                             <input type="text" id="modalRecipientName" name="recipientName" placeholder="Who's getting this gift?" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group form-group-compact">
                             <label for="modalRecipientEmail">Email:</label>
                             <input type="email" id="modalRecipientEmail" name="recipientEmail" placeholder="their.email@example.com" required>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group form-group-compact">
                             <label for="modalRecipientPhone">Phone <span class="optional-label">(optional)</span>:</label>
                             <input type="tel" id="modalRecipientPhone" name="recipientPhone" placeholder="+1 (555) 123-4567">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group form-group-compact">
                             <label for="modalDeliveryMethod">Delivery Method:</label>
                             <select id="modalDeliveryMethod" name="deliveryMethod" required>
                                 <option value="email">📧 Email Only</option>
                                 <option value="sms">📱 SMS Only (requires phone)</option>
                                 <option value="both">📧📱 Both Email & SMS</option>
                             </select>
-                            <p class="form-hint">Choose how you want to send this Honey Badger</p>
                         </div>
                     </div>
                 </div>
