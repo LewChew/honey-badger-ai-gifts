@@ -934,6 +934,17 @@
                             <textarea id="modalChallengeDescription" name="challengeDescription"
                                 placeholder="What should they do to unlock this gift?" rows="3" required></textarea>
                         </div>
+                        <div class="form-group">
+                            <label for="modalVerificationType">Unlock Verification:</label>
+                            <select id="modalVerificationType" name="verificationType" required>
+                                <option value="">Select verification type</option>
+                                <option value="photo">📸 Photo Upload</option>
+                                <option value="video">🎥 Video Upload</option>
+                                <option value="audio">🎤 Audio Recording</option>
+                                <option value="other">📝 Other/Text Response</option>
+                            </select>
+                            <p class="form-hint" style="margin-top: 0.5rem; font-size: 0.85rem; color: #aaa;">How will the recipient prove they completed the challenge?</p>
+                        </div>
                         <div id="modalChallengeDuration" class="form-group" style="display: none;">
                             <label for="modalDuration">Duration:</label>
                             <select id="modalDuration" name="duration">
