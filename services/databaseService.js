@@ -158,6 +158,40 @@ class DatabaseService {
                 });
             }
         });
+
+        // Add new columns to gift_orders table
+        this.db.all("PRAGMA table_info(gift_orders)", (err, columns) => {
+            if (err) {
+                console.error('Error checking gift_orders table:', err.message);
+                return;
+            }
+
+            const columnsToAdd = [
+                { name: 'recipient_email', type: 'TEXT' },
+                { name: 'recipient_phone', type: 'TEXT' },
+                { name: 'delivery_method', type: 'TEXT' },
+                { name: 'challenge_type', type: 'TEXT' },
+                { name: 'challenge_description', type: 'TEXT' },
+                { name: 'verification_type', type: 'TEXT' },
+                { name: 'reminder_frequency', type: 'TEXT' },
+                { name: 'personal_note', type: 'TEXT' },
+                { name: 'notify_on_complete', type: 'BOOLEAN DEFAULT 1' }
+            ];
+
+            columnsToAdd.forEach(column => {
+                const exists = columns && columns.some(col => col.name === column.name);
+                if (!exists) {
+                    console.log(`📝 Running migration: Adding ${column.name} column to gift_orders table`);
+                    this.db.run(`ALTER TABLE gift_orders ADD COLUMN ${column.name} ${column.type}`, (err) => {
+                        if (err) {
+                            console.error(`❌ Migration failed for ${column.name}:`, err.message);
+                        } else {
+                            console.log(`✅ Migration successful: ${column.name} column added`);
+                        }
+                    });
+                }
+            });
+        });
     }
 
     // User management methods
@@ -287,15 +321,57 @@ class DatabaseService {
 
     // Gift order management
     async createGiftOrder(userId, orderData) {
-        const { trackingId, recipientName, recipientContact, giftType, giftValue, challenge, message, duration } = orderData;
-        
+        const {
+            trackingId,
+            recipientName,
+            recipientContact,
+            recipientEmail,
+            recipientPhone,
+            deliveryMethod,
+            giftType,
+            giftValue,
+            challenge,
+            challengeType,
+            challengeDescription,
+            verificationType,
+            reminderFrequency,
+            personalNote,
+            message,
+            duration,
+            notifyOnComplete
+        } = orderData;
+
         return new Promise((resolve, reject) => {
             const sql = `
-                INSERT INTO gift_orders (user_id, tracking_id, recipient_name, recipient_contact, gift_type, gift_value, challenge, message, duration)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                INSERT INTO gift_orders (
+                    user_id, tracking_id, recipient_name, recipient_contact, recipient_email,
+                    recipient_phone, delivery_method, gift_type, gift_value, challenge,
+                    challenge_type, challenge_description, verification_type,
+                    reminder_frequency, personal_note, message, duration, notify_on_complete
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             `;
 
-            this.db.run(sql, [userId, trackingId, recipientName, recipientContact, giftType, giftValue, challenge, message, duration], function(err) {
+            this.db.run(sql, [
+                userId,
+                trackingId,
+                recipientName,
+                recipientContact || recipientPhone || recipientEmail,
+                recipientEmail || null,
+                recipientPhone || null,
+                deliveryMethod || null,
+                giftType,
+                giftValue,
+                challenge || challengeDescription || null,
+                challengeType || null,
+                challengeDescription || challenge || null,
+                verificationType || null,
+                reminderFrequency || null,
+                personalNote || message || null,
+                message || personalNote || null,
+                duration || null,
+                notifyOnComplete !== undefined ? notifyOnComplete : 1
+            ], function(err) {
                 if (err) {
                     reject(new Error('Gift order creation failed: ' + err.message));
                 } else {

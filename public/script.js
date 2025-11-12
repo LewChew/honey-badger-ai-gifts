@@ -1693,12 +1693,46 @@ document.getElementById('sendBadgerForm')?.addEventListener('submit', async (e) 
         recipientPhone: document.getElementById('modalRecipientPhone').value,
         deliveryMethod: document.getElementById('modalDeliveryMethod').value,
         giftType: document.getElementById('modalGiftType').value,
+        giftValue: getGiftValue(),
         challengeType: document.getElementById('modalChallengeType').value,
         challengeDescription: document.getElementById('modalChallengeDescription').value,
+        verificationType: document.getElementById('modalVerificationType').value,
         reminderFrequency: document.getElementById('modalReminderFrequency').value,
         personalNote: document.getElementById('modalPersonalNote').value,
         notifyOnComplete: document.getElementById('modalNotifyOnComplete').checked
     };
+
+    // Helper function to get gift value from gift details
+    function getGiftValue() {
+        const giftType = document.getElementById('modalGiftType').value;
+        let giftValue = '';
+
+        switch (giftType) {
+            case 'giftcard':
+                const brand = document.getElementById('giftCardBrand')?.value || '';
+                const amount = document.getElementById('giftCardAmount')?.value || '';
+                giftValue = amount ? `${amount} ${brand}` : brand;
+                break;
+            case 'cash':
+                giftValue = document.getElementById('cashAmount')?.value || '';
+                break;
+            case 'physical':
+                const itemDesc = document.getElementById('itemDescription')?.value || '';
+                const itemVal = document.getElementById('itemValue')?.value || '';
+                giftValue = itemVal ? `${itemDesc} (${itemVal})` : itemDesc;
+                break;
+            case 'photo':
+                giftValue = document.getElementById('mediaDescription')?.value || 'Photo/Video';
+                break;
+            case 'message':
+                giftValue = 'Custom Message';
+                break;
+            default:
+                giftValue = '';
+        }
+
+        return giftValue;
+    }
 
     // Add duration if multiday
     const challengeType = document.getElementById('modalChallengeType').value;

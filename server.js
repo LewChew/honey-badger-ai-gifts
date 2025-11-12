@@ -948,44 +948,83 @@ app.post('/api/send-honey-badger', authenticateToken, async (req, res) => {
         }
     }
 
-    // Fallback response if neither SMS nor Email is configured
-    res.json({
-        success: true,
-        message: 'Honey Badger sent successfully!',
-        trackingId: 'HB' + Date.now(),
-        sender: req.user.name,
-        note: 'Email and SMS not configured. Gift created but recipient will not be notified.'
-    });
+    // Fallback: Save to database even if SMS/Email not configured
+    try {
+        const trackingId = 'HB' + Date.now();
+        const orderData = {
+            trackingId,
+            recipientName,
+            recipientEmail: recipientEmail || null,
+            recipientPhone: recipientPhone || recipientContact || null,
+            recipientContact: recipientContact || recipientPhone || recipientEmail,
+            deliveryMethod: deliveryMethod || 'email',
+            giftType,
+            giftValue: giftValue || '',
+            challengeType: challengeType || 'custom',
+            challengeDescription: challengeDescription || challenge || '',
+            challenge: challenge || challengeDescription || '',
+            verificationType: req.body.verificationType || null,
+            reminderFrequency: req.body.reminderFrequency || 'none',
+            personalNote: personalNote || message || '',
+            message: message || personalNote || '',
+            duration: duration || 1,
+            notifyOnComplete: req.body.notifyOnComplete !== undefined ? req.body.notifyOnComplete : true
+        };
+
+        await db.createGiftOrder(req.user.id, orderData);
+
+        res.json({
+            success: true,
+            message: 'Honey Badger sent successfully!',
+            trackingId,
+            sender: req.user.name,
+            note: process.env.ENABLE_SMS !== 'true' && process.env.ENABLE_EMAIL !== 'true'
+                ? 'Email and SMS not configured. Gift created but recipient will not be notified.'
+                : null
+        });
+    } catch (error) {
+        console.error('Error saving gift order:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to save gift order: ' + error.message
+        });
+    }
 });
 
-// Get user's sent honey badgers (mock data)
-app.get('/api/honey-badgers', authenticateToken, (req, res) => {
-    // Mock data - replace with actual database query
-    const mockHoneyBadgers = [
-        {
-            id: 'HB' + (Date.now() - 86400000),
-            recipientName: 'John Doe',
-            giftType: 'giftcard',
-            giftValue: '$50 Starbucks',
-            challenge: 'Send me a selfie with your morning coffee!',
-            status: 'active',
-            createdAt: new Date(Date.now() - 86400000).toISOString()
-        },
-        {
-            id: 'HB' + (Date.now() - 172800000),
-            recipientName: 'Jane Smith',
-            giftType: 'cash',
-            giftValue: '$100',
-            challenge: 'Complete a 30-minute workout',
-            status: 'completed',
-            createdAt: new Date(Date.now() - 172800000).toISOString()
-        }
-    ];
+// Get user's sent honey badgers
+app.get('/api/honey-badgers', authenticateToken, async (req, res) => {
+    try {
+        const orders = await db.getUserOrders(req.user.id);
 
-    res.json({
-        success: true,
-        honeyBadgers: mockHoneyBadgers
-    });
+        // Format orders for frontend
+        const honeyBadgers = orders.map(order => ({
+            id: order.tracking_id,
+            recipientName: order.recipient_name,
+            recipientEmail: order.recipient_email,
+            recipientPhone: order.recipient_phone,
+            giftType: order.gift_type,
+            giftValue: order.gift_value,
+            challenge: order.challenge_description || order.challenge,
+            challengeType: order.challenge_type,
+            verificationType: order.verification_type,
+            status: order.status,
+            createdAt: order.created_at,
+            deliveryMethod: order.delivery_method,
+            duration: order.duration,
+            reminderFrequency: order.reminder_frequency
+        }));
+
+        res.json({
+            success: true,
+            honeyBadgers
+        });
+    } catch (error) {
+        console.error('Error fetching honey badgers:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch honey badgers: ' + error.message
+        });
+    }
 });
 
 // Health check endpoint
