@@ -1938,9 +1938,10 @@ header {
 }
 
 .network-icon {
-    width: 24px;
-    height: 24px;
+    width: 40px;
+    height: 40px;
     vertical-align: middle;
+    border-radius: 8px;
 }
 
 .btn-add-contact {
